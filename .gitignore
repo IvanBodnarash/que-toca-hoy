@@ -1,0 +1,16 @@
+
+#### Archivos temporales
+*.log
+*.tmp
+*.swp
+
+#### .env
+/backend/.env
+/backend/src/.env
+
+#### Dependencias
+#/backend/node_modules/
+
+#/frontend/node_modules/
+
+

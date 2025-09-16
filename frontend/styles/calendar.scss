@@ -1,0 +1,70 @@
+$font-family: "Poppins", sans-serif;
+$font-size: 14px;
+$event-font-size: 14px;
+$day-header-font-weight: 600;
+
+/* General borders color in monthly view */
+.rbc-month-view,
+.rbc-month-header .rbc-header,
+.rbc-month-row,
+.rbc-day-bg,
+.rbc-date-cell {
+  border-color: #94a3b8;
+}
+
+/* Thin lines between month rows */
+.rbc-month-row + .rbc-month-row {
+  border-top: 1px solid #94a3b8;
+}
+
+/* Vertical lines between days in month */
+.rbc-month-view .rbc-day-bg + .rbc-day-bg {
+  border-left: 1px solid #94a3b8;
+}
+
+/* Days of week Header (monthly/weekly view) */
+.rbc-time-header,
+.rbc-time-header-content,
+.rbc-time-header .rbc-header {
+  border-color: #94a3b8;
+}
+
+/* Weekly/daily (time grid): vaertical colums borders */
+.rbc-time-view .rbc-time-content > * + * {
+  border-left: 1px solid #94a3b8;
+}
+
+/* Time slots horizontal borders */
+.rbc-time-content .rbc-timeslot-group {
+  border-top: 1px solid #94a3b8;
+}
+
+/* Left time column */
+.rbc-time-gutter,
+.rbc-time-gutter .rbc-timeslot-group {
+  border-color: #94a3b8;
+}
+
+/* Agenda view */
+.rbc-agenda-view table,
+.rbc-agenda-view td,
+.rbc-agenda-view th {
+  border-color: #94a3b8;
+}
+
+.rbc-toolbar button {
+  border: 1px solid #94a3b8;
+}
+
+.rbc-toolbar .rbc-btn-group button.rbc-active {
+  background: #07577c; /* example */
+  border-color: #0b8ec7;
+  color: white;
+}
+
+.rbc-toolbar-label {
+  font-size: 18px;
+  margin: 4px 0;
+  font-weight: bold;
+  color: #043b55;
+}

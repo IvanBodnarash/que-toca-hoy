@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@font-face {
+    font-family: "Mileast";
+    src: url("/fonts/Mileast.otf") format("otf");
+    font-weight: 400;
+    font-style: normal;
+}
+
+.main-logo {
+    font-family: "Mileast", "sans-serif";
+}

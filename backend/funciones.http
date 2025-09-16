@@ -1,0 +1,152 @@
+@baseUrl = http://localhost:3000
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsInVzZXJuYW1lIjoiZmxvd2NoZWNrZXIiLCJpYXQiOjE3NTYxNDA2NTEsImV4cCI6MTc1NjE0MTU1MX0.1kW9kaGTMN0scOcLTijgu-mpsKhpvVlwh01OB2h1V58
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{ 
+    "name": "flowchecker", 
+    "email": "flowchecker@gmail.com", 
+    "username": "flowchecker", 
+    "password": "flow123" 
+}
+
+### login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "flowchecker",
+  "password": "flow123"
+}
+
+//BUYLIST
+### // Obtener lista de compra por tarea ID
+GET {{baseUrl}}/buylist/task/2
+Authorization: Bearer {{token}}
+
+### // Obtener lista de compra por material ID
+GET {{baseUrl}}/buylist/material/3
+Authorization: Bearer {{token}}
+
+//GROUP
+
+
+### Obtener usuarios de grupo
+GET {{baseUrl}}/group/1/users
+Authorization: Bearer {{token}}
+
+### Obtener tareas de grupo
+GET {{baseUrl}}/group/1/tasks
+Authorization: Bearer {{token}}
+
+### POST para crear plantilla
+POST {{baseUrl}}/group/1/templates
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Plantilla de tarea",
+    "description": "Descripción de la plantilla",
+    "steps": "Paso 1, Paso 2, Paso 3"
+}
+
+### Obtener plantillas de tareas de grupo
+GET {{baseUrl}}/group/1/templates
+Authorization: Bearer {{token}}
+
+### Obtener la imagen del grupo  (revisar)
+GET {{baseUrl}}/group/1/image
+Authorization: Bearer {{token}}
+
+### Obtener materiales de grupo
+GET {{baseUrl}}/group/1/materials
+Authorization: Bearer {{token}}
+
+### Obtener tasks de usuarios de grupo 1
+GET {{baseUrl}}/taskdated/group/1
+Authorization: Bearer {{token}}
+# Accept: application/json
+
+//MATERIAL
+### Obtener plantillas de material
+GET {{baseUrl}}/material/2/templates
+Authorization: Bearer {{token}}
+
+### Obtener listas de compra
+GET {{baseUrl}}/material/3/buylists
+Authorization: Bearer {{token}}
+
+
+//MATERIALTASKTEMPLATE
+### Obtener materiales por plantilla
+GET {{baseUrl}}/materialtasktemplate/1/materials
+Authorization: Bearer {{token}}
+
+### Obtener plantillas por material
+GET {{baseUrl}}/materialtasktemplate/2/templates
+Authorization: Bearer {{token}}
+
+
+### // Obtener lista de compra por tarea ID
+POST {{baseUrl}}/user/1/taskDated
+Content-Type: application/json
+
+{
+    "idUser": 1,
+    "idTaskDated": 1
+}
+
+//PUT {{baseUrl}}/user/1
+Content-Type: application/json
+
+{
+    "name": "Usuario Actualizado",
+    "email": "actualizado@correo.com"
+}
+
+DELETE {{baseUrl}}/user/1
+
+
+
+### crear grupo con PIN
+### crear grupo con PIN (autogenerado)
+POST {{baseUrl}}/group/createwithpin
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Matemáticas Avanzadas",
+  "link": "https://discord.gg/123",
+  "image": "imagen.png"
+}
+
+
+### obtener el PIN de un grupo
+GET {{baseUrl}}/group/2/pin
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Unirse a un grupo con PIN
+POST {{baseUrl}}/usergroup/join
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "idUser": 3,
+  "idGroup": 2,
+  "password": "g5go0JK7"
+}
+
+
+
+#### // Obtener tareas por usuario y rango de fechas (today | week | month)
+GET {{baseUrl}}/user/1/taskdated/report?filter=today
+Authorization: Bearer {{token}}
+
+
+### Obtener lista de compra por grupo y rango de fechas (today | week | month)
+GET {{baseUrl}}/user/1/group/1/buylist/report?filter=today
+Authorization: Bearer {{token}}

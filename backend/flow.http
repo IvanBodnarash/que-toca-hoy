@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:3000
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsInVzZXJuYW1lIjoiZmxvd2NoZWNrZXIiLCJpYXQiOjE3NTU2MTQzNjMsImV4cCI6MTc1NTYxNTI2M30.EcJq5LrpBqOfaEt0We2gG-3zP2eHuZi-qbE3iCJaduE
+
+### listar usuarios
+GET {{baseUrl}}/user 
+
+
+### register user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{ 
+    "name": "flowchecker", 
+    "email": "flowchecker@gmail.com", 
+    "username": "flowchecker", 
+    "password": "flow123" 
+}
+
+
+
+### check token -- password correct
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "flowchecker",
+  "password": "flow123"
+}
+
+
+### access profile
+GET {{baseUrl}}/auth/profile
+Authorization: Bearer {{token}}

@@ -1,0 +1,108 @@
+// crear 2 usuarios en un mismo grupo
+// asignar una tarea a cada uno con freq= daily, rotative = true, que caduque hoy a las 23:59
+// ejecutar cronojob para ver si las asigna al otro usuario
+
+@baseUrl = http://localhost:3000
+
+
+### crear grupo
+POST {{baseUrl}}/group
+Content-Type: application/json
+
+{ 
+    "name": "Crono group"
+}
+
+
+### crear usuario 1 
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{ 
+    "name": "user1", 
+    "email": "user1@gmail.com", 
+    "username": "user1", 
+    "password": "user1" 
+}
+
+### asignar el grupo al user1
+POST {{baseUrl}}/usergroup/assign
+Content-Type: application/json
+
+{ 
+    "idUser": 5, 
+    "idGroup": 4
+}
+
+### crear un taskDated
+POST {{baseUrl}}/taskdated
+Content-Type: application/json
+
+{ 
+    "idGroup": 4,
+    "idTaskTemplate": 3,
+    "startDate": "2025-08-19T00:00:00.000Z",
+    "endDate": "2025-08-19T23:59:59.000Z",
+    "status": "todo",
+    "frequency": "daily",
+    "rotative": true
+
+}
+
+### asignar esta tarea al user1
+POST {{baseUrl}}/usertask/assign
+Content-Type: application/json
+
+{ 
+    "idUser" : 5,
+    "idTaskDated": 14
+}
+
+
+### crear usuario 2
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{ 
+    "name": "user2", 
+    "email": "user2@gmail.com", 
+    "username": "user2", 
+    "password": "user2" 
+}
+
+### asignar el grupo al user2
+POST {{baseUrl}}/usergroup
+Content-Type: application/json
+
+{ 
+    "idUser": 6, 
+    "idGroup": 4
+}
+
+### crear un taskDated
+POST {{baseUrl}}/taskdated
+Content-Type: application/json
+
+{ 
+    "idGroup": 4,
+    "idTaskTemplate": 4,
+    "startDate": "2025-08-19T00:00:00.000Z",
+    "endDate": "2025-08-19T23:59:59.000Z",
+    "status": "todo",
+    "frequency": "daily",
+    "rotative": true
+
+}
+
+### asignar esta tarea al user2
+POST {{baseUrl}}/usertask/assign
+Content-Type: application/json
+
+{ 
+    "idUser" : 6,
+    "idTaskDated": 11
+}
+
+
+### listar tareas user1
+GET {{baseUrl}}/user/6/taskdateds

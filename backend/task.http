@@ -1,0 +1,35 @@
+@baseUrl = http://localhost:3000
+
+
+///taskDatedRouter.get("/:id/users", taskDatedController.getUsers);
+
+### obtener usuarios de taskDated
+GET {{baseUrl}}/taskdated/14/users
+
+/// taskDatedRouter.get("/:id/buylists", taskDatedController.getBuyList);
+### Obtener lista de compra de tarea por ID taskDated
+GET {{baseUrl}}/taskdated/4/buylists
+
+
+// rutas específicas primero para evitar conflictos
+// 
+//taskTemplateRouter.get('/group/:idGroup/:type', taskTemplateController.getTasksByTypeByGroupID);
+###  listar todos taskTemplate por tipo pasado como variable (tarea o receta) por ID de grupo
+GET {{baseUrl}}/tasktemplate/group/1/task
+
+
+//taskTemplateRouter.get('/:idTask/taskdated', taskTemplateController.getTasksByID);
+### // Obtener tareas agendadas (taskDated) de taskTemplate
+GET {{baseUrl}}/tasktemplate/3/taskdated
+
+
+
+//taskTemplateRouter.get('/:id/materials', taskTemplateController.getMaterials);
+### // listar los materiales requeridos por ID de tarea
+GET {{baseUrl}}/tasktemplate/3/materials
+
+
+// ruta genérica al final con prefijo fijo para tipo
+//taskTemplateRouter.get('/type/:type', taskTemplateController.getByType);
+### // listar todos taskTemplate por tipo pasado como variable (tarea o receta)
+GET {{baseUrl}}/tasktemplate/type/task
