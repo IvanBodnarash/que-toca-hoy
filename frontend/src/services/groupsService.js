@@ -30,14 +30,12 @@ export async function getGroupTemplatesRecipes(groupId) {
 export async function createGroup({ name, image }) {
   const body = { name, image: image ?? null };
   const res = await apiPost("/group/createwithpin", body);
-  // { message, group, pin }
   return res;
 }
 
 // Join with PIN (without idGroup)
 export async function joinGroupByPin(pin) {
   const res = await apiPost("/usergroup/join-by-pin", { pin });
-  // { message: "JOINED", group, record }
   return res;
 }
 
@@ -46,7 +44,6 @@ export async function fetchGroupPin(idGroup) {
   const res = await apiGet(`/group/${idGroup}/pin`);
   return res.pin;
 }
-//
 
 export async function getGroupUsers(groupId) {
   return apiGet(`/group/${groupId}/users`);
@@ -58,7 +55,7 @@ export async function getGroupTemplates(groupId) {
 
 export async function rotateGroupPin(groupId) {
   const res = await apiPut(`/group/${groupId}/changepin`, {});
-  return res.pin; // devuelve solo el pin
+  return res.pin; // Returns only the pin
 }
 
 export async function getGroupById(groupId) {
@@ -80,13 +77,13 @@ export async function deleteGroup(groupId) {
 }
 
 export async function createGroupTemplate(groupId, payload, materials = []) {
-  // check if template with same name exists in group
+  // Сheck if template with same name exists in group
   const existingTemplates = await apiGet(`/group/${groupId}/templates`);
   if (existingTemplates.find((t) => t.name === payload.name)) {
     throw new Error("Template with same name already exists in group");
   }
 
-  // check materials
+  // Сheck materials
   let data = await getGroupMaterials(groupId);
   let existingMaterials = data.materials || [];
   let materialsReady = [];
@@ -125,7 +122,7 @@ export async function createGroupTemplate(groupId, payload, materials = []) {
     return taskTemplate;
   }
 
-  // si no hay materiales, igual crear plantilla sola
+  // If there are no materials, create a template alone
   return apiPost(`/group/${groupId}/templates`, payload);
 }
 
@@ -139,7 +136,7 @@ export const getGroupTasksDated = async (groupId) => {
   return apiGet(`/taskDated/group/${groupId}`);
 };
 
-// tasks con status para statuspage
+// Tasks with status for status page
 export const getGroupTasksDatedStatus = async (groupId) => {
   return apiGet(`/taskDated/group/${groupId}/status`);
 };
@@ -148,7 +145,6 @@ export async function uploadGroupImage(groupId, file) {
   const formData = new FormData();
   formData.append("file", file);
   const data = await apiPost(`/group/${groupId}/upload`, formData);
-  //🔹 Ahora devolvemos directamente la nueva imagen base64
   return data.base64Image || data.path;
 }
 
@@ -162,9 +158,9 @@ export async function updateGroupTemplate(groupId, template) {
 export async function getGroupDetails(groupId) {
   try {
     const [info, users, tasks] = await Promise.all([
-      getGroupById(groupId), // Info básica (nombre, imagen, etc.)
-      getGroupUsers(groupId), // Usuarios del grupo
-      getGroupTasksDatedStatus(groupId), // Tareas con estado
+      getGroupById(groupId), // Basic info (name, image, etc.)
+      getGroupUsers(groupId), // Group users
+      getGroupTasksDatedStatus(groupId), // Tasks with state
     ]);
 
     return {

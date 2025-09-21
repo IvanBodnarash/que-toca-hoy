@@ -48,7 +48,7 @@ export default function GroupMembersStrip({
         {shown.map((u) => (
           <div
             key={u.idUser}
-            className="w-6 h-6 rounded-full border border-white overflow-hidden bg-slate-100 flex items-center justify-center text-[10px] font-semibold"
+            className="w-6 h-6 rounded-full border border-slate-400/70 overflow-hidden bg-slate-100 flex items-center justify-center text-[10px] font-semibold"
           >
             {u.image ? (
               <img
@@ -72,7 +72,7 @@ export default function GroupMembersStrip({
           </div>
         )}
       </div>
-      <p className="text-slate-700">
+      <p className="text-slate-700 text-sm md:text-md truncate">
         {members.length} member{members.length > 1 ? "s" : ""}
       </p>
     </div>

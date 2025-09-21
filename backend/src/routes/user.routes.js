@@ -34,7 +34,8 @@ userRouter.get("/:id/buylist/report", userController.getBuyListReport);
 userRouter.put("/:id/buylist", userController.updateBuyList);
 
 // obtener lista de compras de un grupo por rango de fechas
-userRouter.get("/:idGroup/buylist/report", userController.getBuyListReportByGroup);
+// userRouter.get("/:idGroup/buylist/report", userController.getBuyListReportByGroup);
+
 
 //### Obtener lista de compra por grupo y rango de fechas (today | week | month)
 userRouter.get("/:idUser/group/:idGroup/buylist/report", userController.getGroupBuyListReport);

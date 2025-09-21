@@ -18,8 +18,11 @@ taskDatedRouter.delete("/:idTaskDated/assign/:idUser", taskDatedController.unass
 // Obtener usuarios asignados a una tarea
 taskDatedRouter.get("/:id/users", taskDatedController.getUsers);
 
-// Obtener lista de compra de tarea
+// Obtener lista de compra de tareas
 taskDatedRouter.get("/:id/buylists", taskDatedController.getBuyList);
+
+// Obtener lista de compra de tarea
+taskDatedRouter.get("/:id/buylist", taskDatedController.getBuyList);
 
 // Ruta exclusiva para traer status
 taskDatedRouter.get("/group/:idGroup/status", taskDatedController.getStatusByGroup);

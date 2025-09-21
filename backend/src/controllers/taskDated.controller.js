@@ -5,6 +5,7 @@ import {
   TaskTemplate,
   UserGroup,
   UserTask,
+  Material,
 } from "../models/index.model.js";
 import { Op } from "sequelize"; //
 import { createBaseController } from "./base.controller.js";
@@ -333,13 +334,82 @@ export const taskDatedController = {
   },
 
   // Obtener lista de compra de tarea
+  // getBuyList: async (req, res) => {
+  //   const { id } = req.params;
+  //   try {
+  //     // const items = await BuyList.findAll({ where: { idTaskDated: id } });
+  //     const items = await BuyList.findAll({
+  //       where: { idTaskDated: id },
+  //       include: [
+  //         { model: Material, attributes: ["idMaterial", "name", "unit"] },
+  //         {
+  //           model: TaskDated,
+  //           attributes: ["idTaskDated", "idGroup", "idTaskTemplate"],
+  //           include: [
+  //             {
+  //               model: TaskTemplate,
+  //               attributes: ["idTaskTemplate", "name", "type"],
+  //             },
+  //           ],
+  //         },
+  //       ],
+  //       order: [["idBuyList", "ASC"]],
+  //     });
+  //     res.set(
+  //       "Cache-Control",
+  //       "no-store, no-cache, must-revalidate, proxy-revalidate"
+  //     );
+  //     res.set("Pragma", "no-cache");
+  //     res.set("Expires", "0");
+
+  //     res.json(items);
+  //   } catch (error) {
+  //     res.status(500).json({ message: "Error fetching buy list" });
+  //   }
+  // },
+
   getBuyList: async (req, res) => {
     const { id } = req.params;
     try {
-      const items = await BuyList.findAll({ where: { idTaskDated: id } });
-      res.json(items);
+      const task = await TaskDated.findByPk(id, {
+        attributes: ["idTaskDated", "idGroup", "idTaskTemplate"],
+        include: [
+          {
+            model: TaskTemplate,
+            attributes: ["idTaskTemplate", "name", "type"],
+          },
+          {
+            model: BuyList,
+            attributes: ["idBuyList", "idTaskDated", "quantity", "unit", "idMaterial"],
+            include: [
+              { model: Material, attributes: ["idMaterial", "name"] },
+            ],
+          },
+        ],
+        order: [[BuyList, "idBuyList", "ASC"]],
+      });
+
+      if (!task) return res.status(404).json({ message: "Task not found" });
+
+      const items = (task.BuyLists || []).map((bl) => ({
+        ...bl.toJSON(),
+        recipeName: task.TaskTemplate?.name ?? null,
+        recipeType: task.TaskTemplate?.type ?? null,
+      }));
+
+      res.set(
+        "Cache-Control",
+        "no-store, no-cache, must-revalidate, proxy-revalidate"
+      );
+      res.set("Pragma", "no-cache");
+      res.set("Expires", "0");
+      return res.json(items);
     } catch (error) {
-      res.status(500).json({ message: "Error fetching buy list" });
+      console.error("getBuyList failed:", error);
+      return res.status(500).json({
+        message: "Error fetching buy list",
+        error: String(error?.message || error),
+      });
     }
   },
 
