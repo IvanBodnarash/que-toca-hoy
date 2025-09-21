@@ -5,7 +5,7 @@ export default function UserCard({ user, isSelected, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`rounded-2xl shadow p-3 flex items-center gap-4 cursor-pointer transition hover:shadow-md ${
+      className={`rounded-2xl shadow p-2 md:p-3 flex items-center gap-4 cursor-pointer transition hover:shadow-md ${
         isSelected ? "ring-2 ring-cyan-700" : ""
       }`}
       style={{
@@ -16,10 +16,10 @@ export default function UserCard({ user, isSelected, onClick }) {
         <img
           src={user.imageUrl}
           alt={user.name}
-          className="w-20 h-20 object-cover bg-white rounded-full border border-slate-400"
+          className="size-16 md:size-20 object-cover bg-white rounded-full border border-slate-400"
         />
       ) : (
-        <div className="w-20 h-20 flex items-center justify-center rounded-full border border-slate-400">
+        <div className="size-16 md:size-20 flex items-center justify-center rounded-full border border-slate-400">
           <img
             src={defaultAvatar}
             alt="default avatar"
@@ -29,12 +29,12 @@ export default function UserCard({ user, isSelected, onClick }) {
       )}
       <div className="flex-1">
         <h3 className="text-lg font-semibold">{user.name}</h3>
-        <div className="mt-1 text-sm text-gray-600">
-          Tareas: {user.tasksDone}/{user.tasksTotal}
+        <div className="mt-1 text-sm text-slate-700">
+          Tasks: {user.tasksDone}/{user.tasksTotal}
         </div>
-        <div className="mt-2 h-2 bg-gray-200 rounded">
+        <div className="mt-2 h-1 md:h-2 bg-gray-200 rounded">
           <div
-            className="h-2 rounded"
+            className="h-1 md:h-2 rounded"
             style={{
               width: `${
                 user.tasksTotal > 0

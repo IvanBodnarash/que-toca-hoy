@@ -12,20 +12,17 @@ import { FiRefreshCw } from "react-icons/fi";
 import { startCronJob } from "../../services/taskDatedService.js";
 import { BiHome } from "react-icons/bi";
 import { FaEdit } from "react-icons/fa";
-import { useGroupRealtime } from "../../realtime/useGroupRealtime.js";
+import { IoIosSave } from "react-icons/io";
+import { GiCancel } from "react-icons/gi";
 
-// 👈 importa el servicio
+import { useGroupRealtime } from "../../realtime/useGroupRealtime.js";
 
 export default function GroupHeader() {
   const { groupId } = useParams();
   const { groups, loading, error, setGroups } = useGroup();
-  // const fileInputRef = useRef(null);
 
   const group = groups.find((g) => String(g.idGroup) === String(groupId));
 
-  // const letter = group?.name?.trim()?.charAt(0)?.toUpperCase() || "?";
-
-  // Estado para edición de nombre
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState(group?.name || "");
 
@@ -56,7 +53,7 @@ export default function GroupHeader() {
         )
       );
     } catch (err) {
-      console.error("❌ Error al subir imagen:", err);
+      console.error("Error uploading image:", err);
       alert(err.message);
     }
   };
@@ -92,7 +89,7 @@ export default function GroupHeader() {
       );
       setIsEditingName(false);
     } catch (err) {
-      console.error("❌ Error al cambiar nombre:", err);
+      console.error("Error name changing:", err);
       alert(err.message);
     }
   };
@@ -106,7 +103,7 @@ export default function GroupHeader() {
   };
 
   return (
-    <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-4 z-10 justify-between px-5">
+    <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-2 md:gap-4 z-10 justify-between px-5">
       <GroupImageUploader
         avatar={group?.image}
         onChangeAvatar={handleFileChange}
@@ -123,25 +120,25 @@ export default function GroupHeader() {
               onBlur={handleNameSubmit}
               onKeyDown={handleNameKeyDown}
               autoFocus
-              className="text-xl font-semibold p-1 rounded-md w-full bg-white/50 text-slate-800 border border-white/30 focus:outline-none focus:ring-2 focus:ring-cyan-300"
+              className="md:text-xl font-semibold p-1 rounded-md w-full bg-white/50 text-slate-800 border border-white/30 focus:outline-none focus:ring-2 focus:ring-cyan-300"
               placeholder="Group name"
             />
             <button
               onClick={handleNameSubmit}
-              className="px-3 py-2 rounded bg-white/15 text-white hover:bg-white/25 transition cursor-pointer"
+              className="p-2 rounded bg-white/15 text-white hover:bg-white/25 transition cursor-pointer"
               title="Save (Enter)"
             >
-              Save
+              <IoIosSave className="text-xl" />
             </button>
             <button
               onClick={() => {
                 setNewName(group?.name || "");
                 setIsEditingName(false);
               }}
-              className="px-3 py-2 rounded-md bg-white/10 text-white/80 hover:bg-white/20 transition cursor-pointer"
+              className="p-2 rounded-md bg-white/10 text-white/80 hover:bg-white/20 transition cursor-pointer"
               title="Cancel (Esc)"
             >
-              Cancel
+              <GiCancel className="text-xl" />
             </button>
           </div>
         ) : (
@@ -149,7 +146,7 @@ export default function GroupHeader() {
             <h1
               className="text-md md:text-xl text-white font-bold cursor-pointer select-none group-hover:underline decoration-white/60 underline-offset-4"
               onClick={handleNameClick}
-              title="Click para editar nombre"
+              title="Click to change name"
             >
               {group?.name || (loading ? "Loading..." : "Unknown group")}
             </h1>
@@ -161,11 +158,11 @@ export default function GroupHeader() {
         )}
       </div>
 
-      <div className="flex flex-end items-center justify-center gap-2 text-white transition-all">
+      <div className="flex flex-end items-center justify-center gap-1 md:gap-2 text-white transition-all">
         <button
           onClick={handleStartCronJob}
-          title="Iniciar tareas programadas"
-          className="inline-flex h-14 w-14 items-center justify-center hover:scale-105 active:scale-100 rounded-2xl hover:border-white/40 hover:bg-white/5 hover:border-2 p-2 cursor-pointer"
+          title="Start scheduled tasks"
+          className="inline-flex size-14 items-center justify-center hover:scale-105 active:scale-100 rounded-2xl hover:border-white/40 hover:bg-white/5 hover:border-2 cursor-pointer"
         >
           <FiRefreshCw className="size-8 hover:scale-105 hover:rotate-90 active:scale-100 transition-all" />
         </button>

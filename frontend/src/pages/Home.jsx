@@ -13,11 +13,7 @@ import defaultAvatar from "../assets/initialAvatar.jpg";
 import { safeImageSrc } from "../utils/imageProcessor";
 import JoinGroupModal from "../components/groups/JoinGroupModal";
 
-import {
-  fetchGroupPin,
-  deleteGroup,
-  getMyGroups,
-} from "../services/groupsService";
+import { fetchGroupPin, deleteGroup } from "../services/groupsService";
 
 import { useGroup } from "../context/GroupContext";
 import ConfirmDialog from "../components/alerts/ConfirmDialog";
@@ -211,7 +207,7 @@ export default function Home() {
                           <AiOutlineEye size={20} />
                         )}
                       </button>
-                      {/* Botón eliminar */}
+                      {/* Leave Group */}
                       <button
                         type="button"
                         onClick={(e) => {

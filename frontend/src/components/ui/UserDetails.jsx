@@ -37,7 +37,6 @@ export default function ({ user }) {
         <TaskWheel
           done={user.tasksDone || 0}
           total={user.tasksTotal || 0}
-          size={140}
           strokeWidth={14}
           strokeColor={user.color || "#06b6d4"}
         />

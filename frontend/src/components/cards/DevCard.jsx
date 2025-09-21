@@ -11,14 +11,14 @@ export function DevCard({ member }) {
           <img
             src={member.image}
             alt={member.name}
-            className="object-cover h-58 w-64 rounded-xl"
+            className="object-cover h-52 w-full md:h-58 md:w-64 rounded-xl"
           />
-          <h1 className="text-3xl text-yellow-50 font-bold w-54 mt-2">
+          <h1 className="text-xl md:text-2xl text-yellow-50 font-bold w-54 mt-2">
             {member.name}
           </h1>
         </div>
         <div className="flex flex-col gap-2">
-          <h1 className="text-yellow-50 text-xl">{member.position}</h1>
+          <h1 className="text-yellow-50 md:text-xl">{member.position}</h1>
           <div className="flex flex-col gap-1 text-yellow-50">
             <NavLink
               to={member.links[0]}

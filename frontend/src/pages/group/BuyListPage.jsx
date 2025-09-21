@@ -115,11 +115,11 @@ export default function BuyListPage() {
         quantity: item.checked ? 0 : Number(item.quantity) || 0,
       }));
       await updateBuyList(payload);
-      toast.success("✅ List updated");
+      toast.success("List updated");
       addActivity("Shopping list has been updated");
       fetchBuyList();
     } catch (err) {
-      toast.error("❌ Error updating the list");
+      toast.error("Error updating the list");
     }
   };
 

@@ -52,6 +52,9 @@ export default function ManageTasks() {
     }
   };
 
+  const handleDeleted = (id) =>
+    setTemplates((prev) => prev.filter((t) => t.idTaskTemplate !== id));
+
   return (
     <div className="px-6 py-22 space-y-6 max-w-3xl mx-auto">
       {/* Header */}
@@ -98,6 +101,7 @@ export default function ManageTasks() {
         <GroupTemplatesList
           templates={templates}
           onEdit={(t) => setEditingTemplate(t)}
+          onDeleted={handleDeleted}
         />
       )}
 

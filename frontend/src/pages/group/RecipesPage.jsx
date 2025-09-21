@@ -22,7 +22,7 @@ export default function RecipesPage() {
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [creatingRecipe, setCreatingRecipe] = useState(false);
 
-  // Cargar templates
+  // Load templates
   const loadTemplates = async () => {
     setLoading(true);
     setError("");
@@ -49,7 +49,7 @@ export default function RecipesPage() {
     onTemplatesChanged: () => loadTemplates(),
   });
 
-  // Función para actualizar template
+  // Update template
   const handleEditTemplate = async (template) => {
     try {
       await updateGroupTemplate(groupId, template);
@@ -60,6 +60,9 @@ export default function RecipesPage() {
       alert(err.message || "Failed to update template");
     }
   };
+
+  const handleDeleted = (id) =>
+    setTemplates((prev) => prev.filter((t) => t.idTaskTemplate !== id));
 
   return (
     <div className="px-6 py-22 space-y-6 max-w-3xl mx-auto">
@@ -108,6 +111,7 @@ export default function RecipesPage() {
         <GroupTemplatesList
           templates={templates}
           onEdit={(template) => setEditingTemplate(template)}
+          onDeleted={handleDeleted}
         />
       )}
 

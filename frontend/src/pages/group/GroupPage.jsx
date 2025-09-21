@@ -169,22 +169,22 @@ export default function GroupPage() {
     <div className="bg-cyan-950/10 py-22 xl:px-48">
       <Toaster position="bottom-center" />
       <div className="flex flex-col w-11/12 md:w-4/5 gap-4 mx-auto">
-        {/* PIN del grupo */}
+        {/* Group PIN */}
         <div className="flex items-center justify-between bg-white p-1.5 rounded-xl shadow">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {" "}
             <button
               type="button"
               onClick={() => setVisible(!visible)}
-              className="p-2 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
+              className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
             >
               {visible ? (
-                <AiOutlineEyeInvisible size={18} />
+                <AiOutlineEyeInvisible className="size-5 md:size-6" />
               ) : (
-                <AiOutlineEye size={18} />
+                <AiOutlineEye className="size-5 md:size-6" />
               )}
             </button>
-            <h1 className="text-cyan-900">Show group details</h1>
+            <h1 className="text-cyan-900 text-sm md:text-md">Show group details</h1>
           </div>
           {visible && (
             <div className="flex items-center gap-2">
@@ -199,9 +199,9 @@ export default function GroupPage() {
                     toast.success("PIN copied to clipboard");
                   }
                 }}
-                className="p-2 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
+                className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
               >
-                <AiOutlineCopy size={18} />
+                <AiOutlineCopy className="size-5 md:size-6" />
               </button>
               <button
                 type="button"
@@ -214,9 +214,9 @@ export default function GroupPage() {
                     toast.error(`❌ ${err.message}`);
                   }
                 }}
-                className="p-2 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition cursor-pointer"
+                className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition cursor-pointer"
               >
-                <AiOutlineReload size={18} />
+                <AiOutlineReload className="size-5 md:size-6" />
               </button>
             </div>
           )}

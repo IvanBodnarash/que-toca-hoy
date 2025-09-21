@@ -37,7 +37,7 @@ export default function EditTaskTemplateModal({ template, onClose, onSave }) {
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Nombre */}
+          {/* Name */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-slate-700">
               Name
@@ -48,7 +48,7 @@ export default function EditTaskTemplateModal({ template, onClose, onSave }) {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          {/* Pasos */}
+          {/* Steps */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-slate-700">
               Steps
@@ -81,7 +81,7 @@ export default function EditTaskTemplateModal({ template, onClose, onSave }) {
               + Add step
             </button>
           </div>
-          {/* Botones */}
+          {/* Buttons */}
           <div className="flex justify-end gap-2">
             <button
               type="button"

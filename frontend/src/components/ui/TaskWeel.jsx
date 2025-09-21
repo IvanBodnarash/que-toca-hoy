@@ -1,12 +1,11 @@
 export default function TaskWheel({
   done,
   total,
-  // size = 140,
   strokeWidth = 12,
   strokeColor = "#22c55e",
 }) {
   const isMobile = window.innerWidth <= 768;
-  const size = isMobile ? 120 : 140;
+  const size = isMobile ? 110 : 140;
 
   const percentage = total > 0 ? (done / total) * 100 : 0;
   const radius = (size - strokeWidth) / 2;

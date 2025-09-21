@@ -89,7 +89,7 @@ export const taskTemplateController = {
     }
   },
 
-  // Actualizar plantilla
+  // Update template
   updateTemplate: async (req, res) => {
     const { idTaskTemplate } = req.params;
     const { name, steps, materials } = req.body;
@@ -234,6 +234,46 @@ export const taskTemplateController = {
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
+    }
+  },
+
+  // Delete template
+  updateTemplate: async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const template = await TaskTemplate.findByPk(id);
+      if (!template)
+        return res.status(404).json({ message: "Template not found" });
+
+      // 1. Check if the instances planned
+      const scheduledCount = await TaskDated.count({
+        where: { idTaskTemplate: id },
+      });
+
+      if (scheduledCount > 0) {
+        return res.status(409).json({
+          massage: "Cannot delete: template has scheduled tasks",
+          code: "TEMPLATE_IN_USE",
+          scheduledCount,
+        });
+      }
+
+      // 2. Delete
+      const idGroup = template.idGroup;
+      await template.destroy();
+
+      // 3. Notifications
+      emitTemplatesChanged(req, idGroup, {
+        action: "deleted",
+        templateId: Number(id),
+      });
+      emitCalendarRefresh(req, idGroup);
+
+      return res.status(204).send();
+    } catch (error) {
+      console.error("Delete template failed:", error);
+      return res.status(500).json({ message: "Error deleting template" });
     }
   },
 };

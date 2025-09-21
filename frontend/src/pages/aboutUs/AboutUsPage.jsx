@@ -68,15 +68,15 @@ const aboutUs = [
 
 export default function AboutUsPage() {
   return (
-    <div className="py-8 px-8 md:px-32 bg-cyan-900 h-full space-y-16">
+    <div className="py-8 px-8 md:px-32 bg-cyan-900 h-full md:space-y-16">
       <div className="py-4 md:py-12 hover:scale-105 m-auto transition-all w-fit">
         <NavLink
           to="/"
-          aria-label="Que Toca Hoy — Home"
+          aria-label="Que Toca Hoy - Home"
           className="leading-none text-center text-yellow-100 hover:text-yellow-200 transition-all"
         >
-          <p className="text-4xl md:text-6xl main-logo">QueTocaHoy</p>
-          <p className="text-xl">Enter</p>
+          <p className="text-3xl md:text-5xl main-logo">QueTocaHoy</p>
+          <p className="text-lg">Enter</p>
         </NavLink>
       </div>
 
@@ -86,15 +86,19 @@ export default function AboutUsPage() {
             key={el.title}
             className="text-yellow-50 py-4 flex flex-col gap-2 md:gap-4 md:w-[48%] bg-cyan-950/60 p-5 rounded-xl"
           >
-            <h1 className="text-2xl md:text-3xl font-bold">{el.title}</h1>
-            <p className="text-lg md:text-xl text-yellow-50/80">{el.description}</p>
+            <h1 className="text-lg md:text-2xl font-bold">{el.title}</h1>
+            <p className="text-sm md:text-lg text-yellow-50/80">
+              {el.description}
+            </p>
           </div>
         ))}
       </div>
 
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold text-yellow-50">Our Team</h1>
-        <div className="flex flex-wrap justify-around gap-4 py-4">
+        <h1 className="text-3xl font-bold text-center text-yellow-50">
+          Our Team
+        </h1>
+        <div className="flex flex-wrap justify-around gap-6 py-4">
           {teamMembers.map((member) => (
             <DevCard key={member.name} member={member} />
           ))}
@@ -105,10 +109,10 @@ export default function AboutUsPage() {
         <h1 className="text-2xl text-yellow-50">Contribute to our project!</h1>
         <NavLink
           className="font-mono text-yellow-100 hover:text-yellow-50 hover:scale-105 transition-all"
-          to="https://github.com/eeleeml/QueTocaHoy"
+          to="https://github.com/IvanBodnarash/que-toca-hoy"
           target="_blank"
         >
-          https://github.com/eeleeml/QueTocaHoy
+          https://github.com/IvanBodnarash/que-toca-hoy
         </NavLink>
       </div>
     </div>

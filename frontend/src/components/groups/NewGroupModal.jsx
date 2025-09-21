@@ -9,9 +9,7 @@ import initialGroupImg from "../../assets/defaultGroupImg.png";
 export default function NewGroupModal({ onClose, onCreated }) {
   const [step, setStep] = useState(1);
 
-  // Group Data
   const [title, setTitle] = useState("");
-  // const [description, setDescription] = useState("");
   const [imageData, setImageData] = useState(initialGroupImg);
 
   const [invitePin, setInvitePin] = useState("");
@@ -46,12 +44,12 @@ export default function NewGroupModal({ onClose, onCreated }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-[93%] md:w-2/5 z-55 min-h-54 rounded-2xl bg-white p-4 shadow-xl">
+      <div className="w-[85%] md:w-2/5 z-55 min-h-54 rounded-2xl bg-white p-4 shadow-xl">
         {step === 1 ? (
           <div>
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">New Group</h2>
+              <h2 className="text-lg md:text-xl text-slate-700 font-semibold">New Group</h2>
               <button
                 onClick={() => onClose()}
                 className="inline-flex h-8 w-8 items-center justify-center rounded cursor-pointer hover:bg-gray-100"
@@ -64,7 +62,7 @@ export default function NewGroupModal({ onClose, onCreated }) {
             {/* Body */}
             <div className="space-y-2">
               {/* Title */}
-              <div className="flex flex-col gap-2">
+              <div className="flex text-sm md:text-md flex-col gap-2">
                 <label htmlFor="title" className="text-slate-800">
                   Title
                 </label>
@@ -78,7 +76,7 @@ export default function NewGroupModal({ onClose, onCreated }) {
               </div>
 
               {/* Image */}
-              <div className="flex flex-col gap-2">
+              <div className="flex text-sm md:text-md flex-col gap-2">
                 <label htmlFor="title" className="text-slate-800">
                   Group Image
                 </label>

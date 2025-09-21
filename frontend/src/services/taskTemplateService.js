@@ -1,4 +1,4 @@
-import { apiPost, apiPut } from "../api/apiFetch";
+import { apiDelete, apiPost, apiPut } from "../api/apiFetch";
 
 // Update template (TaskTemplate)
 export async function updateTaskTemplate(idTaskTemplate, payload) {
@@ -29,4 +29,10 @@ export async function createRecipeTemplate(groupId, payload, materials = []) {
   }
 
   return taskTemplate;
+}
+
+// Delete template (handles 409 from backend)
+export async function deleteTaskTemplate(idTaskTemplate) {
+  if (!idTaskTemplate) throw new Error("NO_ID");
+  return apiDelete(`/tasktemplate/${idTaskTemplate}`);
 }
