@@ -6,19 +6,23 @@ import { deleteTaskTemplate } from "../../services/taskTemplateService";
 import { normalizeSteps } from "../../utils/normalizeSteps";
 
 import { ChevronDown, ChevronUp, Edit, Trash2 } from "lucide-react";
+import ConfirmDialog from "../alerts/ConfirmDialog";
 
 export default function TemplateItem({ template, onEdit, onDeleted }) {
   const [showMaterials, setShowMaterials] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const stepsArray = normalizeSteps(template?.steps);
 
+  const requestDelete = () => {
+    if (busy) return;
+    setShowConfirm(true);
+  };
+
   const handleDelete = async () => {
     if (busy) return;
-    const ok = window.confirm(`Delete ${template.name}?`);
-    if (!ok) return;
-
     try {
       setBusy(true);
       await deleteTaskTemplate(template.idTaskTemplate);
@@ -34,6 +38,7 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
       }
     } finally {
       setBusy(false);
+      setShowConfirm(false);
     }
   };
 
@@ -87,7 +92,7 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
           </button>
 
           <button
-            onClick={handleDelete}
+            onClick={requestDelete}
             disabled={busy}
             className="bg-red-700 text-white p-1.5 rounded-md text-xs flex items-center gap-1 font-medium hover:bg-red-900 cursor-pointer transition"
             title="Delete recipe"
@@ -130,7 +135,7 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
             {template.materials.map((mat, idx) => (
               <li
                 key={`${mat.idMaterial}-${idx}`}
-                className="flex items-center justify-between w-50 gap-2"
+                className="flex items-center gap-2"
               >
                 <span className="font-medium">{mat.name}</span>
                 {mat.quantity && (
@@ -143,6 +148,18 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
           </ul>
         )}
       </div>
+
+      <ConfirmDialog
+        open={showConfirm}
+        title="Delete recipe?"
+        message={`This will permanently remove “${template.name}”.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        danger
+        busy={busy}
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
     </li>
   );
 }

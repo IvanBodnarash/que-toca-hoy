@@ -8,6 +8,8 @@
 /backend/.env
 /backend/src/.env
 
+/frontend/.env
+
 #### Dependencias
 #/backend/node_modules/
 

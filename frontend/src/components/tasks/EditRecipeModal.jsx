@@ -97,7 +97,9 @@ export default function EditRecipeModal({
 
         <div className="mb-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="block text-sm font-medium text-slate-700">Ingredients</span>
+            <span className="block text-sm font-medium text-slate-700">
+              Ingredients
+            </span>
             <button
               onClick={handleAddMaterial}
               className="text-cyan-800 text-md hover:text-cyan-600 cursor-pointer transition-all"
@@ -137,6 +139,21 @@ export default function EditRecipeModal({
                   <option value="ud">ud</option>
                   <option value="ml">ml</option>
                   <option value="gr">gr</option>
+                  <option value="kg">kg</option>
+                  <option value="l">l</option>
+                  <option value="tsp">tsp</option>
+                  <option value="tbsp">tbsp</option>
+                  <option value="cup">cup</option>
+                  <option value="pint">pint</option>
+                  <option value="pinch">pinch</option>
+                  <option value="dash">dash</option>
+                  <option value="clove">clove</option>
+                  <option value="bunch">bunch</option>
+                  <option value="slice">slice</option>
+                  <option value="handful">handful</option>
+                  <option value="can">can</option>
+                  <option value="pack">pack</option>
+                  <option value="piece">piece</option>
                 </select>
                 <button
                   onClick={() => handleRemoveMaterial(i)}
