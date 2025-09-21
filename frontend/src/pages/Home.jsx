@@ -93,7 +93,7 @@ export default function Home() {
         </div>
         <div className="flex flex-row w-full items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="font-bold text-lg">Welcome back!</h1>
+            <h1 className="font-bold text-cyan-900/90 text-lg">Welcome back!</h1>
             <h3 className="text-slate-700 text-md">{displayName}</h3>
           </div>
           <div className="flex flex-row items-center gap-6">
@@ -119,24 +119,12 @@ export default function Home() {
         </div>
       </header>
 
-      {/*<div className="flex flex-row">
-        <div className="w-2/4 bg-slate-300 m-4 p-3 rounded-md text-center border border-slate-400">
-          <h1 className="text-slate-700">Groups:</h1>
-          <h1 className="text-cyan-800 font-bold text-2xl">{groups.length}</h1>
-        </div>
-        <div className="w-2/4 bg-slate-300 m-4 p-3 rounded-md text-center border border-slate-400">
-          <h1 className="text-slate-700">Tasks todo:</h1>
-          <h1 className="text-cyan-800 font-bold text-2xl">8</h1>
-        </div>
-      </div>*/}
-
       <main className="flex flex-col gap-4 m-4 md:py-2 md:px-32">
         <BriefInfoSection userData={user} />
 
         <div className="flex flex-row justify-between items-center">
-          <h1 className="font-bold text-lg">Your Groups</h1>
-          <div className="flex gap-2">
-            {/* TODO: Add navigation to join grop + refactor logic */}
+          <h1 className="font-bold text-cyan-900/80 text-lg">Your Groups</h1>
+          <div className="text-sm md:text-md flex gap-2">
             <button
               className="bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 transition-all cursor-pointer text-white p-2 rounded-md"
               onClick={() => setJoinGroupModalOpened(true)}
@@ -187,7 +175,7 @@ export default function Home() {
                     </div>
 
                     <div className="flex-1 min-w-0 relative transition-all">
-                      <h1 className="text-lg font-semibold truncate">
+                      <h1 className="md:text-lg text-cyan-900/90 font-semibold truncate">
                         {group.name}
                       </h1>
 
