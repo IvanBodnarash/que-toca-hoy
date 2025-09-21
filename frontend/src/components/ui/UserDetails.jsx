@@ -4,7 +4,7 @@ import defaultAvatar from "../../assets/initialAvatar.jpg";
 export default function ({ user }) {
   if (!user) return null;
 
-  const pendientes = (user.tasksAssigned || [])
+  const pending = (user.tasksAssigned || [])
     .filter((t) =>
       t.Users.some(
         (x) => x.UserTask?.status !== "done" && x.idUser === user.idUser
@@ -12,9 +12,7 @@ export default function ({ user }) {
     )
     .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
 
-  const proxima = pendientes[0];
-
-  console.log(user.color);
+  const next = pending[0];
 
   return (
     <div className="bg-white border border-slate-400 shadow rounded-2xl flex flex-col md:flex-row justify-between items-center p-4 gap-6">
@@ -23,7 +21,7 @@ export default function ({ user }) {
           <img
             src={user.imageUrl}
             alt={user.name}
-            className="size-32 md:size-36 object-cover border-4 rounded-full"
+            className="size-28 md:size-36 object-cover border-4 rounded-full"
             style={{ borderColor: user.color }}
           />
         ) : (
@@ -45,29 +43,29 @@ export default function ({ user }) {
         />
       </div>
 
-      <div className="flex md:w-3/5 gap-2">
+      <div className="flex w-full md:w-3/5 gap-2">
         <div className="flex-1">
-          <h2 className="text-xl font-semibold">{user.name}</h2>
-          <p className="text-gray-700 mt-2">
+          <h2 className="text-lg md:text-xl font-semibold">{user.name}</h2>
+          <p className="text-gray-700 text-sm md:text-md md:mt-2">
             Tasks: {user.tasksDone}/{user.tasksTotal}
           </p>
 
           <div className="bg-slate-500/20 border border-slate-300 rounded-xl shadow p-3 mt-2">
-            <h3 className="text-lg font-semibold mb-2">Next task</h3>
-            {proxima ? (
-              <p className="text-slate-600 font-medium">
+            <h3 className="md:text-lg font-semibold md:mb-2">Next task</h3>
+            {next ? (
+              <p className="text-slate-600 text-sm md:text-md font-medium">
                 To be done before{" "}
                 <span className="underline">
-                  {new Date(proxima.startDate).toLocaleDateString()}
+                  {new Date(next.startDate).toLocaleDateString()}
                 </span>
               </p>
             ) : (
-              <p className="text-green-600 font-semibold">No pending tasks</p>
+              <p className="text-green-600 text-sm md:text-md font-semibold">No pending tasks</p>
             )}
           </div>
         </div>
 
-        <div className="flex gap-4 h-40">
+        <div className="flex gap-4 min-h-38">
           <div className="flex flex-col items-center justify-between">
             <span className="text-sm font-semibold text-green-700">Done</span>
             <div className="w-10 bg-green-800/50 rounded-lg flex-1 flex items-end">

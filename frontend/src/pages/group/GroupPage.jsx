@@ -1,10 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router";
 import {
-  getGroupTemplatesTasks,
   getGroupTemplatesRecipes,
   getGroupUsers,
-  getGroupById,
   darGroupPin,
   getGroupTasksDatedStatus,
   rotateGroupPin,
@@ -26,10 +24,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import UserCard from "../../components/ui/UserCard.jsx";
 
 const filterTasksByPeriod = (tasks, period) => {
-  const now = new Date();
   return tasks.filter((t) => {
-    //console.log("this task ", t);
-
     if (!t?.startDate || !t?.endDate) return false;
 
     const start = new Date(t.startDate);
@@ -37,20 +32,14 @@ const filterTasksByPeriod = (tasks, period) => {
 
     const { startDate: startFilter, endDate: endFilter } = getDateRange(period);
 
-    //console.log(start, startFilter, end, endFilter);
-
     return end >= startFilter && start <= endFilter;
   });
 };
 
 export default function GroupPage() {
-  const token = localStorage.getItem("token");
   const rawUser = localStorage.getItem("user");
   const { user } = useAuth();
-  // console.log(rawUser);
-  if (!token || !rawUser) throw new Error("NO_AUTH");
-
-  const me = user;
+  if (!rawUser) throw new Error("NO_USER");
   const { groupId } = useParams();
 
   const [selectedUser, setSelectedUser] = useState(null);
@@ -114,9 +103,9 @@ export default function GroupPage() {
         setGroupPin("N/A");
       }
     } catch (err) {
-      console.error("Error cargando datos del grupo:", err);
-      setError("No se pudo cargar el grupo");
-      toast.error("❌ Error cargando datos del grupo");
+      console.error("Error loading group data:", err);
+      setError("The group could not be loaded");
+      toast.error("Error loading group data");
     } finally {
       setLoading(false);
     }

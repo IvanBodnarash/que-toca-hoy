@@ -1,10 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { getMyTasksReport } from "../../services/tasksService";
 import { useGroupRealtime } from "../../realtime/useGroupRealtime";
 import BriefTasksList from "./BriefTasksListItem";
 
 import { RiTodoFill } from "react-icons/ri";
 import { MdOutlineDownloadDone } from "react-icons/md";
+
+// CACHE between mounts (within page session)
+const TASKS_CACHE = new Map(); // key -> { data, ts }
+const TTL_MS = 5 * 60_000; // 1 minute
+const cacheKey = (userId, filter) => `tasks:${userId}:${filter}`;
 
 export default function BriefInfoSection({ userData }) {
   const [filter, setFilter] = useState("today");
@@ -13,29 +18,70 @@ export default function BriefInfoSection({ userData }) {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
-  const getAllMyTasks = useCallback(async () => {
-    try {
-      setLoading(true);
-      setErr("");
-      const res = await getMyTasksReport(userData.idUser, filter);
-      const tasksTodo = res.filter((item) => item.status === "todo");
-      const tasksDone = res.filter((item) => item.status === "done");
-      setTodoTasks(tasksTodo);
-      setDoneTasks(tasksDone);
-    } catch (error) {
-      setErr("Failed to load tasks");
-    } finally {
-      setLoading(false);
-    }
+  // Is there a valid cache right away (for spinner control)
+  const hasValidCache = useMemo(() => {
+    const key = cacheKey(userData.idUser, filter);
+    const entry = TASKS_CACHE.get(key);
+    return !!(entry && Date.now() - entry.ts < TTL_MS);
   }, [userData.idUser, filter]);
 
+  const applyData = useCallback((rows) => {
+    const tasksTodo = rows.filter((item) => item.status === "todo");
+    const tasksDone = rows.filter((item) => item.status === "done");
+    setTodoTasks(tasksTodo);
+    setDoneTasks(tasksDone);
+  }, []);
+
+  const fetchAndUpdate = useCallback(
+    async (signal) => {
+      try {
+        if (!hasValidCache) setLoading(true); // Spinner will apear when no cache
+        setErr("");
+
+        const res = await getMyTasksReport(userData.idUser, filter);
+        if (signal?.aborted) return;
+
+        // Update state
+        applyData(res);
+
+        // Update cache
+        const key = cacheKey(userData.idUser, filter);
+        TASKS_CACHE.set(key, { data: res, ts: Date.now() });
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        setErr("Failed to load tasks");
+      } finally {
+        if (!signal?.aborted) setLoading(false);
+      }
+    },
+    [userData.idUser, filter, hasValidCache, applyData]
+  );
+
+  // Initial render: return cache immediately (if there is), next - background update
   useEffect(() => {
-    getAllMyTasks();
-  }, [getAllMyTasks]);
+    const key = cacheKey(userData.idUser, filter);
+    const entry = TASKS_CACHE.get(key);
+
+    // Instantly show cached data
+    if (
+      entry &&
+      typeof entry.ts === "number" &&
+      Date.now() - entry.ts < TTL_MS
+    ) {
+      applyData(entry.data);
+    }
+
+    const ac = new AbortController();
+    fetchAndUpdate(ac.signal);
+    return () => ac.abort();
+  }, [userData.idUser, filter, applyData, fetchAndUpdate]);
 
   useGroupRealtime(userData.idUser, {
     onUserTasksChanged: () => {
-      getAllMyTasks();
+      const ac = new AbortController();
+      fetchAndUpdate(ac.signal);
+      // Don't forget to cancel if the component manages to unmount
+      return () => ac.abort();
     },
   });
 
@@ -56,10 +102,13 @@ export default function BriefInfoSection({ userData }) {
         </select>
       </div>
 
-      {loading && <p className="text-slate-500 mt-2">Loading...</p>}
+      {loading && !hasValidCache && (
+        <p className="text-slate-500 mt-2">Loading...</p>
+      )}
       {err && <p className="text-red-500 mt-2">{err}</p>}
 
-      {!loading && !err && (
+      {/* if there is a cache — show the content (even when loading=true) */}
+      {!err && (
         <div className="flex flex-row gap-4 mt-4 text-sm md:text-md">
           <div className="w-1/2 space-y-2 bg-slate-300 p-1.5 rounded-md border border-slate-400">
             <div className="flex flex-row items-center gap-2">

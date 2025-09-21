@@ -4,14 +4,7 @@ import { safeImageSrc } from "../../utils/imageProcessor";
 import { useGroupMembersStore } from "../../state/useGroupMembersStore";
 import { useGroupRealtime } from "../../realtime/useGroupRealtime";
 
-// const cache = new Map();
-
-export default function GroupMembersStrip({
-  idGroup,
-  max = 5,
-  refreshKey,
-  onClick,
-}) {
+export default function GroupMembersStrip({ idGroup, max = 5 }) {
   const { members, loaded, fetchMembers } = useGroupMembersStore(idGroup);
 
   useGroupRealtime(idGroup, {

@@ -93,7 +93,9 @@ export default function Home() {
         </div>
         <div className="flex flex-row w-full items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="font-bold text-cyan-900/90 text-lg">Welcome back!</h1>
+            <h1 className="font-bold text-cyan-900/90 text-lg">
+              Welcome back!
+            </h1>
             <h3 className="text-slate-700 text-md">{displayName}</h3>
           </div>
           <div className="flex flex-row items-center gap-6">
