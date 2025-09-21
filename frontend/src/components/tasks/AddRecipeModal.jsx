@@ -61,9 +61,7 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
   const handleAddMaterial = () => {
     if (
       search.trim() &&
-      !materials.some(
-        (m) => m.name.toLowerCase() === search.toLowerCase()
-      )
+      !materials.some((m) => m.name.toLowerCase() === search.toLowerCase())
     ) {
       const newMat = { idMaterial: Date.now(), name: search };
       setMaterials([...materials, newMat]);
@@ -130,7 +128,7 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
       <div className="w-[90%] max-w-md rounded-2xl bg-white p-6 shadow-xl space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">Add New Recipe</h2>
-          <button onClick={onClose} className="text-gray-500">
+          <button onClick={onClose} className="text-slate-500 hover:bg-slate-200 transition-all cursor-pointer rounded p-2">
             ✕
           </button>
         </div>
@@ -184,7 +182,7 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
                     className="px-3 py-1 cursor-pointer hover:bg-gray-100 text-cyan-700"
                     onClick={handleAddMaterial}
                   >
-                    ➕ Add "{search}"
+                    + Add "{search}"
                   </div>
                 )}
               </div>
@@ -218,6 +216,21 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
                   <option value="ud">ud</option>
                   <option value="ml">ml</option>
                   <option value="gr">gr</option>
+                  <option value="kg">kg</option>
+                  <option value="l">l</option>
+                  <option value="tsp">tsp</option>
+                  <option value="tbsp">tbsp</option>
+                  <option value="cup">cup</option>
+                  <option value="pint">pint</option>
+                  <option value="pinch">pinch</option>
+                  <option value="dash">dash</option>
+                  <option value="clove">clove</option>
+                  <option value="bunch">bunch</option>
+                  <option value="slice">slice</option>
+                  <option value="handful">handful</option>
+                  <option value="can">can</option>
+                  <option value="pack">pack</option>
+                  <option value="piece">piece</option>
                 </select>
                 <button
                   type="button"

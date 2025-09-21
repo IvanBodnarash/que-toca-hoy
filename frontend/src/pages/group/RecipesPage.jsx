@@ -6,12 +6,12 @@ import AddRecipeModal from "../../components/tasks/AddRecipeModal";
 import {
   getGroupTemplatesRecipes,
   updateGroupTemplate,
-  createGroupTemplate,
 } from "../../services/groupsService";
 import { GiHotMeal } from "react-icons/gi";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "lucide-react";
 import { useGroupRealtime } from "../../realtime/useGroupRealtime";
+import AddFromCompassModal from "../../components/tasks/AddFromCompassModal";
 
 export default function RecipesPage() {
   const { groupId } = useParams();
@@ -21,6 +21,7 @@ export default function RecipesPage() {
   const [filterName, setFilterName] = useState("");
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [creatingRecipe, setCreatingRecipe] = useState(false);
+  const [addingFromCompass, setAddingFromCompass] = useState(false);
 
   // Load templates
   const loadTemplates = async () => {
@@ -72,14 +73,21 @@ export default function RecipesPage() {
           <GiHotMeal className="w-8 h-8" />
           <h1 className="text-2xl font-bold">Recipes</h1>
         </div>
-        <button
-          onClick={() => setCreatingRecipe(true)}
-          className="flex items-center gap-2 bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 text-white px-2 py-1 md:px-4 md:py-1.5 rounded-lg shadow transition-all cursor-pointer"
-        >
-          <PlusIcon className="size-5" /> New Recipe
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setCreatingRecipe(true)}
+            className="text-xs flex items-center gap-1 bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 text-white px-2 py-1 md:px-4 md:py-1.5 rounded-lg shadow transition-all cursor-pointer"
+          >
+            <PlusIcon className="size-3" /> New Recipe
+          </button>
+          <button
+            onClick={() => setAddingFromCompass(true)}
+            className="text-sm flex items-center gap-2 border border-cyan-900 hover:bg-cyan-50 active:bg-cyan-100 text-cyan-900 px-2 py-1 md:px-4 md:py-1.5 rounded-lg shadow transition-all cursor-pointer"
+          >
+            Recipe Compass
+          </button>
+        </div>
       </div>
-
       {/* Search bar */}
       <div className="relative">
         <MagnifyingGlassIcon className="w-5 h-5 text-slate-400 absolute left-3 top-2.5" />
@@ -92,20 +100,16 @@ export default function RecipesPage() {
           autoFocus
         />
       </div>
-
       {/* States */}
       {loading && (
         <div className="text-slate-500 animate-pulse">Loading recipes...</div>
       )}
-
       {error && <div className="text-red-600 font-medium">{error}</div>}
-
       {!loading && !error && templates.length === 0 && (
         <div className="text-slate-500 italic text-center p-6 rounded-lg border border-slate-200 bg-slate-50">
           No recipes found.
         </div>
       )}
-
       {/* List */}
       {!loading && !error && templates.length > 0 && (
         <GroupTemplatesList
@@ -115,7 +119,7 @@ export default function RecipesPage() {
         />
       )}
 
-      {/* Modal editar */}
+      {/* Edit recipe modal */}
       {editingTemplate && (
         <EditRecipeModal
           template={editingTemplate}
@@ -125,12 +129,21 @@ export default function RecipesPage() {
         />
       )}
 
-      {/* Modal crear receta */}
+      {/* Create recipe modal */}
       {creatingRecipe && (
         <AddRecipeModal
           groupId={groupId}
           onClose={() => setCreatingRecipe(false)}
           onCreated={loadTemplates}
+        />
+      )}
+
+      {/* Add from Recipe Compass modal */}
+      {addingFromCompass && (
+        <AddFromCompassModal
+          groupId={groupId}
+          onClose={() => setAddingFromCompass(false)}
+          onImported={loadTemplates}
         />
       )}
     </div>
