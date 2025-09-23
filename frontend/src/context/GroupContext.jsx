@@ -7,7 +7,7 @@ export const GroupContext = createContext(null);
 export function GroupsProvider({ children }) {
   const { user } = useAuth();
   const [groups, setGroups] = useState([]);
-  const [groupDetails, setGroupDetails] = useState({}); // 🔑 { [groupId]: data }
+  const [groupDetails, setGroupDetails] = useState({}); // { [groupId]: data }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 

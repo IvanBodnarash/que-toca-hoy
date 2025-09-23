@@ -107,7 +107,7 @@ export default function BriefInfoSection({ userData }) {
       )}
       {err && <p className="text-red-500 mt-2">{err}</p>}
 
-      {/* if there is a cache — show the content (even when loading=true) */}
+      {/* if there is a cache - show the content (even when loading=true) */}
       {!err && (
         <div className="flex flex-row gap-4 mt-4 text-sm md:text-md">
           <div className="w-1/2 space-y-2 bg-slate-300 p-1.5 rounded-md border border-slate-400">

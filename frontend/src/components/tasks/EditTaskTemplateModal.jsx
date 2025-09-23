@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { normalizeSteps } from "../../utils/normalizeSteps";
 
 export default function EditTaskTemplateModal({ template, onClose, onSave }) {
@@ -11,7 +11,6 @@ export default function EditTaskTemplateModal({ template, onClose, onSave }) {
     onSave({
       ...template,
       name,
-      // steps: JSON.stringify(steps),
       steps,
     });
   };

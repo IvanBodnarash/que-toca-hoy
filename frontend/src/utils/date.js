@@ -16,7 +16,7 @@ export function toDateOnly(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-// Calcula el rango de fechas según filtro: today | week | month
+// Calculate the date range according to the filter: today | week | month
 export function getDateRange(filter) {
   const now = new Date();
   let startDate, endDate;
@@ -26,7 +26,7 @@ export function getDateRange(filter) {
     endDate = toDateOnly(now);
     endDate.setHours(23, 59, 59, 999);
   } else if (filter === "week") {
-    // lunes de esta semana
+    // Monday of this week
     startDate = toDateOnly(
       new Date(
         now.getFullYear(),
@@ -34,7 +34,7 @@ export function getDateRange(filter) {
         now.getDate() - (now.getDay() === 0 ? 6 : now.getDay() - 1)
       )
     );
-    // domingo
+    // Sunday
     endDate = toDateOnly(new Date(startDate));
     endDate.setDate(startDate.getDate() + 6);
     endDate.setHours(23, 59, 59, 999);
@@ -43,10 +43,8 @@ export function getDateRange(filter) {
     endDate = toDateOnly(new Date(now.getFullYear(), now.getMonth() + 1, 0));
     endDate.setHours(23, 59, 59, 999);
   } else {
-    throw new Error("Filtro inválido. Usa: today, week o month");
+    throw new Error("Invalid filter. Use: today, week, or month");
   }
-
-  //console.log(startDate, endDate);
 
   return { startDate, endDate };
 }

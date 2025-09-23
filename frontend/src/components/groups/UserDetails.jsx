@@ -59,11 +59,12 @@ export default function UserDetails({ user }) {
           <h3 className="text-lg font-semibold mb-2">📌 Next task</h3>
           {proxima ? (
             <p className="text-gray-800 font-medium">
-              Todo before{" "}
-              {new Date(proxima.startDate).toLocaleDateString()}
+              Todo before {new Date(proxima.startDate).toLocaleDateString()}
             </p>
           ) : (
-            <p className="text-green-600 font-semibold">🎉 You are up to date</p>
+            <p className="text-green-600 font-semibold">
+              🎉 You are up to date
+            </p>
           )}
         </div>
       </div>

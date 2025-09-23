@@ -2,10 +2,10 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { useAuth } from "../../context/AuthContext";
+import { login } from "../../services/authService";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  // const location = useLocation();
   const { setLoggedUser } = useAuth();
 
   const [username, setUsername] = useState("");
@@ -14,61 +14,25 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // const LOCALSTORAGE_PENDING_INVITE_KEY = "pending_invite";
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // for httpOnly refresh-cookie
-        body: JSON.stringify({
-          username: username.trim(),
-          password,
-        }),
-      });
+      const { token, user } = await login(username.trim(), password);
 
-      if (!res.ok) {
-        let msg = "Invalid credentials";
-        try {
-          const err = await res.json();
-          msg = err?.error || err?.message || msg;
-        } catch {
-          msg = (await res.text()) || msg;
-        }
-        throw new Error(msg);
-      }
+      if (!token || !user) throw new Error("Invalid server response");
 
-      const data = await res.json(); // { token }
-      localStorage.setItem("token", data.token); // saving accessToken to localStorage
-      setLoggedUser(data.user);
-
-      // If pending_invite exists return to /join
-      // const pendingInvite = localStorage.getItem(
-      //   LOCALSTORAGE_PENDING_INVITE_KEY
-      // );
-      // if (pendingInvite) {
-      //   const { token } = JSON.parse(pendingInvite);
-      //   localStorage.removeItem(LOCALSTORAGE_PENDING_INVITE_KEY);
-      //   navigate(`/join?token=${encodeURIComponent(token)}`, { replace: true });
-      //   return;
-      // }
-
-      // // If came from redirect (?next=/join?token=...)
-      // const params = new URLSearchParams(location.search);
-      // const next = params.get("next");
-      // if (next) {
-      //   navigate(next, { replace: true });
-      //   return;
-      // }
-
-      // Default
+      localStorage.setItem("user", JSON.stringify(user)); // Saving accessToken to localStorage
+      setLoggedUser(user);
       navigate("/", { replace: true });
     } catch (error) {
-      const msg = error?.message || "Invalid credentials";
+      const msg =
+        error?.message === "UNAUTHORIZED"
+          ? "Session expired. Please login again."
+          : error?.message || "Invalid credentials";
       setError(msg);
     } finally {
       setLoading(false);
@@ -87,6 +51,7 @@ export default function LoginPage() {
       </div>
       <div className="bg-white p-6 shadow-xl">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {/* Username / Email */}
           <div className="flex flex-col gap-2">
             <label
               htmlFor="username"
@@ -106,6 +71,8 @@ export default function LoginPage() {
               disabled={loading}
             />
           </div>
+
+          {/* Password */}
           <div className="flex flex-col gap-2">
             <label
               htmlFor="password"
@@ -140,16 +107,19 @@ export default function LoginPage() {
             </div>
           </div>
 
+          {/* Error */}
           {error && <div className="text-red-600 text-sm">{error}</div>}
 
           <button
             type="submit"
-            className="bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 transition-all p-2 text-white rounded-md outline-0 cursor-pointer"
+            className="bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 transition-all p-2 text-white rounded-md outline-0 cursor-pointer disabled:opacity-70"
             disabled={loading}
+            aria-busy={loading}
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
+
         <p className="pt-2 text-slate-600">
           Don't have an account?{" "}
           <NavLink to="/auth/register" className="text-cyan-700 underline">

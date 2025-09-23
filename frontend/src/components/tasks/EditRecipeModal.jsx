@@ -3,7 +3,6 @@ import { X, Plus, Trash } from "lucide-react";
 
 export default function EditRecipeModal({
   template,
-  groupId,
   onClose,
   onSave,
 }) {
@@ -50,8 +49,6 @@ export default function EditRecipeModal({
             ✕
           </button>
         </div>
-
-        {/* <h2 className="text-xl font-bold text-cyan-800 mb-4">Edit Template</h2> */}
 
         <div className="mb-2 space-y-2">
           <label className="block font-medium text-slate-700">Name</label>

@@ -61,7 +61,6 @@ async function refreshToken() {
 }
 
 // Helpers
-
 async function safeReadJson(res) {
   const text = await res.text();
   if (!text) return null;

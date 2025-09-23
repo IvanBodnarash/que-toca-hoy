@@ -10,6 +10,7 @@ import {
   startOfDayLocal,
   toLocalInputString,
 } from "../../utils/toLocalInputString";
+import MaterialsModal from "./MaterialsModal";
 
 export default function NewTaskDatedModal({
   open,
@@ -31,27 +32,27 @@ export default function NewTaskDatedModal({
   const [frequency, setFrequency] = useState("none");
   const [rotative, setRotative] = useState(false);
 
-  // for materials
+  // For materials
   const [materialsModalOpen, setMaterialsModalOpen] = useState(false);
   const [selectedTemplateMaterials, setSelectedTemplateMaterials] = useState(
     []
   );
   const [selectedMaterials, setSelectedMaterials] = useState([]);
 
-  // for selected type of template
+  // For selected type of template
   const [selectedTask, setSelectedTask] = useState("");
   const [selectedRecipe, setSelectedRecipe] = useState("");
 
   const handleTaskChange = (id) => {
     setSelectedTask(id);
-    setSelectedRecipe(""); // reset del otro
-    handleTemplateChange(id); // cargar materiales y abrir modal
+    setSelectedRecipe(""); // Reset
+    handleTemplateChange(id); // Load materials and open the modal
   };
 
   const handleRecipeChange = (id) => {
     setSelectedRecipe(id);
-    setSelectedTask(""); // reset del otro
-    handleTemplateChange(id); // cargar materiales y abrir modal
+    setSelectedTask(""); // Reset from another
+    handleTemplateChange(id); // Upload materials and open modal
   };
 
   useEffect(() => {
@@ -61,26 +62,6 @@ export default function NewTaskDatedModal({
       setLoading(true);
       setError("");
       try {
-        // const [tpls, usrs] = await Promise.all([
-        //   getGroupTemplates(groupId),
-        //   getGroupUsers(groupId),
-        // ]);
-
-        // if (!cancelled) {
-        //   setTemplates(Array.isArray(tpls) ? tpls : []);
-        //   setUsers(Array.isArray(usrs) ? usrs : []);
-
-        //   const d = defaultDate || new Date();
-        //   const iso = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-        //     .toISOString()
-        //     .slice(0, 16); // local datetime-local
-        //   setStartDate(iso);
-        //   setEndDate(iso);
-        //   setIdTaskTemplate("");
-        //   setAssignees([]);
-        //   setFrequency("none");
-        //   setRotative(false);
-        // }
         const [tpls, usrs] = await Promise.all([
           getGroupTemplates(groupId),
           getGroupUsers(groupId),
@@ -118,21 +99,6 @@ export default function NewTaskDatedModal({
   }, [open, groupId, defaultDate]);
 
   const handleTemplateChange = async (templateId) => {
-    // console.log("get materials");
-    // setIdTaskTemplate(templateId);
-
-    // const materials = await getMaterialsforTemplante(templateId);
-    // console.log("materials, ", materials);
-    // if (materials.length > 0) {
-    //   setSelectedTemplateMaterials(materials);
-    //   // Inicializa selectedMaterials con cantidad y unidad por defecto
-    //   setSelectedMaterials([]);
-    //   setMaterialsModalOpen(true); // abrir modal de materiales
-    // } else {
-    //   setSelectedTemplateMaterials([]);
-    //   setSelectedMaterials([]);
-    //   setMaterialsModalOpen(false);
-    // }
     try {
       setIdTaskTemplate(templateId);
       if (!templateId) {
@@ -189,16 +155,6 @@ export default function NewTaskDatedModal({
     setLoading(true);
     setError("");
     try {
-      // const created = await createTaskDated({
-      //   idGroup: Number(groupId),
-      //   idTaskTemplate: Number(idTaskTemplate),
-      //   startDate: new Date(startDate).toISOString(),
-      //   endDate: new Date(endDate).toISOString(),
-      //   frequency,
-      //   rotative,
-      //   materials: selectedMaterials,
-      // });
-
       const created = await createTaskDated({
         idGroup: Number(groupId),
         idTaskTemplate: Number(idTaskTemplate),
@@ -228,18 +184,8 @@ export default function NewTaskDatedModal({
           }
         }
       }
-      // if (Array.isArray(assignees) && assignees.length > 0) {
-      //   for (const uid of assignees) {
-      //     try {
-      //       await assignUserToTask(Number(uid), Number(created.idTaskDated));
-      //     } catch (err) {
-      //       console.warn("assignUserToTask failed:", err?.message || err);
-      //     }
-      //   }
-      // }
-
-      onCreated(); // refresh calendar
-      onClose(); // close modal
+      onCreated(); // Refresh calendar
+      onClose(); // Close modal
     } catch (e) {
       setError(e.message || "Create failed");
     } finally {
@@ -249,7 +195,7 @@ export default function NewTaskDatedModal({
 
   if (!open) return null;
 
-  // Separar recetas y tareas
+  // Separate recipes and tasks
   const taskTemplates = templates.filter((t) => t.type === "task");
   const recipeTemplates = templates.filter((t) => t.type === "recipe");
 
@@ -416,65 +362,12 @@ export default function NewTaskDatedModal({
 
         {/* Materials modal */}
         {materialsModalOpen && (
-          <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/40">
-            <div className="w-[90%] max-w-md bg-white p-4 rounded-2xl shadow-lg">
-              <h2 className="text-lg font-semibold mb-3">
-                Select materials to buy
-              </h2>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {selectedTemplateMaterials.map((mat) => {
-                  const isSelected = selectedMaterials.some(
-                    (m) => m.idMaterial === mat.idMaterial
-                  );
-                  return (
-                    <label
-                      key={mat.idMaterial}
-                      className="flex items-center gap-2"
-                    >
-                      <input
-                        type="checkbox"
-                        className="size-5 cursor-pointer"
-                        checked={isSelected}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedMaterials([
-                              ...selectedMaterials,
-                              {
-                                idMaterial: mat.idMaterial,
-                                quantity: mat.quantity || 1,
-                                unit: mat.unit || "ud",
-                              },
-                            ]);
-                          } else {
-                            setSelectedMaterials(
-                              selectedMaterials.filter(
-                                (m) => m.idMaterial !== mat.idMaterial
-                              )
-                            );
-                          }
-                        }}
-                      />
-                      {mat.name} ({mat.quantity} {mat.unit || "ud"})
-                    </label>
-                  );
-                })}
-              </div>
-              <div className="mt-4 flex justify-end gap-2">
-                <button
-                  onClick={() => setMaterialsModalOpen(false)}
-                  className="px-4 py-2 rounded bg-slate-200 hover:bg-slate-300 transition-all cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => setMaterialsModalOpen(false)}
-                  className="px-4 py-2 rounded bg-cyan-900 text-white hover:bg-cyan-800 transition-all cursor-pointer"
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
+          <MaterialsModal
+            selectedMaterials={selectedMaterials}
+            selectedTemplateMaterials={selectedTemplateMaterials}
+            setMaterialsModalOpen={setMaterialsModalOpen}
+            setSelectedMaterials={setSelectedMaterials}
+          />
         )}
       </div>
     </div>

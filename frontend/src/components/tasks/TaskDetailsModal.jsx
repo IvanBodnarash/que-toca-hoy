@@ -1,7 +1,6 @@
 export default function TaskDetailsModal({
   open,
   task,
-  members = [],
   usersMap,
   role, // "admin" | "user"
   onClose,

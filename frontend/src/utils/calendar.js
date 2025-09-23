@@ -37,7 +37,7 @@ export function getContrastYIQ(hexcolor) {
   return yiq >= 128 ? "#000" : "#fff"; // light background -> black text, dark background -> white text
 }
 
-// Converting TaskDated -> event для react-big-calendar
+// Converting TaskDated -> event for react-big-calendar
 export function toCalendarEvent(task) {
   const start = new Date(task.startDate);
   const end = task.endDate

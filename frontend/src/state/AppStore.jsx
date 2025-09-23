@@ -1,15 +1,9 @@
-// src/state/AppStore.jsx
 import { createContext, useContext, useMemo, useReducer } from "react";
 
 const AppStoreCtx = createContext(null);
 
 const initialState = {
-  groups: {
-    // [idGroup]: {
-    //   members: [], membersLoaded: false,
-    //   events: [],  eventsLoaded:  false,
-    // }
-  },
+  groups: {},
 };
 
 function reducer(state, action) {

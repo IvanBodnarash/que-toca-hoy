@@ -12,8 +12,8 @@ export default function LogoContainer({ stacked = true, className = "" }) {
           <span className="block text-[22px] md:text-2xl">Que</span>
           <span className="block text-[22px] md:text-2xl">Toca</span>
           <span className="block text-[22px] md:text-2xl bg-gradient-to-r from-cyan-800 to-cyan-500 bg-clip-text text-transparent">
-  Hoy
-</span>
+            Hoy
+          </span>
         </div>
       ) : (
         <div className="leading-none text-cyan-900 tracking-tight text-2xl md:text-3xl">

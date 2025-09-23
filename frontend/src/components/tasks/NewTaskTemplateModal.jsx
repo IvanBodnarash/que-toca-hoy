@@ -16,10 +16,9 @@ export default function AddTemplateModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // materiales
+  // Materials
   const [materials, setMaterials] = useState([]);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
-  const [newMaterial, setNewMaterial] = useState("");
   const [search, setSearch] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const loadMaterials = async () => {
@@ -34,7 +33,7 @@ export default function AddTemplateModal({
       if (!cancelled) {
         const mats = Array.isArray(data.materials) ? data.materials : [];
 
-        // ✅ eliminar duplicados por idMaterial
+        // Remove duplicates by idMaterial
         const uniqueMaterials = Array.from(
           new Map(mats.map((m) => [m.idMaterial, m])).values()
         );
@@ -116,17 +115,7 @@ export default function AddTemplateModal({
     e.preventDefault();
     setError("");
     try {
-      // Convertir cada línea del textarea en un paso
-      // const stepsArray = steps
-      //   .split("\n")
-      //   .map((s) => s.trim())
-      //   .filter((s) => s.length > 0);
-      // const stepsArray = normalizeSteps(steps);
-
-      const stepsArray = steps
-        .split("\n")
-        .map((s) => s.trim())
-        .filter((s) => s.length > 0);
+      const stepsArray = normalizeSteps(steps);
 
       const tpl = await createGroupTemplate(
         groupId,
@@ -174,15 +163,8 @@ export default function AddTemplateModal({
             value={steps}
             onChange={(e) => setSteps(e.target.value)}
           />
-          {/*<select
-            className="w-full border rounded px-2 py-1 outline-none focus:ring-2 border-slate-800 focus:ring-cyan-600"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          >
-            <option value="task">Task</option>
-            <option value="recipe">Recipe</option>
-          </select>*/}
-          {/* Sección de materiales */}
+
+          {/* Materials section */}
           <div className="space-y-2 relative">
             <p className="font-medium">Materials</p>
 
@@ -215,13 +197,13 @@ export default function AddTemplateModal({
                     className="px-3 py-1 cursor-pointer hover:bg-gray-100 text-cyan-700"
                     onClick={handleAddMaterial}
                   >
-                    ➕ Add "{search}"
+                    + Add "{search}"
                   </div>
                 )}
               </div>
             )}
 
-            {/* Lista editable de materiales seleccionados */}
+            {/* Editable list of selected materials */}
             <div className="space-y-2 mt-2">
               {selectedMaterials.map((mat) => (
                 <div
@@ -242,7 +224,7 @@ export default function AddTemplateModal({
                     }
                   />
                   <select
-                    className="border rounded px-1 py-0.5"
+                    className="border rounded px-1 py-0.5 cursor-pointer"
                     value={mat.unit}
                     onChange={(e) =>
                       handleChangeUnit(mat.idMaterial, e.target.value)
@@ -251,10 +233,25 @@ export default function AddTemplateModal({
                     <option value="ud">ud</option>
                     <option value="ml">ml</option>
                     <option value="gr">gr</option>
+                    <option value="kg">kg</option>
+                    <option value="l">l</option>
+                    <option value="tsp">tsp</option>
+                    <option value="tbsp">tbsp</option>
+                    <option value="cup">cup</option>
+                    <option value="pint">pint</option>
+                    <option value="pinch">pinch</option>
+                    <option value="dash">dash</option>
+                    <option value="clove">clove</option>
+                    <option value="bunch">bunch</option>
+                    <option value="slice">slice</option>
+                    <option value="handful">handful</option>
+                    <option value="can">can</option>
+                    <option value="pack">pack</option>
+                    <option value="piece">piece</option>
                   </select>
                   <button
                     type="button"
-                    className="text-red-600"
+                    className="text-red-600 cursor-pointer"
                     onClick={() => handleRemoveMaterial(mat.idMaterial)}
                   >
                     ✕
@@ -264,6 +261,12 @@ export default function AddTemplateModal({
             </div>
           </div>
 
+          {/* States */}
+          {loading && (
+            <div className="text-slate-500 animate-pulse">
+              Loading task templates...
+            </div>
+          )}
           {error && <div className="text-red-600 text-sm">{error}</div>}
 
           <div className="flex justify-end gap-2">

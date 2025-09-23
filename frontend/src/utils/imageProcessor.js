@@ -54,12 +54,12 @@ export async function resizeImageToDataURL(
 export function safeImageSrc(value, fallback = null) {
   if (typeof value !== "string") return fallback;
 
-  const s = value.trim(); // 👈 solo trim al inicio y final
+  const s = value.trim(); // only trim at the start and end
   if (!s) return fallback;
 
   if (s.startsWith("data:image/")) return s; // Base64
   if (/^https?:\/\//i.test(s)) return s; // http(s) URL
-  if (s.startsWith("/")) return s; // rutas relativas
+  if (s.startsWith("/")) return s; // relative routes
 
   return fallback;
 }

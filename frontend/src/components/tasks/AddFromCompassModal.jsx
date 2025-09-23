@@ -1,8 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  getGroupMaterials,
-  createGroupTemplate,
-} from "../../services/groupsService";
+import { createGroupTemplate } from "../../services/groupsService";
 import { fetchCompassRecipes } from "../../external/compassService";
 import { compassMapper } from "../../external/compassMapper";
 

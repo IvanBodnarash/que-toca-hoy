@@ -3,7 +3,7 @@ import {
   getGroupMaterials,
   createGroupTemplate,
 } from "../../services/groupsService";
-//import { createRecipeTemplate } from "../../services/taskTemplateService";
+import { normalizeSteps } from "../../utils/normalizeSteps";
 
 export default function AddRecipeModal({ groupId, onClose, onCreated }) {
   const [name, setName] = useState("");
@@ -16,7 +16,7 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
   const [search, setSearch] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Cargar materiales del grupo
+  // Load group materials
   const loadMaterials = async () => {
     setLoading(true);
     setError("");
@@ -24,7 +24,7 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
       const data = await getGroupMaterials(groupId);
       const mats = Array.isArray(data.materials) ? data.materials : [];
 
-      // Eliminar duplicados por idMaterial
+      // Delete duplicates by idMaterial
       const uniqueMaterials = Array.from(
         new Map(mats.map((m) => [m.idMaterial, m])).values()
       );
@@ -100,15 +100,12 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
     e.preventDefault();
     setError("");
     try {
-      // Convertir steps en array
-      const stepsArray = steps
-        .split("\n") // separar por saltos de línea
-        .map((s) => s.trim()) // limpiar espacios
-        .filter((s) => s.length); // eliminar líneas vacías
+      // Convert steps to array
+      const stepsArray = normalizeSteps(steps);
 
       const tpl = await createGroupTemplate(
         groupId,
-        { name, steps: stepsArray, type: "recipe" }, // pasos como array
+        { name, steps: stepsArray, type: "recipe" },
         selectedMaterials.map((m) => ({
           idMaterial: m.idMaterial,
           quantity: m.quantity,
@@ -128,7 +125,10 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
       <div className="w-[90%] max-w-md rounded-2xl bg-white p-6 shadow-xl space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold">Add New Recipe</h2>
-          <button onClick={onClose} className="text-slate-500 hover:bg-slate-200 transition-all cursor-pointer rounded p-2">
+          <button
+            onClick={onClose}
+            className="text-slate-500 hover:bg-slate-200 transition-all cursor-pointer rounded p-2"
+          >
             ✕
           </button>
         </div>
@@ -243,6 +243,9 @@ export default function AddRecipeModal({ groupId, onClose, onCreated }) {
             ))}
           </div>
 
+          {loading && (
+            <div className="text-slate-500 animate-pulse">Loading...</div>
+          )}
           {error && <div className="text-red-600 text-sm">{error}</div>}
 
           <div className="flex justify-end gap-2">

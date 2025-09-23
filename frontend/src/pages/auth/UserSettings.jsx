@@ -1,19 +1,19 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
-import { BiHide, BiShow } from "react-icons/bi";
-import { validate } from "../../utils/validations";
-import UserImageUploader from "../../components/auth/UserImageUploader";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-import defaultAvatar from "../../assets/initialAvatar.jpg";
 import { safeImageSrc } from "../../utils/imageProcessor";
+import { validate } from "../../utils/validations";
 import { apiPut } from "../../api/apiFetch.js";
+
+import { BiHide, BiShow } from "react-icons/bi";
+
+import UserImageUploader from "../../components/auth/UserImageUploader";
+import defaultAvatar from "../../assets/initialAvatar.jpg";
 
 export default function UserSettings() {
   const { user, logout, updateUser } = useAuth();
   const navigate = useNavigate();
-
-  // console.log(user);
 
   // Loading div
   if (!user) return <div className="p-4">Loading...</div>;
@@ -120,9 +120,7 @@ export default function UserSettings() {
       });
     } catch (_) {}
 
-    // localStorage.removeItem("token");
     localStorage.removeItem("user");
-    localStorage.removeItem("pending_invite");
 
     try {
       logout?.();

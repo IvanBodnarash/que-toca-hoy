@@ -49,7 +49,9 @@ export default function NewGroupModal({ onClose, onCreated }) {
           <div>
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h2 className="text-lg md:text-xl text-slate-700 font-semibold">New Group</h2>
+              <h2 className="text-lg md:text-xl text-slate-700 font-semibold">
+                New Group
+              </h2>
               <button
                 onClick={() => onClose()}
                 className="inline-flex h-8 w-8 items-center justify-center rounded cursor-pointer hover:bg-gray-100"
@@ -60,7 +62,7 @@ export default function NewGroupModal({ onClose, onCreated }) {
             </div>
 
             {/* Body */}
-            <div className="space-y-2">
+            <form onSubmit={submitAll} className="space-y-2">
               {/* Title */}
               <div className="flex text-sm md:text-md flex-col gap-2">
                 <label htmlFor="title" className="text-slate-800">
@@ -72,6 +74,7 @@ export default function NewGroupModal({ onClose, onCreated }) {
                   type="text"
                   className="w-full border border-slate-600 outline-cyan-700 rounded-sm p-2"
                   onChange={(e) => setTitle(e.target.value)}
+                  required
                 />
               </div>
 
@@ -96,14 +99,11 @@ export default function NewGroupModal({ onClose, onCreated }) {
                 >
                   Cancel
                 </button>
-                <button
-                  className="px-4 py-1 rounded-md bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 text-white cursor-pointer transition-all"
-                  onClick={submitAll}
-                >
+                <button className="px-4 py-1 rounded-md bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 text-white cursor-pointer transition-all">
                   Create
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         ) : (
           <div>

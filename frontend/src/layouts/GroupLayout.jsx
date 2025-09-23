@@ -6,9 +6,7 @@ export default function GroupLayout() {
   return (
     <>
       <GroupHeader />
-      {/* <div className="py-22"> */}
-        <Outlet />
-      {/* </div> */}
+      <Outlet />
       <MobileNavigation />
     </>
   );
