@@ -31,7 +31,7 @@ function emitCalendarRefresh(req, idGroup) {
 export const taskTemplateController = {
   ...baseController,
 
-  // Obtener materiales de plantilla de tarea
+  // Get task template materials
   getMaterials: async (req, res) => {
     const { id } = req.params;
     try {
@@ -44,7 +44,7 @@ export const taskTemplateController = {
     }
   },
 
-  // Obtener tareas de plantilla de tarea
+  // Get tasks from task template
   getTasksByID: async (req, res) => {
     const { idTask } = req.params;
     try {
@@ -57,7 +57,7 @@ export const taskTemplateController = {
     }
   },
 
-  // obtener las templates por tipo: task o template
+  // Get the templates by type: task or template
   getByType: async (req, res) => {
     const { type } = req.params;
     try {
@@ -71,7 +71,8 @@ export const taskTemplateController = {
       res.status(500).json({ message: "Error fetching tasks" });
     }
   },
-  // listar todos taskTemplate por tipo pasado como variable (tarea o receta) por ID de grupo
+
+  // List all taskTemplate by type passed as variable (task or recipe) by group ID
   getTasksByTypeByGroupID: async (req, res) => {
     const { type, idGroup } = req.params;
 
@@ -101,17 +102,17 @@ export const taskTemplateController = {
       if (!template)
         return res.status(404).json({ message: "Template not found" });
 
-      // Actualizar nombre y pasos
+      // Update name and steps
       await template.update({ name, steps });
 
-      // Actualizar materiales
+      // Update materials
       if (materials && Array.isArray(materials)) {
-        // Primero eliminamos las relaciones existentes
+        // First we remove the existing relations
         await MaterialTaskTemplate.destroy({ where: { idTaskTemplate } });
 
-        // Creamos las nuevas relaciones
+        // We create the new relations
         for (const mat of materials) {
-          // Si el material no tiene idMaterial, asumimos que es nuevo y lo creamos
+          // If the material does not have idMaterial, we assume it is new and create it
           let materialId = mat.idMaterial;
           if (!materialId) {
             const newMaterial = await Material.create({
@@ -130,7 +131,7 @@ export const taskTemplateController = {
         }
       }
 
-      // Traemos el template actualizado con sus materiales
+      // We bring the updated template with its materials
       const updatedTemplate = await TaskTemplate.findByPk(idTaskTemplate, {
         include: Material,
       });
@@ -186,7 +187,7 @@ export const taskTemplateController = {
     const { name, steps, materials = [] } = req.body;
 
     try {
-      // Convertir steps a array si viene como string
+      // Convert steps to array if it comes as a string
       let stepsData = steps;
       if (typeof steps === "string") {
         stepsData = steps
@@ -195,7 +196,7 @@ export const taskTemplateController = {
           .filter((s) => s.length);
       }
 
-      // Crear el template con type = recipe
+      // Create tempate with type = recipe
       const recipe = await TaskTemplate.create({
         name,
         steps: stepsData,
@@ -203,7 +204,7 @@ export const taskTemplateController = {
         type: "recipe",
       });
 
-      // Procesar materiales
+      // Process materials
       for (const mat of materials) {
         let material = null;
 

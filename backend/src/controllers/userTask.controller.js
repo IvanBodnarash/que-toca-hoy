@@ -1,4 +1,9 @@
-import { User, UserTask, TaskDated, TaskTemplate } from "../models/index.model.js";
+import {
+  User,
+  UserTask,
+  TaskDated,
+  TaskTemplate,
+} from "../models/index.model.js";
 
 import { createBaseController } from "./base.controller.js";
 
@@ -62,29 +67,31 @@ async function buildTaskSnapshot(idTaskDated) {
   };
 }
 
-// las funciones más comunes ya las manejamos desde UserController y TaskController.
+// We already handle the most common functions from UserController and TaskController
 
 export const userTaskController = {
   ...baseController,
 
-  // Asignar tarea a usuario
+  // Assign task to user
   assignTask: async (req, res) => {
     const { idUser, idTaskDated } = req.body;
 
     if (!idUser || !idTaskDated) {
-      return res.status(400).json({ message: "Faltan idUser o idTaskDated" });
+      return res
+        .status(400)
+        .json({ message: "idUser or idTaskDated is missing" });
     }
 
     try {
-      // Comprobar que el usuario existe
+      // Check that the user exists
       const userExists = await User.findByPk(idUser);
       if (!userExists) {
         return res
           .status(404)
-          .json({ message: `Usuario con id ${idUser} no existe` });
+          .json({ message: `User with id ${idUser} does not exist` });
       }
 
-      // Comprobar que la tarea existe
+      // Check that the task exists
       const taskExists = await TaskDated.findByPk(idTaskDated);
       if (!taskExists) {
         return res
@@ -92,7 +99,7 @@ export const userTaskController = {
           .json({ message: `TaskDated con id ${idTaskDated} no existe` });
       }
 
-      // Crear la relación
+      // Create relation
       const record = await UserTask.create({ idUser, idTaskDated });
 
       const snap = await buildTaskSnapshot(idTaskDated);
@@ -101,10 +108,10 @@ export const userTaskController = {
           task: snap,
         });
 
-      res.status(201).json({ message: "Task asignada correctamente", record });
+      res.status(201).json({ message: "Task assigned successfully", record });
     } catch (error) {
       res.status(500).json({
-        message: "Error asignando task",
+        message: "Error assigning task",
         error: error.original ? error.original.sqlMessage : error.message,
       });
     }
@@ -114,7 +121,9 @@ export const userTaskController = {
     const { idUser, idTaskDated } = req.body;
 
     if (!idUser || !idTaskDated) {
-      return res.status(400).json({ message: "Faltan idUser o idTaskDated" });
+      return res
+        .status(400)
+        .json({ message: "idUser or idTaskDated is missing" });
     }
 
     try {
@@ -127,7 +136,7 @@ export const userTaskController = {
       });
 
       if (deleted === 0) {
-        // Fila no encontrada: ya se eliminó o los identificadores no coinciden
+        // Row not found: already deleted or IDs do not match
         return res.status(404).json({ error: "RELATION_NOT_FOUND" });
       }
 

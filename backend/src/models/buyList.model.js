@@ -1,36 +1,43 @@
 // idBuyList, idTask, idMaterial, quantity, unit
 
-import { DataTypes } from 'sequelize';
-import {sequelize} from '../../config/database.js'
+import { DataTypes } from "sequelize";
+import { sequelize } from "../../config/database.js";
 
-const BuyList = sequelize.define('BuyList', {
-    idBuyList: { type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true },
+const BuyList = sequelize.define(
+  "BuyList",
+  {
+    idBuyList: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     idTaskDated: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        references: { model: 'tasksdated', key: 'idTaskDated' },
-        allowNull: false
+      type: DataTypes.INTEGER.UNSIGNED,
+      references: { model: "tasksdated", key: "idTaskDated" },
+      allowNull: false,
     },
     idMaterial: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        references: { model: 'materials', key: 'idMaterial' },
-        allowNull: false
+      type: DataTypes.INTEGER.UNSIGNED,
+      references: { model: "materials", key: "idMaterial" },
+      allowNull: false,
     },
     quantity: {
-        type: DataTypes.FLOAT.UNSIGNED,
-        allowNull: false,
+      type: DataTypes.FLOAT.UNSIGNED,
+      allowNull: false,
     },
-    unit:{
-        type: DataTypes.ENUM('ud', 'ml', 'gr'), 
-        defaultValue: 'ud',
-        allowNull: false
-    }
-}, {
-    tableName: 'buylists',
+    unit: {
+      type: DataTypes.ENUM("ud", "ml", "gr"),
+      defaultValue: "ud",
+      allowNull: false,
+    },
+  },
+  {
+    tableName: "buylists",
     timestamps: true,
-    underscored: false
-});
-
+    underscored: false,
+  }
+);
 
 export default BuyList;
 
-//Para los campos que se relacionan con otra entidad -> primaryKey : false no hace falta, no hay riesgo de que Sequelize lo tome como primary key por defecto.
+// For fields that relate to another entity -> primaryKey : false is not necessary, there is no risk of Sequelize taking it as the primary key by default.

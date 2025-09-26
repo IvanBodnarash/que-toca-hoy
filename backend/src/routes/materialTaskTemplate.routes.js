@@ -1,13 +1,13 @@
 import { createBaseRouter } from "./base.routes.js";
 import { materialTaskTemplateController } from "../controllers/materialTaskTemplate.controller.js"
 
-// listar, listar por ID, crear, editar por ID, borrar por ID
+// List, list by ID, create, edit by ID, delete by ID
 const materialTaskTemplateRouter = createBaseRouter(materialTaskTemplateController);
 
-// Obtener materiales por plantilla
+// Get materials by template
 materialTaskTemplateRouter.get("/:id/materials", materialTaskTemplateController.getMaterialsByTemplate);
 
-// Obtener plantillas por material
+// Get templates by material
 materialTaskTemplateRouter.get("/:id/templates", materialTaskTemplateController.getTemplatesByMaterial);
 
 

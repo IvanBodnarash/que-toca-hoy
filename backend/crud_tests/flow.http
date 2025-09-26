@@ -1,11 +1,11 @@
 @baseUrl = http://localhost:3000
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjUsInVzZXJuYW1lIjoiZmxvd2NoZWNrZXIiLCJpYXQiOjE3NTU2MTQzNjMsImV4cCI6MTc1NTYxNTI2M30.EcJq5LrpBqOfaEt0We2gG-3zP2eHuZi-qbE3iCJaduE
 
-### listar usuarios
+### Get users
 GET {{baseUrl}}/user 
 
 
-### register user
+### Register user
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
@@ -17,8 +17,7 @@ Content-Type: application/json
 }
 
 
-
-### check token -- password correct
+### Check token -- password correct
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
@@ -28,6 +27,6 @@ Content-Type: application/json
 }
 
 
-### access profile
+### Access profile
 GET {{baseUrl}}/auth/profile
 Authorization: Bearer {{token}}

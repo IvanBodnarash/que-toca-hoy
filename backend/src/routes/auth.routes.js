@@ -4,16 +4,20 @@ import { verifyToken } from '../middlewares/auth.middleware.js';
 
 const authRouter = Router();
 
-// Ruta para registrar un nuevo usuario
+// Register route
 authRouter.post('/register', register);
 
-// Ruta para login
+// Login route
 authRouter.post('/login', login);
 
+// Refresh route
 authRouter.post('/refresh', refresh);
+
+// Logout route
 authRouter.post('/logout', logout);
 
-// Ruta para profile
+// Profile routes
+
 // Profile (get)
 authRouter.get('/profile', verifyToken, profile);
 

@@ -10,18 +10,21 @@ async function emitForTask(req, idTaskDated, type, payload) {
     });
     if (!task) return;
     const gid = Number(task.idGroup);
-    req.app.get("io").to(`group:${gid}`).emit("buylist:changed", {
-      idGroup: gid,
-      type,
-      ...payload,
-    });
+    req.app
+      .get("io")
+      .to(`group:${gid}`)
+      .emit("buylist:changed", {
+        idGroup: gid,
+        type,
+        ...payload,
+      });
   } catch (error) {}
 }
 
 export const buyListController = {
   ...baseController,
 
-  // Obtener lista de compra por tarea
+  // Get buy list by task
   getByTask: async (req, res) => {
     const { taskId } = req.params;
     try {
@@ -32,7 +35,7 @@ export const buyListController = {
     }
   },
 
-  // Obtener lista de compra por material
+  // Get buy list by material
   getByMaterial: async (req, res) => {
     const { materialId } = req.params;
     try {
@@ -53,8 +56,7 @@ export const buyListController = {
         return res.status(400).json({ message: "Datos inválidos" });
       }
 
-      // materiasl es array de tipo [{idMaterial: 1, quantity: 300, unit: 'gr'}]
-      // Construir array de objetos para insertar
+      // Build array of objects to insert
       const entries = materials.map((material) => ({
         idTaskDated,
         idMaterial: material.idMaterial,
@@ -62,12 +64,11 @@ export const buyListController = {
         unit: material.unit,
       }));
 
-      // Insertar todos en la base de datos
-      //   await BuyList.bulkCreate(entries);
+      // Insert all into the database
+      // await BuyList.bulkCreate(entries);
 
-      //   res.status(201).json({ message: "Lista de compras creada exitosamente" });
       const created = await BuyList.bulkCreate(entries);
-      res.status(201).json({ message: "Lista de compras creada exitosamente" });
+      res.status(201).json({ message: "Shopping list created successfully" });
 
       // Live
       emitForTask(req, idTaskDated, "bulk-created", { items: created });
@@ -81,7 +82,7 @@ export const buyListController = {
     const { idTaskDated, idMaterial, quantity, unit } = req.body;
 
     try {
-      // Comprobar que la tarea existe
+      // Check that the task exists
       const taskExists = await TaskDated.findByPk(idTaskDated);
       if (!taskExists) {
         return res
@@ -89,7 +90,7 @@ export const buyListController = {
           .json({ message: `TaskDated con id ${idTaskDated} no existe` });
       }
 
-      // Comprobar que el material existe
+      // Check that the material exists
       const materialExists = await Material.findByPk(idMaterial);
       if (!materialExists) {
         return res
@@ -117,8 +118,8 @@ export const buyListController = {
       }
       res.status(500).json({
         message:
-          "No se puede crear el registro: la tarea indicada (idTaskDated) no existe o es inválida.",
-        error: "Violación de clave foránea en idTaskDated",
+          "Unable to create record: The specified task (idTaskDated) does not exist or is invalid.",
+        error: "Foreign key violation in idTaskDated",
       });
     }
   },

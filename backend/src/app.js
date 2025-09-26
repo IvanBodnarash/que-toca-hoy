@@ -1,5 +1,5 @@
-import cors from "cors"; //para permitir solicitudes de diferentes orígenes (CORS) (desde el navegador)
-import dotenv from "dotenv"; //para cargar las variables de entorno (configuración)
+import cors from "cors"; // to allow cross-origin requests (CORS) (from the browser)
+import dotenv from "dotenv"; // to load the environment variables (configuration)
 import express from "express";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
@@ -56,11 +56,11 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: ["http://localhost:5173"], // vite dev server
-    credentials: true, // permite cookies + auth headers
+    credentials: true, // permit cookies + auth headers
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
-); // para permitir desde el navegador solicitudes de diferentes orígenes
+); // to allow requests from different origins from the browser
 
 // rutas
 app.use("/auth", authRouter);
@@ -117,10 +117,10 @@ io.on("connection", (socket) => {
 
 app.set("io", io);
 
-// Semillas simples en código (se ejecutan 1 vez si no hay datos)
+// Simple seeds in code (execute once if there is no data)
 async function seedIfEmpty() {
   // User, Group, TaskTemplate, Task, Material, MaterialTaskTemplate, BuyList, UserGroup, UserTask
-  // si un elemento esta marcado como /elemento, es que en la base de datos, la columna es allowNull: true o tiene valor por defecto
+  // If an element is marked as /element, it means that in the database, the column is allowNull: true or has a default value
   const usersCount = await User.count();
   if (usersCount === 0) {
     // 👥 Usuarios

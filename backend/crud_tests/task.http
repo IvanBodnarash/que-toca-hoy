@@ -3,33 +3,38 @@
 
 ///taskDatedRouter.get("/:id/users", taskDatedController.getUsers);
 
-### obtener usuarios de taskDated
+### Get users of taskDated
 GET {{baseUrl}}/taskdated/14/users
 
 /// taskDatedRouter.get("/:id/buylists", taskDatedController.getBuyList);
-### Obtener lista de compra de tarea por ID taskDated
+
+### Get buy list of task by ID taskDated
 GET {{baseUrl}}/taskdated/4/buylists
 
 
-// rutas específicas primero para evitar conflictos
-// 
+// Specific routes first to avoid conflicts
+
 //taskTemplateRouter.get('/group/:idGroup/:type', taskTemplateController.getTasksByTypeByGroupID);
-###  listar todos taskTemplate por tipo pasado como variable (tarea o receta) por ID de grupo
+
+###  List all taskTemplates by type passed as a variable (task or recipe) by group ID
 GET {{baseUrl}}/tasktemplate/group/1/task
 
 
 //taskTemplateRouter.get('/:idTask/taskdated', taskTemplateController.getTasksByID);
-### // Obtener tareas agendadas (taskDated) de taskTemplate
+
+### Get agended tasks (taskDated) of taskTemplate
 GET {{baseUrl}}/tasktemplate/3/taskdated
 
 
-
 //taskTemplateRouter.get('/:id/materials', taskTemplateController.getMaterials);
-### // listar los materiales requeridos por ID de tarea
+
+### List the required materials by task ID
 GET {{baseUrl}}/tasktemplate/3/materials
 
 
-// ruta genérica al final con prefijo fijo para tipo
+// Generic route at the end with fixed prefix for type
+
 //taskTemplateRouter.get('/type/:type', taskTemplateController.getByType);
-### // listar todos taskTemplate por tipo pasado como variable (tarea o receta)
+
+### List all taskTemplates by type passed as a variable (task or recipe)
 GET {{baseUrl}}/tasktemplate/type/task

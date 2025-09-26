@@ -1,16 +1,16 @@
 import { createBaseRouter } from "./base.routes.js";
 import { userTaskController } from "../controllers/userTask.controller.js";
 
-// listar, listar por ID, crear, editar por ID, borrar por ID
+// List, list by ID, create, edit by ID, delete by ID
 const userTaskRouter = createBaseRouter(userTaskController);
 
-// Ruta específica para asignar task
+// Special route to assign task
 userTaskRouter.post("/assign", userTaskController.assignTask);
 
-// Ruta específica para desasignar task
+// Special route to unassign task
 userTaskRouter.post("/unassign", userTaskController.unassignTask);
 
-
+// Update user task status
 userTaskRouter.post("/status", userTaskController.updateStatus);
 
 export default userTaskRouter;

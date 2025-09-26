@@ -32,40 +32,25 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ where: { username } });
     if (!user) {
-      return res.status(401).json({ error: "Usuario no encontrado" });
+      return res.status(401).json({ error: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ error: "Contraseña inválida" });
+      return res.status(401).json({ error: "Invalid password" });
     }
-    // Generar token
+    // Generate token
     const payload = { idUser: user.idUser, username: user.username };
     const token = jwt.sign(payload, SECRET, {
       expiresIn: ACCESS_EXPIRES_IN,
     });
 
-    // Generar refresh token
+    // Generate refresh token
     const randomString = uuidv4();
-    const payload_refresh = { idUser: user.idUser, string: randomString }; // Incluimos idUser para saber a qué usuario pertenece el refresh token
+    const payload_refresh = { idUser: user.idUser, string: randomString }; // We include idUser to know which user the refresh token belongs to
     const token_refresh = jwt.sign(payload_refresh, SECRET, {
       expiresIn: REFRESH_EXPIRES_IN,
     });
-
-    // const data = {
-    //   refreshToken: token_refresh,
-    //   expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-    // };
-
-    // const userRefresh = await UserRefresh.findOne({
-    //   where: { idUser: user.idUser },
-    // });
-
-    // if (!userRefresh) {
-    //   await UserRefresh.create({ idUser: user.idUser, ...data });
-    // } else {
-    //   await UserRefresh.update(data, { where: { idUser: user.idUser } });
-    // }
 
     await UserRefresh.create({
       idUser: user.idUser,
@@ -77,21 +62,19 @@ const login = async (req, res) => {
 
     res.json({ token, user: toSafeUser(user) });
   } catch (error) {
-    console.error("Error en login:", error);
-    res.status(500).json({ error: "Error del servidor" });
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
-// Registro
+// Register
 const register = async (req, res) => {
   const { name, email, username, password, image, color } = req.body;
 
   try {
     const existingUser = await User.findOne({ where: { username } });
     if (existingUser) {
-      return res
-        .status(409)
-        .json({ error: "El nombre de usuario ya está en uso" });
+      return res.status(409).json({ error: "The username is already in use" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -119,11 +102,6 @@ const register = async (req, res) => {
       { expiresIn: REFRESH_EXPIRES_IN }
     );
 
-    // const data = {
-    //   refreshToken: token_refresh,
-    //   expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-    // };
-
     await UserRefresh.create({
       idUser: newUser.idUser,
       refreshToken: token_refresh,
@@ -133,13 +111,13 @@ const register = async (req, res) => {
     setRefreshCookie(res, token_refresh);
 
     res.status(201).json({
-      message: "Usuario registrado con éxito",
+      message: "User registered successfully",
       token,
       user: toSafeUser(newUser),
     });
   } catch (error) {
-    console.error("Error en registro:", error);
-    res.status(500).json({ error: "Error del servidor" });
+    console.error("Register error:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -179,7 +157,7 @@ const refresh = async (req, res) => {
       { expiresIn: ACCESS_EXPIRES_IN }
     );
 
-    // Rotacion refresh
+    // Rotation refresh
     const newRefresh = jwt.sign(
       { idUser: user.idUser, string: uuidv4() },
       SECRET,
@@ -207,7 +185,6 @@ const logout = async (req, res) => {
   const tokenFromCookie = req.cookies?.jid;
   try {
     if (tokenFromCookie) {
-      // const decoded = jwt.verify(tokenFromCookie, SECRET);
       await UserRefresh.destroy({ where: { refreshToken: tokenFromCookie } });
     }
   } catch (_) {}
@@ -220,14 +197,14 @@ const logout = async (req, res) => {
   res.json({ ok: true });
 };
 
-// Perfil
+// Profile
 const profile = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.idUser);
     if (!user) return res.status(404).json({ error: "USER_NOT_FOUND" });
     res.json({ message: "Acceso permitido", user: toSafeUser(user) });
   } catch (e) {
-    res.status(500).json({ error: "Error del servidor" });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -254,10 +231,6 @@ const updateProfile = async (req, res) => {
     if (typeof email !== "undefined") user.email = email;
     if (typeof image !== "undefined") user.image = image;
     if (typeof color !== "undefined") user.color = color;
-
-    // if (password) {
-    //   user.password = await bcrypt.hash(password, 10);
-    // }
 
     if (
       typeof password !== "undefined" &&

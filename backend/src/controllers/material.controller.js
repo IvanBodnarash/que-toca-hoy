@@ -6,7 +6,7 @@ const baseController = createBaseController(Material);
 export const materialController = {
   ...baseController,
 
-  // Obtener plantillas de material
+  // Get material templates
   getTaskTemplates: async (req, res) => {
     const { id } = req.params;
     try {
@@ -19,7 +19,7 @@ export const materialController = {
     }
   },
 
-  // Obtener listas de compra
+  // Get buy lists
   getBuyLists: async (req, res) => {
     const { id } = req.params;
     try {

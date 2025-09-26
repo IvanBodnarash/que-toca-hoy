@@ -1,30 +1,30 @@
 import { createBaseRouter } from "./base.routes.js";
 import { taskTemplateController } from "../controllers/taskTemplate.controller.js";
 
-// listar, listar por ID, crear, editar por ID, borrar por ID
+// List, list by ID, create, edit by ID, delete by ID
 const taskTemplateRouter = createBaseRouter(taskTemplateController);
 
-// rutas específicas primero para evitar conflictos
-// listar todos taskTemplate por tipo pasado como variable (tarea o receta) por ID de grupo
+// Specific routes first to avoid conflicts
+// List all taskTemplate by type passed as variable (task or recipe) by group ID
 taskTemplateRouter.get('/group/:idGroup/:type', taskTemplateController.getTasksByTypeByGroupID);
 
-// Obtener tareas agendadas (taskDated) de taskTemplate
+// Get scheduled tasks (taskDated) from taskTemplate
 taskTemplateRouter.get('/:idTask/taskdated', taskTemplateController.getTasksByID);
 
-// listar los materiales requeridos por ID de tarea
+// List the required materials by task ID
 taskTemplateRouter.get('/:id/materials', taskTemplateController.getMaterials);
 
-// ruta genérica al final con prefijo fijo para tipo
-// listar todos taskTemplate por tipo pasado como variable (tarea o receta)
+// Generic path at the end with a fixed prefix for type
+// List all taskTemplates by type passed as a variable (task or recipe)
 taskTemplateRouter.get('/type/:type', taskTemplateController.getByType);
 
-
+// Update template
 taskTemplateRouter.put("/group/:groupId/template/:idTaskTemplate", taskTemplateController.updateTemplate);
 
-
+// Update basic template
 taskTemplateRouter.put("/:idTaskTemplate", taskTemplateController.updateBasicTemplate);
 
-
+// Create recipe task template type
 taskTemplateRouter.post("/group/:idGroup", taskTemplateController.createRecipe);
 
 export default taskTemplateRouter;

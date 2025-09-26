@@ -6,14 +6,14 @@ export const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Token faltante o inválido" });
+    return res.status(401).json({ error: "Missing or invalid token" });
   }
 
   const token = authHeader.split(" ")[1];
-  console.log("Token recibido:", token);
+  console.log("Token received:", token);
 
   try {
-    // Intentar verificar el token normalmente
+    // Attempt to verify the token normally
     const decoded = jwt.verify(token, SECRET);
     req.user = decoded;
     console.log("VERIFY RESULT", decoded);
@@ -23,6 +23,6 @@ export const verifyToken = async (req, res, next) => {
       return res.status(401).json({ error: "TOKEN_EXPIRED" });
     }
 
-    return res.status(401).json({ error: "Token inválido" });
+    return res.status(401).json({ error: "Invalid token" });
   }
 };

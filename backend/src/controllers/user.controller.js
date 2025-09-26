@@ -17,7 +17,7 @@ function toDateOnly(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
-// Calcula el rango de fechas según filtro: today | week | month
+// Calculate the date range based on the filter: today | week | month
 function getDateRange(filter) {
   const now = new Date();
   let startDate, endDate;
@@ -27,7 +27,7 @@ function getDateRange(filter) {
     endDate = toDateOnly(now);
     endDate.setHours(23, 59, 59, 999);
   } else if (filter === "week") {
-    // lunes de esta semana
+    // Monday this week
     startDate = toDateOnly(
       new Date(
         now.getFullYear(),
@@ -35,7 +35,7 @@ function getDateRange(filter) {
         now.getDate() - (now.getDay() === 0 ? 6 : now.getDay() - 1)
       )
     );
-    // domingo
+    // Sunday
     endDate = toDateOnly(new Date(startDate));
     endDate.setDate(startDate.getDate() + 6);
     endDate.setHours(23, 59, 59, 999);
@@ -44,13 +44,13 @@ function getDateRange(filter) {
     endDate = toDateOnly(new Date(now.getFullYear(), now.getMonth() + 1, 0));
     endDate.setHours(23, 59, 59, 999);
   } else {
-    throw new Error("Filtro inválido. Usa: today, week o month");
+    throw new Error("Invalid filter. Use: today, week or month");
   }
 
   return { startDate, endDate };
 }
 
-// Genera la condición de búsqueda para tareas dentro de un rango
+// Generates the search condition for tasks within a range
 
 function taskRangeCondition(startDate, endDate) {
   return {
@@ -71,15 +71,11 @@ function taskRangeCondition(startDate, endDate) {
 
 const baseController = createBaseController(User);
 
-/// groupController.post("ruta", groupController)
-
-// export const funcion
-
 export const userController = {
   ...baseController,
 
-  // funciones
-  // Obtener grupos de usuario
+  // Functions
+  // Get user groups
   getGroups: async (req, res) => {
     const { id } = req.params;
     try {
@@ -92,10 +88,10 @@ export const userController = {
     }
   },
 
-  // Añadir grupo a usuario
+  // Add group to user
   addGroup: async (req, res) => {
-    const { id } = req.params; // id del usuario
-    const { idGroup } = req.body; // id del grupo a asignar
+    const { id } = req.params;
+    const { idGroup } = req.body;
 
     try {
       const user = await User.findByPk(id);
@@ -112,7 +108,7 @@ export const userController = {
     }
   },
 
-  // Obtener tareas de usuario
+  // Get user tasks
   getTasks: async (req, res) => {
     const { id } = req.params;
     try {
@@ -124,24 +120,23 @@ export const userController = {
     }
   },
 
-  // Asignar tarea a usuario
+  // Assign task to the user
   assignTask: async (req, res) => {
     const { id } = req.params;
     const { taskId } = req.body;
 
     try {
-      // Comprobar que existen usuario y tarea
+      // Check that the user and task exist
       const user = await User.findByPk(id);
       const task = await TaskDated.findByPk(taskId);
 
       if (!user && !task)
         return res
           .status(404)
-          .json({ message: "Usuario y TaskDated no encontrados" });
-      if (!user)
-        return res.status(404).json({ message: "Usuario no encontrado" });
+          .json({ message: "User and TaskDated not found" });
+      if (!user) return res.status(404).json({ message: "Usuer not found" });
       if (!task)
-        return res.status(404).json({ message: "TaskDated no encontrada" });
+        return res.status(404).json({ message: "TaskDated not found" });
 
       await UserTask.create({ idUser: id, idTaskDated: taskId });
       res.status(201).json({ message: "Task assigned to user" });
@@ -150,7 +145,7 @@ export const userController = {
     }
   },
 
-  // asignar imagen en base de datos
+  // Assign image to DB
   asignImage: async (req, res) => {
     const id = req.params.id;
     const normalizedPath = req.file.path.replace(/\\/g, "/");
@@ -162,7 +157,7 @@ export const userController = {
       await User.update({ image: normalizedPath }, { where: { idUser: id } });
 
       res.status(201).json({
-        message: "Imagen asignada correctamente",
+        message: "Imagen assigned successfully",
         name: req.file.filename,
         path: normalizedPath,
       });
@@ -171,7 +166,7 @@ export const userController = {
     }
   },
 
-  // Obtener tareas por usuario y rango de fechas
+  // Get tasks by user and date range
   getTasksReport: async (req, res) => {
     const { id } = req.params;
     const { filter } = req.query;
@@ -279,12 +274,10 @@ export const userController = {
         const io = req.app.get("io");
         const uid = Number(id);
 
-        // унікальні id груп зі звіту
         const groupIds = Array.from(
           new Set(tasks.map((t) => Number(t.idGroup)).filter(Boolean))
         );
 
-        // 1) нотифікнемо персональну кімнату користувача
         io.to(`user:${uid}`).emit("usertasks:changed", {
           idUser: uid,
           reason: "report",
@@ -292,7 +285,6 @@ export const userController = {
           groups: groupIds,
         });
 
-        // 2) (необовʼязково) пінгнемо календарні кімнати груп
         for (const gid of groupIds) {
           io.to(`calendar:${gid}`).emit("usertasks:changed", {
             idGroup: gid,
@@ -301,7 +293,7 @@ export const userController = {
           });
         }
       } catch (e) {
-        // без паніки, просто не завалюємо відповідь
+        //
       }
 
       res.json(tasks);
@@ -310,16 +302,17 @@ export const userController = {
     }
   },
 
-  //ESTA FUNCION SE CAMBIARIA POR UN getBuyListReportGlobal
-  // Obtener lista de compras por usuario y rango de fechas
+  //THIS FUNCTION WOULD BE CHANGED FOR A getBuyListReportGlobal
+
+  // Get buy list by user and date range
   getBuyListReport: async (req, res) => {
-    const { id } = req.params; // id del usuario
+    const { id } = req.params;
     const { filter } = req.query;
 
     try {
       const { startDate, endDate } = getDateRange(filter);
 
-      // Traer solo los BuyList asociados a tareas del grupo del usuario
+      // Bring only the BuyLists associated with tasks from the user's group
       const tasks = await TaskDated.findAll({
         where: taskRangeCondition(startDate, endDate),
         include: [
@@ -343,7 +336,7 @@ export const userController = {
         ],
       });
 
-      // aplanamos todas las buylists de las tareas
+      // We flatten all the task buylists
       const buyLists = tasks.flatMap((task) => task.BuyLists);
 
       res.json(buyLists);
@@ -352,13 +345,13 @@ export const userController = {
     }
   },
 
-  // ➤ Update de buylist (marcar comprado, modificar o revertir cantidad)
+  // Update of buylist (mark purchased, modify or reverse quantity)
   updateBuyList: async (req, res) => {
     const { id } = req.params; // idUser
-    const updates = req.body; // array con {idBuyList, quantity}
+    const updates = req.body; // array with {idBuyList, quantity}
 
     try {
-      // 1) Grupos del usuario
+      // 1. User groups
       const userGroups = await UserGroup.findAll({
         where: { idUser: id },
         attributes: ["idGroup"],
@@ -368,12 +361,12 @@ export const userController = {
       if (groupIds.length === 0) {
         return res
           .status(403)
-          .json({ error: "Usuario no pertenece a ningún grupo" });
+          .json({ error: "User does not belong to any group" });
       }
 
       const affected = [];
 
-      // 2) Para cada item a actualizar
+      // 2. For each item to update
       for (const u of updates) {
         const buyItem = await BuyList.findByPk(u.idBuyList, {
           include: [
@@ -386,14 +379,10 @@ export const userController = {
 
         if (!buyItem) continue;
 
-        // validar que pertenece a un grupo del usuario
-        // if (!groupIds.includes(buyItem.TaskDated.TaskTemplate.idGroup)) {
-        //   continue;
-        // }
         const gid = buyItem.TaskDated.TaskTemplate.idGroup;
         if (!groupIds.includes(gid)) continue;
 
-        // 3) Actualizar cantidad (acepta poner 0 o devolverlo a >0)
+        // 3. Update quantity (accepts setting 0 or returning it to >0)
         await buyItem.update({ quantity: u.quantity });
         affected.push({ idGroup: gid, idTaskDated: buyItem.idTaskDated });
       }
@@ -417,25 +406,24 @@ export const userController = {
 
       res.json({ success: true });
     } catch (err) {
-      console.error("❌ Error updateBuyList:", err);
-      res.status(500).json({ error: "Error actualizando lista" });
+      console.error("Error updateBuyList:", err);
+      res.status(500).json({ error: "Error updating list" });
     }
   },
 
-  //CONSULTAR ESTO
-  // Nuevo controlador: lista de compras de un grupo específico
+  // Buy list of specific group
   getBuyListReportByGroup: async (req, res) => {
-    const { idGroup } = req.params; // id del grupo
+    const { idGroup } = req.params;
     const { filter } = req.query;
 
     try {
       const { startDate, endDate } = getDateRange(filter);
 
-      // Traer solo los BuyList asociados a tareas de este grupo
+      // Bring only the BuyLists associated with tasks in this group
       const tasks = await TaskDated.findAll({
         where: {
           ...taskRangeCondition(startDate, endDate),
-          idGroup, // 🔑 diferencia: ahora limitamos al grupo
+          idGroup, // difference: now we limit the group
         },
         include: [
           {
@@ -446,7 +434,7 @@ export const userController = {
         ],
       });
 
-      // aplanamos todas las buylists de las tareas
+      // we flatten all the task buylists
       const buyLists = tasks.flatMap((task) => task.BuyLists);
 
       res.json(buyLists);
@@ -456,26 +444,26 @@ export const userController = {
   },
 
   getGroupBuyListReport: async (req, res) => {
-    const { idUser, idGroup } = req.params; // id del usuario y del grupo
+    const { idUser, idGroup } = req.params;
     const { filter = "today" } = req.query;
 
     console.log("idUser:", idUser, "idGroup:", idGroup);
 
     try {
-      // 🔹 Verificar que el usuario pertenece al grupo
+      // Verify that the user belongs to the group
       const membership = await UserGroup.findOne({
         where: { idUser, idGroup },
       });
       if (!membership) {
         return res
           .status(403)
-          .json({ message: "El usuario no pertenece a este grupo" });
+          .json({ message: "The user does not exist in this group" });
       }
 
-      // 🔹 Obtener rango de fechas
+      // Get date range
       const { startDate, endDate } = getDateRange(filter);
 
-      // 🔹 Traer tareas del grupo dentro del rango
+      // Bring group tasks within range
       const tasks = await TaskDated.findAll({
         where: taskRangeCondition(startDate, endDate),
         include: [
@@ -492,12 +480,12 @@ export const userController = {
         ],
       });
 
-      // 🔹 Aplanar todas las buyLists
+      // Flatten all buyLists
       const buyLists = tasks.flatMap((task) => task.BuyLists);
 
       return res.json(buyLists);
     } catch (error) {
-      console.error("Error en getGroupBuyListReport:", error);
+      console.error("Error in getGroupBuyListReport:", error);
       return res.status(500).json({ message: error.message });
     }
   },

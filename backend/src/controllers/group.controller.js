@@ -1,4 +1,3 @@
-import { type } from "os";
 import {
   Group,
   User,
@@ -36,24 +35,24 @@ function emitTemplatesChanged(req, idGroup, payload = {}) {
 }
 
 /* 
-Requisitos:
-- El PIN tiene mínimo 8 caracteres.
-- Incluye al menos 1 mayúscula y 1 número.
-- Se devuelve el PIN en la respuesta para que el cliente lo guarde/vea.
-- Se guarda: hash (bcrypt) + cifrado (AES-256-GCM) para poder mostrarlo después.
+Requirements:
+- The PIN must be at least 8 characters long.
+- Include at least 1 capital letter and 1 number.
+- The PIN is returned in the response for the client to save/view.
+- It is stored as a hash (bcrypt) + encryption (AES-256-GCM) so it can be displayed later.
 */
 
-const ENC_ALGO = "aes-256-gcm"; // Cifrado AES-256-GCM
-// Usa una clave de 32 bytes. En producción, OBLIGATORIO usar variable de entorno fuerte.
+const ENC_ALGO = "aes-256-gcm"; // AES-256-GCM encryption
+// Use a 32-byte key. In production, strong environment variable is REQUIRED.
 
 const ENC_KEY = crypto
   .createHash("sha256") // Crea un hash SHA-256
-  .update(process.env.JWT_SECRET || "DEV_ONLY__CAMBIA_ESTA_CLAVE_EN_PRODUCCION") // Actualiza el hash con la clave secreta
-  .digest(); // Genera el hash final
+  .update(process.env.JWT_SECRET || "DEV_ONLY__CAMBIA_ESTA_CLAVE_EN_PRODUCCION") // Update the hash with the secret key
+  .digest(); // Generate the final hash
 
-/** Cifra el PIN con AES-256-GCM. Devuelve iv:ciphertext:tag en hex */
+// Encrypts the PIN with AES-256-GCM. Returns iv:ciphertext:tag in hex
 function encryptPin(pinPlain) {
-  const iv = crypto.randomBytes(12); // recomendado 12 bytes para GCM
+  const iv = crypto.randomBytes(12); // Recommended 12 bytes for GCM
   const cipher = crypto.createCipheriv(ENC_ALGO, ENC_KEY, iv);
   const encrypted = Buffer.concat([
     cipher.update(pinPlain, "utf8"),
@@ -65,7 +64,7 @@ function encryptPin(pinPlain) {
   )}`;
 }
 
-/** Descifra el formato iv:ciphertext:tag en hex */
+// Decrypts iv:ciphertext:tag format into hex
 function decryptPin(encryptedStr) {
   if (!encryptedStr) return null;
   const [ivHex, dataHex, tagHex] = encryptedStr.split(":");
@@ -79,7 +78,7 @@ function decryptPin(encryptedStr) {
   return decrypted.toString("utf8");
 }
 
-// Validador de contraseña fuerte
+// Strong Password Validator
 function validatePassword(password) {
   const minLength = 8;
   const hasUpper = /[A-Z]/.test(password);
@@ -87,7 +86,7 @@ function validatePassword(password) {
   return password.length >= minLength && hasUpper && hasNumber;
 }
 
-// Generador de PIN aleatorio
+// Random PIN Generator
 function generateStrongPin(length = 8) {
   const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const lower = "abcdefghijklmnopqrstuvwxyz";
@@ -95,16 +94,16 @@ function generateStrongPin(length = 8) {
   const allChars = upper + lower + numbers;
 
   let pin = "";
-  // Garantizar al menos 1 mayúscula y 1 número
+  // Ensure at least 1 capital letter and 1 number
   pin += upper.charAt(Math.floor(Math.random() * upper.length));
   pin += numbers.charAt(Math.floor(Math.random() * numbers.length));
 
-  // Rellenar el resto de caracteres
+  // Fill in the rest of the characters
   for (let i = pin.length; i < length; i++) {
     pin += allChars.charAt(Math.floor(Math.random() * allChars.length));
   }
 
-  // Mezclar para que no empiece siempre con el mismo patrón
+  // Mix it up so that it doesn't always start with the same pattern.
   pin = pin
     .split("")
     .sort(() => 0.5 - Math.random())
@@ -116,7 +115,7 @@ function generateStrongPin(length = 8) {
 export const groupController = {
   ...baseController,
 
-  // Obtener usuarios de grupo
+  // Get group users
   getUsers: async (req, res) => {
     const { id } = req.params;
     try {
@@ -128,7 +127,7 @@ export const groupController = {
     }
   },
 
-  // Obtener tareas de grupo
+  // Get group tasks
   getTasks: async (req, res) => {
     const { id } = req.params;
     try {
@@ -143,9 +142,9 @@ export const groupController = {
     }
   },
 
-  // Crear plantilla de tarea para un grupo
+  // Create task template for the group
   createTaskTemplate: async (req, res) => {
-    const { id } = req.params; // id del grupo
+    const { id } = req.params; // group id
     const { name, description, steps, type } = req.body;
 
     try {
@@ -154,7 +153,7 @@ export const groupController = {
         description,
         steps,
         idGroup: id,
-        type: type || "task", // valor por defecto "task"
+        type: type || "task", // default value
       });
       res.status(201).json(newTemplate);
       emitTemplatesChanged(req, id, {
@@ -167,7 +166,7 @@ export const groupController = {
     }
   },
 
-  // Obtener plantillas de tareas de grupo
+  // Get group task templates
   getTaskTemplates: async (req, res) => {
     const { id } = req.params;
     try {
@@ -178,28 +177,6 @@ export const groupController = {
     }
   },
 
-  /*
-  // asignar imagen en base de datos
-  asignImage: async (req, res) => {
-    const id = req.params.id;
-    const normalizedPath = req.file.path.replace(/\\/g, "/");
-
-    try {
-      const user = await Group.findByPk(id);
-      if (!user) return res.status(404).json({ message: "Group not found" });
-
-      await Group.update({ image: normalizedPath }, { where: { idGroup: id } });
-
-      res.status(201).json({
-        message: "Imagen asignada correctamente",
-        name: req.file.filename,
-        path: normalizedPath,
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Error assigning image" });
-    }
-  },*/
-
   asignImage: async (req, res) => {
     console.log("req.file:", req.file);
     console.log("req.body:", req.body);
@@ -209,20 +186,19 @@ export const groupController = {
       const group = await Group.findByPk(id);
       if (!group) return res.status(404).json({ message: "Group not found" });
 
-      // Leer el archivo y convertirlo a base64
-      //const fileData = fs.readFileSync(req.file.path);
+      // Read a file and convert to base64
       const base64Image = `data:${
         req.file.mimetype
       };base64,${req.file.buffer.toString("base64")}`;
 
-      // Guardar en la BD como texto largo (tu campo image es TEXT LONG)
+      // Save to DB into large text
       await Group.update({ image: base64Image }, { where: { idGroup: id } });
 
       res.status(201).json({
-        message: "Imagen asignada correctamente",
+        message: "Image assigned correctly",
         name: req.file.filename,
-        base64Image, // 👈 aquí agregamos la imagen real
-        base64Length: base64Image.length, // opcional
+        base64Image,
+        base64Length: base64Image.length,
       });
 
       // Push live
@@ -233,7 +209,8 @@ export const groupController = {
     }
   },
 
-  //obtener la imagen del grupo
+  //Get group image
+
   //groupRouter.get("/:id/image", groupController.getImage);
   getImage: async (req, res) => {
     const { id } = req.params;
@@ -246,17 +223,17 @@ export const groupController = {
     }
   },
 
-  // Obtener materiales de grupo
+  // Get group materials
   getGroupMaterials: async (req, res) => {
     const { id } = req.params;
     try {
       const group = await Group.findOne({
         where: { idGroup: id },
-        attributes: ["idGroup", "name"], // 👈 opcional: así ves info del grupo
+        attributes: ["idGroup", "name"],
         include: [
           {
             model: TaskTemplate,
-            attributes: ["idTaskTemplate"], // 👈 mejor pedir el id aunque luego no lo uses
+            attributes: ["idTaskTemplate"],
             include: [
               {
                 model: Material,
@@ -281,7 +258,6 @@ export const groupController = {
         name: group.name,
         materials,
       });
-      // O si quieres con info del grupo:
     } catch (error) {
       console.error(error);
       return res
@@ -290,46 +266,38 @@ export const groupController = {
     }
   },
 
-  // Crear grupo con PIN generado y CIFRADO
+  // Create group with generated and encrypted PIN
   createWithPin: async (req, res) => {
     const { name, image } = req.body;
     const meId = req.user?.idUser;
 
     try {
-      // Generar PIN fuerte
+      // Generate stronh PIN
       let randomPin;
       do {
         randomPin = generateStrongPin(8);
       } while (!validatePassword(randomPin));
 
-      // Hash + cifrado
+      // Hash + encrypted
       const hashedPin = await bcrypt.hash(randomPin, 10);
       const encryptedPin = encryptPin(randomPin);
 
-      // Crear grupo
+      // Create group
       const group = await Group.create({
         name,
         image,
         pin: hashedPin, // hash (bcrypt)
-        pinEncrypted: encryptedPin, // cifrado (AES-256-GCM)
+        pinEncrypted: encryptedPin, // encrypted (AES-256-GCM)
       });
 
       if (meId) {
         await UserGroup.create({ idUser: meId, idGroup: group.idGroup });
       }
 
-      // Al crear un grupo, añadir la taskTemplate "Comprar"
-      const comprar = await TaskTemplate.create({
-        idGroup: group.idGroup,
-        name: "Comprar",
-        steps: "",
-        type: "task",
-      });
-
       res.status(201).json({
-        message: "Grupo creado correctamente",
+        message: "Group created successfully",
         group,
-        pin: randomPin, // devuelves el PIN para que el cliente lo guarde
+        pin: randomPin,
       });
     } catch (error) {
       console.error(error);
@@ -337,9 +305,7 @@ export const groupController = {
     }
   },
 
-  // ===============================
-  // Cambiar el PIN de un grupo (autogenerado y CIFRADO)
-  // ===============================
+  // Change a group's PIN (auto-generated and ENCRYPTED)
   changePin: async (req, res) => {
     const { id } = req.params;
 
@@ -354,7 +320,7 @@ export const groupController = {
 
       const group = await Group.findByPk(id);
       if (!group) {
-        return res.status(404).json({ message: "Grupo no encontrado" });
+        return res.status(404).json({ message: "Group not found" });
       }
 
       group.pin = hashedPin;
@@ -362,16 +328,16 @@ export const groupController = {
       await group.save();
 
       res.json({
-        message: "PIN actualizado correctamente",
+        message: "PIN updated successfully",
         pin: newPin,
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error actualizando PIN", error });
+      res.status(500).json({ message: "Error updating PIN", error });
     }
   },
 
-  // NUEVO: Ver el PIN del grupo (descifrado)
+  // NEW: View group PIN (decrypted)
   getPin: async (req, res) => {
     const { id } = req.params;
 
@@ -380,26 +346,21 @@ export const groupController = {
         attributes: ["idGroup", "name", "pinEncrypted"],
       });
       if (!group) {
-        return res.status(404).json({ message: "Grupo no encontrado" });
+        return res.status(404).json({ message: "Group not found" });
       }
-
-      // (Opcional) Autorización: verifica que el usuario sea miembro/admin del grupo
-      // if (!req.user || !await userIsMemberOrAdmin(req.user.id, id)) {
-      //   return res.status(403).json({ message: "No autorizado" });
-      // }
 
       const pin = decryptPin(group.pinEncrypted);
       if (!pin) {
-        return res.status(409).json({ message: "PIN no disponible" });
+        return res.status(409).json({ message: "PIN not available" });
       }
 
       res.json({
-        message: "PIN obtenido correctamente",
+        message: "PIN obtained successfully",
         pin,
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Error obteniendo PIN", error });
+      res.status(500).json({ message: "Error getting PIN", error });
     }
   },
 
@@ -408,12 +369,6 @@ export const groupController = {
     const { name } = req.body;
     if (!name) return res.status(400).json({ message: "Name is required" });
     try {
-      // const updatedGroup = await Group.findByIdAndUpdate(
-      //   id,
-      //   { name },
-      //   { new: true }
-      // );
-      // res.json(updatedGroup);
       const group = await Group.findByPk(id);
       if (!group) return res.status(404).json({ message: "Group not found" });
 
@@ -429,7 +384,7 @@ export const groupController = {
     }
   },
 
-  // Obtener compras de un grupo (filtradas por rango de fechas)
+  // Get buy list of the grupo (filtered by date range)
   getBuyList: async (req, res) => {
     const { id } = req.params; // idGroup
     const { filter } = req.query;

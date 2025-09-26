@@ -3,37 +3,34 @@ import { taskDatedController } from "../controllers/taskDated.controller.js";
 
 const taskDatedRouter = createBaseRouter(taskDatedController);
 
-// Obtener tareas de un grupo
+// Get tasks from a group
 taskDatedRouter.get("/group/:idGroup", taskDatedController.getByGroup);
 
-// Obtener tareas de un grupo en un rango de fechas
+// Get tasks from a group in a date range
 taskDatedRouter.get("/group/:idGroup/range", taskDatedController.getByGroupRange);
 
-// Asignar usuario
+// Assign user
 taskDatedRouter.post("/:idTaskDated/assign/:idUser", taskDatedController.assignUser);
 
-// Desasignar usuario
+// Unassign user
 taskDatedRouter.delete("/:idTaskDated/assign/:idUser", taskDatedController.unassignUser);
 
-// Obtener usuarios asignados a una tarea
+// Get assigned users to a task
 taskDatedRouter.get("/:id/users", taskDatedController.getUsers);
 
-// Obtener lista de compra de tareas
+// Get buy list of tasks
 taskDatedRouter.get("/:id/buylists", taskDatedController.getBuyList);
 
-// Obtener lista de compra de tarea
+// Get buy list of task
 taskDatedRouter.get("/:id/buylist", taskDatedController.getBuyList);
 
-// Ruta exclusiva para traer status
+// Special route to get status
 taskDatedRouter.get("/group/:idGroup/status", taskDatedController.getStatusByGroup);
 
-
-// Cambiar estado de la tarea
+// Change task state (todo/done)
 taskDatedRouter.patch("/:idTaskDated/status", taskDatedController.updateStatus);
 
-
+// Create frequent and rotative tasks
 taskDatedRouter.post("/:id/next", taskDatedController.createNextNow);
-
-
 
 export default taskDatedRouter;

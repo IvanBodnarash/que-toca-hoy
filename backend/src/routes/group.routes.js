@@ -3,10 +3,10 @@ import { groupController } from "../controllers/group.controller.js";
 import { upload, getImage } from "../middlewares/upload.middleware.js";
 // import { verifyToken } from "../middlewares/auth.middleware.js";
 
-// listar, listar por ID, crear, editar por ID, borrar por ID
+// List, list by ID, create, edit by ID, delete by ID
 const groupRouter = createBaseRouter(groupController);
 
-// añadir imagen a un grupo por ID grupo
+// Add image to a group by group ID
 groupRouter.post(
   "/:id/upload",
   upload.single("file"),
@@ -14,36 +14,37 @@ groupRouter.post(
   groupController.asignImage
 );
 
-// Obtener usuarios de grupo
+// Get group users
 groupRouter.get("/:id/users", groupController.getUsers);
 
-// Obtener tareas de grupo
+// Get group tasks
 groupRouter.get("/:id/tasks", groupController.getTasks);
 
-// POST para crear plantilla
+// POST to create template
 groupRouter.post("/:id/templates", groupController.createTaskTemplate);
 
-// Obtener plantillas de tareas de grupo
+// Get task templates of group
 groupRouter.get("/:id/templates", groupController.getTaskTemplates);
 
-//obtener la imagen del grupo  (revisar)
+// Get the group image (review)
 groupRouter.get("/:id/image", groupController.getImage);
 
-// Obtener materiales de grupo
+// Get group materials
 groupRouter.get("/:id/materials", groupController.getGroupMaterials);
 
-// // Crear grupo con PIN autogenerado y cifrado
+// Create group with auto-generated and encrypted PIN
 groupRouter.post("/createwithpin", groupController.createWithPin);
 
-// Cambiar PIN (autogenerado y cifrado)
+// Change PIN (auto-generated and encrypted)
 groupRouter.put("/:id/changepin", groupController.changePin);
 
-// Ver PIN (descifrar AES y devolverlo)
+// View PIN (decrypt AES and return it)
 groupRouter.get("/:id/pin", groupController.getPin);
-// Obtener compras de grupo
+
+// Get group purchases
 groupRouter.get("/:id/buylist", groupController.getBuyList);
 
-// Editar nombre de grupo
+// Edit group name
 groupRouter.patch("/:id/name", groupController.updateName);
 
 export default groupRouter;

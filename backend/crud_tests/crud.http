@@ -1,0 +1,273 @@
+@baseUrl = http://localhost:3000
+
+## Reminder: Some users simply give an error because
+## they try to create a group with user 1 and they're already on user 6.
+
+## Everything that doesn't give an error works.
+
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjksInVzZXJuYW1lIjoibmV3LnVzZXIiLCJpYXQiOjE3NTYzMDczNDQsImV4cCI6MTc1NjMwODI0NH0.H_0jfU0U3Tj1aR7borM0sM1riExZ4fdwQr5nt4ZgGec
+
+
+### List tasks by user ID
+GET {{baseUrl}}/user/1/taskDated
+
+### Assign user task by ID - In theory everything is fine, it gives an error because the controller can no longer read the data
+POST {{baseUrl}}/user/1/taskDated
+Content-Type: application/json
+
+{
+    "idUser": 1,
+    "idTaskDated": 1
+}
+
+### List user groups by ID
+GET {{baseUrl}}/user/1/group
+
+### Assign group to user by ID  
+POST {{baseUrl}}/user/1/group
+Content-Type: application/json
+
+{
+    "idGroup": 1
+}
+
+### Delete user group by ID - error 500, I think the many-to-many relations between user and group is missing
+
+DELETE {{baseUrl}}/user/1/group/1
+
+### Post user 1
+POST {{baseUrl}}/user
+Content-Type: application/json
+
+{
+
+    "name": "Usuario 2",
+    "email": "usuario2@correo.com",
+    "username": "usuario2",
+    "password": "159951"
+}
+
+### Register
+
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "New Userr",
+  "email": "someuser@mail.com",
+  "username": "new.user",
+  "password": "123456"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "new.user",
+  "password": "123456"
+}
+
+## User
+
+### Get user 1
+
+GET {{baseUrl}}/user/1
+Authorization: Bearer {{token}}
+
+### Get users
+
+GET {{baseUrl}}/user
+Authorization: Bearer {{token}}
+
+### Update user by ID
+PUT {{baseUrl}}/user/1
+Content-Type: application/json
+
+{
+    "name": "Usuario Actualizado",
+    "email": "actualizado@correo.com"
+}
+
+### Delete user by ID
+DELETE {{baseUrl}}/user/1
+
+
+## Group
+
+### Get groups
+GET {{baseUrl}}/group
+
+### Create group 1    --- If you go for two or ahead, the new ones are generated with the following id
+POST {{baseUrl}}/group
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Nuevo Grupo",
+    "description": "Descripción de prueba"
+}
+
+### Create group
+POST {{baseUrl}}/group
+Content-Type: application/json
+
+{
+    "name": "Nuevo Grupo",
+    "description": "Descripción de prueba"
+}
+
+### Get group by ID
+GET {{baseUrl}}/group/1
+
+### Update group by ID
+PUT {{baseUrl}}/group/createWithPin
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Grupo Actualizado",
+}
+
+### Delete group by ID 
+DELETE {{baseUrl}}/group/1
+
+### Get group users
+GET {{baseUrl}}/group/1/users
+
+### Get group tasks
+GET {{baseUrl}}/group/1/tasks
+
+### Create group materials
+POST {{baseUrl}}/material
+Content-Type: application/json
+
+{
+  "name": "Nuevo Material",
+  "description": "Descripción",
+  "groupId": 1
+}
+### Get group materials
+GET {{baseUrl}}/material?groupId=1
+
+### Create group task template
+POST {{baseUrl}}/group/1/templates
+Content-Type: application/json
+
+{
+    "name": "Nueva Plantilla",
+    "description": "Descripción de la plantilla",
+    "steps": "Paso 1, Paso 2, Paso 3"
+}
+
+
+
+### Get group task templates
+GET {{baseUrl}}/group/1/templates
+
+
+## buyList (material routes)
+
+### Get templates of material by ID
+GET {{baseUrl}}/material/1/templates
+
+### Get buy list
+GET {{baseUrl}}/buyList
+
+### Create item in shopping list - Foreign key error: The given idTaskDated does not exist in TaskDated
+POST {{baseUrl}}/buyList
+Content-Type: application/json
+
+{
+    "idTaskDated": 1,
+    "idMaterial": 1,
+    "quantity": 1,
+    "unit": "ud"
+}
+
+### Get item by ID
+GET {{baseUrl}}/buyList/1
+
+### Update item by ID       
+PUT {{baseUrl}}/buyList/1
+Content-Type: application/json
+
+{
+    "idTaskDated": 1,
+    "idMaterial": 1,
+    "quantity": 2,
+    "unit": "ud"
+}
+
+### Delete item by ID      
+DELETE {{baseUrl}}/buyList/1
+
+### Get shopping list by task ID
+GET {{baseUrl}}/buyList/task/1
+
+### Get shopping list by material ID 
+GET {{baseUrl}}/buyList/material/1
+
+### Get materials by template ID
+GET {{baseUrl}}/material/1/templates
+
+### Get task templates by material ID
+GET {{baseUrl}}/material/1/templates
+
+
+
+## tasks (calendar) taskdated  
+
+### Get user task by ID  
+GET {{baseUrl}}/task/1/users
+
+
+### Get task shopping list by ID
+GET {{baseUrl}}/task/1/buyList
+
+
+
+## task template
+
+### Get agended tasks (taskDated) of taskTemplate
+GET {{baseUrl}}/taskTemplate/1/taskDated
+
+
+### List all taskTemplates by type passed as a variable (task or recipe) by group ID
+GET {{baseUrl}}/tasktemplate/group/1/task
+
+## userTask
+
+### List all "user" tasks (all users)
+GET {{baseUrl}}/userTask
+
+### Create user task - if it fails it's because the idTaskDated 
+### you're trying to use doesn't exist in the TaskDated table, 
+### violating the foreign key constraint.
+
+POST {{baseUrl}}/userTask/assign
+Content-Type: application/json
+
+{
+    "idUser": 1,
+    "idTaskDated": 1
+}
+
+### Get user 1
+GET {{baseUrl}}/user/1
+
+### Get user task by ID of task
+GET {{baseUrl}}/userTask/1
+
+### Update user task by ID
+PUT {{baseUrl}}/userTask/1
+Content-Type: application/json
+
+{
+    "idUser": 1,
+    "idTaskDated": 1,
+    "createdAt": "2025-08-20"
+}
+### Delete user task by ID
+DELETE {{baseUrl}}/userTask/1

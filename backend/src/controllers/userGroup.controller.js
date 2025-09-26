@@ -8,78 +8,76 @@ const baseController = createBaseController(UserGroup);
 
 export const userGroupController = {
   ...baseController,
-  // funciones
+  // Functions
 
-  // Asignar grupo a usuario
+  // Assign group to user
   assignGroup: async (req, res) => {
     const { idUser, idGroup } = req.body;
 
     if (!idUser || !idGroup) {
-      return res.status(400).json({ message: "Faltan idUser o idGroup" });
+      return res.status(400).json({ message: "Missing idUser or idGroup" });
     }
 
     try {
-      // Comprobar que el usuario existe
+      // Check that the user exists
       const userExists = await User.findByPk(idUser);
       if (!userExists) {
         return res
           .status(404)
-          .json({ message: `Usuario con id ${idUser} no existe` });
+          .json({ message: `User with id ${idUser} does not exist` });
       }
 
-      // Comprobar que la tarea existe
+      // Check that the task exists
       const groupExists = await Group.findByPk(idGroup);
       if (!groupExists) {
         return res
           .status(404)
-          .json({ message: `Group con id ${idGroup} no existe` });
+          .json({ message: `Group with id ${idGroup} does not existe` });
       }
 
-      // Crear la relación
+      // Create relation
       const record = await UserGroup.create({ idUser, idGroup });
 
       req.app
         .get("io")
         .to(`group:${idGroup}`)
         .emit("group:membersUpdated", { idGroup, idUser, action: "added" });
-      res.status(201).json({ message: "Grupo asignado correctamente", record });
+      res.status(201).json({ message: "Group assigned successfully", record });
     } catch (error) {
       res.status(500).json({
-        message: "Error asignando grupo",
+        message: "Error group assigning",
         error: error.original ? error.original.sqlMessage : error.message,
       });
     }
   },
 
-  // Unirse a grupo validando PIN
+  // Join group by validating PIN
   joinGroup: async (req, res) => {
     const { idUser, idGroup, password } = req.body;
 
     if (!idUser || !idGroup || !password) {
       return res
         .status(400)
-        .json({ message: "Faltan idUser, idGroup o password" });
+        .json({ message: "idUser, idGroup or password are missing" });
     }
 
     try {
       const user = await User.findByPk(idUser);
-      if (!user)
-        return res.status(404).json({ message: "Usuario no encontrado" });
+      if (!user) return res.status(404).json({ message: "User not found" });
 
       const group = await Group.findByPk(idGroup);
-      if (!group)
-        return res.status(404).json({ message: "Grupo no encontrado" });
+      if (!group) return res.status(404).json({ message: "Group not found" });
 
       const isMatch = await bcrypt.compare(password, group.pin);
       if (!isMatch) {
-        return res.status(401).json({ message: "PIN incorrecto" });
+        return res.status(401).json({ message: "Incorrect PIN" });
       }
 
       const exists = await UserGroup.findOne({ where: { idUser, idGroup } });
       if (exists) {
         return res
           .status(400)
-          .json({ message: "El usuario ya está en este grupo" });
+          .json({ message: "The user is already in this group" });
       }
 
       const record = await UserGroup.create({ idUser, idGroup });
@@ -90,9 +88,9 @@ export const userGroupController = {
         .emit("group:membersUpdated", { idGroup, idUser, action: "joined" });
       res
         .status(201)
-        .json({ message: "Usuario unido al grupo correctamente", record });
+        .json({ message: "User joined group successfully", record });
     } catch (error) {
-      res.status(500).json({ message: "Error uniéndose al grupo", error });
+      res.status(500).json({ message: "Error joining group", error });
     }
   },
 
@@ -100,7 +98,6 @@ export const userGroupController = {
   joinByPin: async (req, res) => {
     try {
       const meId = req.user?.idUser;
-      // const meId = req.user?.idUser || req.body.idUser;
       if (!meId) return res.status(401).json({ message: "UNAUTHORIZED" });
 
       const { pin } = req.body;
@@ -159,22 +156,21 @@ export const userGroupController = {
     }
   },
 
-  // Eliminar relacion y comprobar si borrar grupo
+  // Delete relation and check if delete group
   deleteUserGroup: async (req, res) => {
     const { idGroup, idUser } = req.params;
 
     try {
-      // Comprobar que la relacion
       const userGroupRelation = await UserGroup.findOne({
         where: { idUser, idGroup },
       });
       if (!userGroupRelation) {
-        return res
-          .status(404)
-          .json({ message: `Usuario con id ${idUser} no existe en el grupo` });
+        return res.status(404).json({
+          message: `User with id ${idUser} does not exists in the group`,
+        });
       }
 
-      // Eliminar la relación
+      // Delete the relation
       await userGroupRelation.destroy();
 
       req.app
@@ -182,15 +178,15 @@ export const userGroupController = {
         .to(`group:${idGroup}`)
         .emit("group:membersUpdated", { idGroup, idUser, action: "removed" });
 
-      let mess = "Relacion eliminada";
+      let mess = "Relation deleted";
 
-      // comprobar si quedan usuarios de este grupo
+      // Check if there are any users left in this group
       const usersInGroup = await UserGroup.findAll({ where: { idGroup } });
       if (usersInGroup.length < 1) {
-        // eliminar el grupo
+        // Delete group
         const gr = await Group.findByPk(idGroup);
         const res2 = await gr.destroy();
-        mess += " y grupo eliminado";
+        mess += " and group deleted";
 
         req.app
           .get("io")
@@ -202,7 +198,7 @@ export const userGroupController = {
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        message: "Error eliminando usuario del grupo",
+        message: "Error deleting user from group",
         error: error.original ? error.original.sqlMessage : error.message,
       });
     }

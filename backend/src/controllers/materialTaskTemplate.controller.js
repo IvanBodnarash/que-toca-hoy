@@ -10,7 +10,7 @@ const baseController = createBaseController(MaterialTaskTemplate);
 export const materialTaskTemplateController = {
   ...baseController,
 
-  // Obtener materiales por plantilla
+  // Get materials by template
   getMaterialsByTemplate: async (req, res) => {
     const { id } = req.params;
     try {
@@ -22,7 +22,7 @@ export const materialTaskTemplateController = {
           through: { attributes: ["quantity", "unit"] },
         },
       });
-      // Flatten para frontend
+      // Flattened for the frontend
       const flattened = materials.map((m) => {
         const rel = m.TaskTemplates[0]?.MaterialTaskTemplate;
         return {
@@ -41,7 +41,7 @@ export const materialTaskTemplateController = {
     }
   },
 
-  // Obtener plantillas por material
+  // Get templates by material
   getTemplatesByMaterial: async (req, res) => {
     const { id } = req.params;
     try {

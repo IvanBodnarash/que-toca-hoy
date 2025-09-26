@@ -98,9 +98,6 @@ export const taskDatedController = {
 
       await record.update(req.body);
       res.json(record);
-      // emitCal(req, record.idGroup, "calendar:eventUpdated", {
-      //   idTaskDated: record.idTaskDated,
-      // });
 
       const snap = await buildTaskSnapshot(record.idTaskDated);
       if (snap)
@@ -131,7 +128,8 @@ export const taskDatedController = {
     }
   },
 
-  // Todas las tareas de un grupo con Users + TaskTemplate (para calendario)
+  // All tasks in a group with Users + TaskTemplate (for calendar)
+
   // GET /taskdated/group/:idGroup
   getByGroup: async (req, res) => {
     const { idGroup } = req.params;
@@ -175,7 +173,8 @@ export const taskDatedController = {
     }
   },
 
-  // Lo mismo, pero con un filtro de rango de fechas
+  // Same, but with a date range filter
+
   // GET /taskdated/group/:idGroup/range?from=YYYY-MM-DD&to=YYYY-MM-DD
   getByGroupRange: async (req, res) => {
     const { idGroup } = req.params;
@@ -183,7 +182,7 @@ export const taskDatedController = {
     try {
       const where = { idGroup };
 
-      // si se pasa desde/hasta — agregar una condición de rango
+      // if passed from/to — add a range condition
       if (from || to) {
         where.startDate = {};
         if (from) where.startDate[Op.gte] = new Date(from);
@@ -225,11 +224,12 @@ export const taskDatedController = {
       console.error(error);
       return res
         .status(500)
-        .json({ message: "Error al obtener tareas por rango de fechas" });
+        .json({ message: "Error getting tasks by date range" });
     }
   },
 
-  // Asignar un usuario a una tarea
+  // Assign a user to a task
+
   // POST /taskdated/:idTaskDated/assign/:idUser
   assignUser: async (req, res) => {
     const { idTaskDated, userId } = req.params;
@@ -241,16 +241,16 @@ export const taskDatedController = {
       if (!user && !task) {
         return res
           .status(404)
-          .json({ message: "Usuario y TaskDated no encontrados" });
+          .json({ message: "User and TaskDated not found" });
       }
       if (!user) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        return res.status(404).json({ message: "User not found" });
       }
       if (!task) {
-        return res.status(404).json({ message: "TaskDated no encontrada" });
+        return res.status(404).json({ message: "TaskDated not found" });
       }
 
-      // Añade la relación muchos a muchos en la tabla UserTask
+      // Add the many-to-many relations to the UserTask table
       await task.addUser(user);
 
       const snap = await buildTaskSnapshot(task.idTaskDated);
@@ -259,31 +259,32 @@ export const taskDatedController = {
 
       return res.json({ message: "User assigned to task successfully" });
     } catch (error) {
-      // Captura específica de FK
+      // FK-specific capture
       if (error.original && error.original.code === "ER_NO_REFERENCED_ROW_2") {
         return res.status(400).json({
           message:
-            "Foreign key violation: asegúrate de que idTaskDated y userId existen",
+            "Foreign key violation: make sure that idTaskDated and userId exist",
           error: error.original.sqlMessage,
         });
       }
 
-      // Captura de error cuando no se encuentra el recurso (SequelizeEmptyResultError)
+      // Catch error when resource not found (SequelizeEmptyResultError)
       if (error.name === "SequelizeEmptyResultError") {
         return res.status(404).json({
-          message: "No se encontró el recurso solicitado",
+          message: "The requested resource was not found",
           error: error.message,
         });
       }
 
-      // Resto de errores
+      // Other errors
       return res
         .status(500)
         .json({ message: "Error assigning task", error: error.message });
     }
   },
 
-  // Eliminar usuario de la tarea
+  // Remove user from the task
+
   // DELETE /taskdated/:idTaskDated/assign/:idUser
   unassignUser: async (req, res) => {
     const { idTaskDated, idUser } = req.params;
@@ -294,16 +295,16 @@ export const taskDatedController = {
       if (!user && !task) {
         return res
           .status(404)
-          .json({ message: "Usuario y TaskDated no encontrados" });
+          .json({ message: "User and TaskDated not found" });
       }
       if (!user) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        return res.status(404).json({ message: "User not found" });
       }
       if (!task) {
-        return res.status(404).json({ message: "TaskDated no encontrada" });
+        return res.status(404).json({ message: "TaskDated not found" });
       }
 
-      // Añade la relación muchos a muchos en la tabla UserTask
+      // Add the many-to-many relations to the UserTask table
       await task.removeUser(user);
 
       // emitCal(req, task.idGroup, "calendar:eventUpdated", {
@@ -321,7 +322,7 @@ export const taskDatedController = {
     }
   },
 
-  // Obtener usuarios de tarea
+  // Get task users
   getUsers: async (req, res) => {
     const { id } = req.params;
     try {
@@ -333,41 +334,7 @@ export const taskDatedController = {
     }
   },
 
-  // Obtener lista de compra de tarea
-  // getBuyList: async (req, res) => {
-  //   const { id } = req.params;
-  //   try {
-  //     // const items = await BuyList.findAll({ where: { idTaskDated: id } });
-  //     const items = await BuyList.findAll({
-  //       where: { idTaskDated: id },
-  //       include: [
-  //         { model: Material, attributes: ["idMaterial", "name", "unit"] },
-  //         {
-  //           model: TaskDated,
-  //           attributes: ["idTaskDated", "idGroup", "idTaskTemplate"],
-  //           include: [
-  //             {
-  //               model: TaskTemplate,
-  //               attributes: ["idTaskTemplate", "name", "type"],
-  //             },
-  //           ],
-  //         },
-  //       ],
-  //       order: [["idBuyList", "ASC"]],
-  //     });
-  //     res.set(
-  //       "Cache-Control",
-  //       "no-store, no-cache, must-revalidate, proxy-revalidate"
-  //     );
-  //     res.set("Pragma", "no-cache");
-  //     res.set("Expires", "0");
-
-  //     res.json(items);
-  //   } catch (error) {
-  //     res.status(500).json({ message: "Error fetching buy list" });
-  //   }
-  // },
-
+  // Get task buy list
   getBuyList: async (req, res) => {
     const { id } = req.params;
     try {
@@ -380,10 +347,14 @@ export const taskDatedController = {
           },
           {
             model: BuyList,
-            attributes: ["idBuyList", "idTaskDated", "quantity", "unit", "idMaterial"],
-            include: [
-              { model: Material, attributes: ["idMaterial", "name"] },
+            attributes: [
+              "idBuyList",
+              "idTaskDated",
+              "quantity",
+              "unit",
+              "idMaterial",
             ],
+            include: [{ model: Material, attributes: ["idMaterial", "name"] }],
           },
         ],
         order: [[BuyList, "idBuyList", "ASC"]],
@@ -413,18 +384,18 @@ export const taskDatedController = {
     }
   },
 
-  // Obtener todas las tareas fechadas de un grupo con su status
+  // Get all the dated tasks of a group with their status
   getStatusByGroup: async (req, res) => {
     const { idGroup } = req.params;
     try {
       const tasks = await TaskDated.findAll({
         where: { idGroup },
-        attributes: ["idTaskDated", "startDate", "endDate"], // quitamos status de TaskDated
+        attributes: ["idTaskDated", "startDate", "endDate"],
         include: [
           {
             model: User,
             attributes: ["idUser", "name"],
-            through: { attributes: [["status", "userStatus"]] }, // alias para evitar colisión
+            through: { attributes: [["status", "userStatus"]] },
           },
         ],
         order: [["createdAt", "ASC"]],
@@ -436,6 +407,7 @@ export const taskDatedController = {
       res.status(500).json({ message: "Error fetching task statuses" });
     }
   },
+  
   // POST /taskdated/:id/next  { times?: number }
   createNextNow: async (req, res) => {
     try {

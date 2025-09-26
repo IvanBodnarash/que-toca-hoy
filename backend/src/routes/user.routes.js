@@ -2,44 +2,40 @@ import { createBaseRouter } from "./base.routes.js";
 import { userController } from "../controllers/user.controller.js"
 import { upload, getImage } from "../middlewares/upload.middleware.js"
 
-// listar, listar por ID, crear, editar por ID, borrar por ID
+// List, list by ID, create, edit by ID, delete by ID
 const userRouter = createBaseRouter(userController);
 
-// añadir imagen
+// Add image
 userRouter.post("/:id/upload", upload.single("file"), getImage, userController.asignImage);
 
-// listar tareas de un usuario
+// List user tasks
 userRouter.get("/:id/taskdated", userController.getTasks);
 
-// asignar tarea a un usuario
+// Assign task to the user
 userRouter.post("/:id/taskdated", userController.assignTask);
 
-// listar grupos a los que pertenece 
+// List groups you belong to 
 userRouter.get("/:id/groups", userController.getGroups);
 
-// asignar grupo a un usuario
+// Assign a group to a user
 userRouter.post("/:id/group", userController.addGroup);
 
-
-// Obtener tareas por usuario y rango de fechas
+// Get tasks by user and date range
 userRouter.get("/:id/taskdated/report", userController.getTasksReport);
 
 userRouter.get("/:id/usertask/report", userController.getUserTasksReport);
 
 // buylist
-// obtener lista de compras del usuario por rango de fechas
+// Get user's buy list by date range
 userRouter.get("/:id/buylist/report", userController.getBuyListReport);
 
-// actualizar cantidades o marcar como comprado
+// Update quantities or mark as purchased
 userRouter.put("/:id/buylist", userController.updateBuyList);
 
-// obtener lista de compras de un grupo por rango de fechas
+// Get a group's buy list by date range
 // userRouter.get("/:idGroup/buylist/report", userController.getBuyListReportByGroup);
 
-
-//### Obtener lista de compra por grupo y rango de fechas (today | week | month)
+// Get buy list by group and date range (today | week | month)
 userRouter.get("/:idUser/group/:idGroup/buylist/report", userController.getGroupBuyListReport);
-
-
 
 export default userRouter;
