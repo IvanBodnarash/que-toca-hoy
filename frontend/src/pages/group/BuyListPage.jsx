@@ -116,7 +116,7 @@ export default function BuyListPage() {
       }));
       await updateBuyList(payload);
       toast.success("List updated");
-      addActivity("Shopping list has been updated");
+      addActivity("Buy list has been updated");
       fetchBuyList();
     } catch (err) {
       toast.error("Error updating the list");
@@ -200,7 +200,7 @@ export default function BuyListPage() {
     <div className="px-6 py-22 space-y-6 max-w-3xl mx-auto flex flex-col lg:flex-row gap-6 relative">
       <Toaster position="bottom-center" />
 
-      {/* Shopping List */}
+      {/* Buy List */}
       <div className="flex-1">
         <div className="text-xl md:text-2xl font-bold mb-4 text-cyan-900 flex items-center gap-2">
           <TiShoppingCart className="size-8" />

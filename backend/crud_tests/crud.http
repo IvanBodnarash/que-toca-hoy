@@ -175,7 +175,7 @@ GET {{baseUrl}}/material/1/templates
 ### Get buy list
 GET {{baseUrl}}/buyList
 
-### Create item in shopping list - Foreign key error: The given idTaskDated does not exist in TaskDated
+### Create item in buy list - Foreign key error: The given idTaskDated does not exist in TaskDated
 POST {{baseUrl}}/buyList
 Content-Type: application/json
 
@@ -203,10 +203,10 @@ Content-Type: application/json
 ### Delete item by ID      
 DELETE {{baseUrl}}/buyList/1
 
-### Get shopping list by task ID
+### Get buy list by task ID
 GET {{baseUrl}}/buyList/task/1
 
-### Get shopping list by material ID 
+### Get buy list by material ID 
 GET {{baseUrl}}/buyList/material/1
 
 ### Get materials by template ID
@@ -223,7 +223,7 @@ GET {{baseUrl}}/material/1/templates
 GET {{baseUrl}}/task/1/users
 
 
-### Get task shopping list by ID
+### Get task buy list by ID
 GET {{baseUrl}}/task/1/buyList
 
 

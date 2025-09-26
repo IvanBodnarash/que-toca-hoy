@@ -27,4 +27,7 @@ taskTemplateRouter.put("/:idTaskTemplate", taskTemplateController.updateBasicTem
 // Create recipe task template type
 taskTemplateRouter.post("/group/:idGroup", taskTemplateController.createRecipe);
 
+// Delte template
+taskTemplateRouter.delete("/:idTaskTemplate", taskTemplateController.deleteTemplate)
+
 export default taskTemplateRouter;

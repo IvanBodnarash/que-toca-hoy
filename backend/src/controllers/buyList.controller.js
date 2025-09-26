@@ -68,7 +68,7 @@ export const buyListController = {
       // await BuyList.bulkCreate(entries);
 
       const created = await BuyList.bulkCreate(entries);
-      res.status(201).json({ message: "Shopping list created successfully" });
+      res.status(201).json({ message: "Buy list created successfully" });
 
       // Live
       emitForTask(req, idTaskDated, "bulk-created", { items: created });

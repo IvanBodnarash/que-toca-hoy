@@ -1,5 +1,5 @@
 
-#### Archivos temporales
+#### Temporary files
 *.log
 *.tmp
 *.swp
@@ -10,7 +10,7 @@
 
 /frontend/.env
 
-#### Dependencias
+#### Dependencies
 #/backend/node_modules/
 
 #/frontend/node_modules/

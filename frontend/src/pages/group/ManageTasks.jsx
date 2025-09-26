@@ -3,7 +3,10 @@ import { useParams } from "react-router";
 import GroupTemplatesList from "../../components/groups/GroupTemplatesList";
 import AddTemplateModal from "../../components/tasks/NewTaskTemplateModal";
 import EditTaskTemplateModal from "../../components/tasks/EditTaskTemplateModal";
-import { getGroupTemplatesTasks } from "../../services/groupsService";
+import {
+  getGroupTemplatesTasks,
+  updateGroupTemplate,
+} from "../../services/groupsService";
 import { updateTaskTemplate } from "../../services/taskTemplateService";
 import { PlusIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { SiGoogletasks } from "react-icons/si";
@@ -44,7 +47,7 @@ export default function ManageTasks() {
 
   const handleSaveEdit = async (updated) => {
     try {
-      await updateTaskTemplate(updated.idTaskTemplate, updated);
+      await updateGroupTemplate(groupId, updated);
       await loadTemplates();
       setEditingTemplate(null);
     } catch (err) {

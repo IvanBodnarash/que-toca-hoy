@@ -12,6 +12,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "lucide-react";
 import { useGroupRealtime } from "../../realtime/useGroupRealtime";
 import AddFromCompassModal from "../../components/tasks/AddFromCompassModal";
+import { updateTaskTemplate } from "../../services/taskTemplateService";
 
 export default function RecipesPage() {
   const { groupId } = useParams();

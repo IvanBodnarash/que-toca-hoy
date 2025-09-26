@@ -159,11 +159,10 @@ export const taskTemplateController = {
       const updatedTemplate = await TaskTemplate.findByPk(idTaskTemplate, {
         include: Material,
       });
-      if (!template)
+      if (!updatedTemplate)
         return res.status(404).json({ message: "Template not found" });
 
       await updatedTemplate.update({ name, steps });
-
       res.json(updatedTemplate);
 
       // Live
@@ -239,19 +238,18 @@ export const taskTemplateController = {
   },
 
   // Delete template
-  updateTemplate: async (req, res) => {
-    const { id } = req.params;
+  deleteTemplate: async (req, res) => {
+    const { idTaskTemplate } = req.params;
 
     try {
-      const template = await TaskTemplate.findByPk(id);
+      const template = await TaskTemplate.findByPk(idTaskTemplate);
       if (!template)
         return res.status(404).json({ message: "Template not found" });
 
       // 1. Check if the instances planned
       const scheduledCount = await TaskDated.count({
-        where: { idTaskTemplate: id },
+        where: { idTaskTemplate },
       });
-
       if (scheduledCount > 0) {
         return res.status(409).json({
           massage: "Cannot delete: template has scheduled tasks",
@@ -267,7 +265,7 @@ export const taskTemplateController = {
       // 3. Notifications
       emitTemplatesChanged(req, idGroup, {
         action: "deleted",
-        templateId: Number(id),
+        templateId: Number(idTaskTemplate),
       });
       emitCalendarRefresh(req, idGroup);
 

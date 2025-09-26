@@ -149,11 +149,24 @@ export async function uploadGroupImage(groupId, file) {
 }
 
 export async function updateGroupTemplate(groupId, template) {
+  const { idTaskTemplate, name, steps, materials } = template;
+  if (!groupId) throw new Error("NO_GROUP");
+  if (!idTaskTemplate) throw new Error("NO_TEMPLATE_ID");
+
   return apiPut(
     `/tasktemplate/group/${groupId}/template/${template.idTaskTemplate}`,
-    template
+    { name, steps, materials }
   );
 }
+// export async function updateGroupTemplate(groupId, template) {
+//   const { idTaskTemplate, name, steps, materials } = template;
+//   if (!idTaskTemplate) throw new Error("NO_TEMPLATE_ID");
+
+//   return apiPut(
+//     `/tasktemplate/group/${groupId}/template/${template.idTaskTemplate}`,
+//     template
+//   );
+// }
 
 export async function getGroupDetails(groupId) {
   try {
