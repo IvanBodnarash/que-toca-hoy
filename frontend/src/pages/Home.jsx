@@ -97,7 +97,7 @@ export default function Home() {
           <div className="flex flex-row items-center gap-6">
             <div>
               <NavLink
-                to="aboutUs"
+                to="/aboutUs"
                 aria-label="Que Toca Hoy — Home"
                 className="leading-none text-center text-cyan-900 hover:text-cyan-700 transition-all w-16"
               >
@@ -151,7 +151,7 @@ export default function Home() {
               groups.map((group) => (
                 <NavLink
                   key={group.idGroup}
-                  to={`/group/${group.idGroup}/calendar`}
+                  to={`/app/group/${group.idGroup}/calendar`}
                   className="sm:min-w-120"
                 >
                   <div className="flex flex-row gap-3 bg-slate-300 hover:bg-slate-200 transition-all p-3 rounded-md border border-slate-400 items-center">
@@ -179,7 +179,7 @@ export default function Home() {
 
                       <GroupMembersStrip idGroup={group.idGroup} max={5} />
 
-                      {pinMap[group.idGroup] && (
+                      {/* {pinMap[group.idGroup] && (
                         <p
                           className="text-sm text-slate-700 mt-1 p-1 bg-white rounded shadow absolute right-0 top-1/2 transform -translate-y-1/2"
                           onClick={(e) => {
@@ -189,11 +189,11 @@ export default function Home() {
                         >
                           PIN: {pinMap[group.idGroup]}
                         </p>
-                      )}
+                      )} */}
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <button
+                      {/* <button
                         type="button"
                         onClick={(e) => {
                           e.preventDefault();
@@ -206,7 +206,7 @@ export default function Home() {
                         ) : (
                           <AiOutlineEye size={20} />
                         )}
-                      </button>
+                      </button> */}
                       {/* Leave Group */}
                       <button
                         type="button"

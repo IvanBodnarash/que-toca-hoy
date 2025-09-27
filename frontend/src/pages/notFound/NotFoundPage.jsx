@@ -12,7 +12,7 @@ export default function NotFoundPage() {
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <NavLink
-            to="/"
+            to="/app"
             className="px-4 py-2 rounded-md bg-cyan-900 text-white hover:bg-cyan-800 transition"
           >
             Home

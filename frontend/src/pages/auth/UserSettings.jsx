@@ -113,20 +113,25 @@ export default function UserSettings() {
   };
 
   const handleLogout = async () => {
+    // try {
+    //   await fetch("http://localhost:3000/auth/logout", {
+    //     method: "POST",
+    //     credentials: "include",
+    //   });
+    // } catch (_) {}
+
+    // localStorage.removeItem("user");
+
+    // try {
+    //   logout?.();
+    // } catch (_) {}
+
+    // navigate("/auth", { replace: true });
     try {
-      await fetch("http://localhost:3000/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (_) {}
-
-    localStorage.removeItem("user");
-
-    try {
-      logout?.();
-    } catch (_) {}
-
-    navigate("/auth", { replace: true });
+      await logout();
+    } finally {
+      navigate("/welcome", { replace: true });
+    }
   };
 
   return (
@@ -141,7 +146,7 @@ export default function UserSettings() {
             Logout
           </button>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/app")}
             className="bg-cyan-950 hover:bg-cyan-900 active:bg-cyan-800 transition-all text-white p-2 px-4 rounded-md cursor-pointer"
           >
             Back
@@ -243,7 +248,9 @@ export default function UserSettings() {
                   }}
                   className="h-10 w-14 p-0 border border-slate-300 rounded cursor-pointer"
                 />
-                <span className="text-slate-600 text-sm font-mono tabular-nums w-24 text-center select-all">{profileColor}</span>
+                <span className="text-slate-600 text-sm font-mono tabular-nums w-24 text-center select-all">
+                  {profileColor}
+                </span>
               </div>
             </div>
 

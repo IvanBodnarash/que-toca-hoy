@@ -14,9 +14,9 @@ export default function BriefTasksList({ data, type }) {
   const handleClick = (e) => {
     e?.preventDefault?.();
     if (isRecipe && pendingCount > 0) {
-      navigate(`/group/${idGroup}/buyList?task=${data.idTaskDated}`);
+      navigate(`/app/group/${idGroup}/buyList?task=${data.idTaskDated}`);
     } else {
-      navigate(`/group/${idGroup}/calendar`);
+      navigate(`/app/group/${idGroup}/calendar`);
     }
   };
 

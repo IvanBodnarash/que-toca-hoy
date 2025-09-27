@@ -26,7 +26,7 @@ const BuyList = sequelize.define(
       allowNull: false,
     },
     unit: {
-      type: DataTypes.ENUM("ud", "ml", "gr"),
+      type: DataTypes.STRING(16),
       defaultValue: "ud",
       allowNull: false,
     },

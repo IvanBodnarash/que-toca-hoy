@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 export default function LogoContainer({ stacked = true, className = "" }) {
   return (
     <NavLink
-      to="/"
+      to="/app"
       aria-label="Que Toca Hoy — Home"
       className={`select-none ${className} main-logo`}
     >

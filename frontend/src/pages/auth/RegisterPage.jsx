@@ -89,7 +89,7 @@ export default function Register() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setLoggedUser(user);
-      navigate("/", { replace: true }); // after login -> to Home
+      navigate("/app", { replace: true }); // after login -> to Home
     } catch (error) {
       const msg =
         error?.message === "UNAUTHORIZED"
@@ -249,7 +249,7 @@ export default function Register() {
 
         <p className="pt-2 text-slate-800">
           You already have an account?{" "}
-          <NavLink to="/" className="text-cyan-700 underline">
+          <NavLink to="/app" className="text-cyan-700 underline">
             Sign In
           </NavLink>
         </p>

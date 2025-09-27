@@ -196,128 +196,134 @@ async function seedIfEmpty() {
       { name: "Paella (simple)", steps: ["Prep ingredients", "Sauté base", "Cook rice", "Rest before serving"], idGroup: groups[2].idGroup, type: "recipe" },
       { name: "Spanish omelette (with onion)", steps: ["Peel potatoes", "Fry potatoes", "Beat eggs", "Mix with onion and cook"], idGroup: groups[2].idGroup, type: "recipe" },
       { name: "Cuban-style rice", steps: ["Cook rice", "Fry eggs", "Serve with tomato sauce"], idGroup: groups[2].idGroup, type: "recipe" },
-      // { name: "Limpiar baño", steps: ["Recoger objetos", "Aplicar limpiador", "Fregar", "Secar"], idGroup: groups[2].idGroup, type: "task" },
-      // { name: "Limpiar cocina", steps: ["Limpiar encimeras", "Fregar suelo"], idGroup: groups[2].idGroup, type: "task" },
-      // { name: "Fregar los platos", steps: ["Llenar fregadero", "Aplicar jabón", "Fregar", "Aclarar"], idGroup: groups[2].idGroup, type: "task" },
-      // { name: "Pasar la aspiradora", steps: ["Conectar", "Aspirar habitaciones"], idGroup: groups[2].idGroup, type: "task" },
-      // { name: "Sacar la basura", steps: ["Recoger bolsas", "Llevar al contenedor"], idGroup: groups[2].idGroup, type: "task" },
-      // { name: "Paella", steps: ["Preparar ingredientes", "Saltear", "Cocer arroz", "Reposar"], idGroup: groups[2].idGroup, type: "recipe" },
-      // { name: "Tortilla de patatas", steps: ["Pelar patatas", "Freír", "Batir huevos", "Mezclar y cocinar"], idGroup: groups[2].idGroup, type: "recipe" },
-      // { name: "Arroz a la cubana", steps: ["Cocer arroz", "Freír huevos", "Servir con tomate"], idGroup: groups[2].idGroup, type: "recipe" },
     ]);
 
     // Materials
     const materials = await Material.bulkCreate([
-      { name: "Rice", assumed: false },
-      { name: "Chicken", assumed: false },
-      { name: "Tomato", assumed: false },
-      { name: "Potatoes", assumed: false },
-      { name: "Eggs", assumed: false },
-      { name: "Dish soap", assumed: false },
-      { name: "Toilet paper", assumed: false },
-      { name: "Lettuce", assumed: false },
-      { name: "Croutons", assumed: false },
-      { name: "Bread", assumed: false },
-      { name: "Olive oil", assumed: false }, // could be assumed: true in your logic
-      { name: "Onion", assumed: false },
-      { name: "WC cleaner", assumed: false },
-      { name: "Tomato sauce", assumed: false },
-      { name: "Salt", assumed: false },
-      { name: "Black pepper", assumed: false },
-      { name: "Garlic", assumed: false },
-      { name: "Paprika", assumed: false },
-      { name: "Parmesan", assumed: false },
-      { name: "Whole chicken", assumed: false },
+      { name: "Rice", assumed: false },           // 0
+      { name: "Chicken", assumed: false },        // 1
+      { name: "Tomato", assumed: false },         // 2
+      { name: "Potatoes", assumed: false },       // 3
+      { name: "Eggs", assumed: false },           // 4
+      { name: "Dish soap", assumed: false },      // 5
+      { name: "Toilet paper", assumed: false },   // 6
+      { name: "Lettuce", assumed: false },        // 7
+      { name: "Croutons", assumed: false },       // 8
+      { name: "Bread", assumed: false },          // 9
+      { name: "Olive oil", assumed: false },      // 10
+      { name: "Onion", assumed: false },          // 11
+      { name: "WC cleaner", assumed: false },     // 12
+      { name: "Tomato sauce", assumed: false },   // 13
+      { name: "Salt", assumed: false },           // 14
+      { name: "Black pepper", assumed: false },   // 15
+      { name: "Garlic", assumed: false },         // 16
+      { name: "Paprika", assumed: false },        // 17
+      { name: "Parmesan", assumed: false },       // 18
+      { name: "Whole chicken", assumed: false },  // 19
     ]);
 
     // Materials - templates (when needed)
     await MaterialTaskTemplate.bulkCreate([
-      // Paella
-      { idMaterial: materials[0].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 300, unit: "gr" },
-      { idMaterial: materials[1].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 500, unit: "gr" },
-      { idMaterial: materials[2].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 2, unit: "ud" },
+      // Paella (chicken) -> template[2]
+      { idMaterial: materials[0].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 300, unit: "g" },   // Rice
+      { idMaterial: materials[1].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 500, unit: "g" },   // Chicken
+      { idMaterial: materials[2].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 2,   unit: "pcs" }, // Tomato
+      { idMaterial: materials[10].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 40,  unit: "ml" }, // Olive oil
+      { idMaterial: materials[14].idMaterial, idTaskTemplate: taskTemplates[2].idTaskTemplate, quantity: 5,   unit: "g" },  // Salt
 
-      // Tortilla
-      { idMaterial: materials[3].idMaterial, idTaskTemplate: taskTemplates[3].idTaskTemplate, quantity: 3, unit: "ud" },
-      { idMaterial: materials[4].idMaterial, idTaskTemplate: taskTemplates[3].idTaskTemplate, quantity: 4, unit: "ud" },
+      // Spanish omelette -> template[3]
+      { idMaterial: materials[3].idMaterial, idTaskTemplate: taskTemplates[3].idTaskTemplate, quantity: 400, unit: "g" },   // Potatoes
+      { idMaterial: materials[4].idMaterial, idTaskTemplate: taskTemplates[3].idTaskTemplate, quantity: 4,   unit: "pcs" }, // Eggs
+      { idMaterial: materials[10].idMaterial, idTaskTemplate: taskTemplates[3].idTaskTemplate, quantity: 50,  unit: "ml" }, // Olive oil
 
-      // Limpieza
-      { idMaterial: materials[5].idMaterial, idTaskTemplate: taskTemplates[0].idTaskTemplate, quantity: 100, unit: "ml" },
-      { idMaterial: materials[6].idMaterial, idTaskTemplate: taskTemplates[4].idTaskTemplate, quantity: 2, unit: "ud" },
+      // Clean kitchen -> template[0]
+      { idMaterial: materials[5].idMaterial, idTaskTemplate: taskTemplates[0].idTaskTemplate, quantity: 100, unit: "ml" },  // Dish soap
 
-      // Ensalada César
-      { idMaterial: materials[7].idMaterial, idTaskTemplate: taskTemplates[6].idTaskTemplate, quantity: 1, unit: "ud" },
-      { idMaterial: materials[1].idMaterial, idTaskTemplate: taskTemplates[6].idTaskTemplate, quantity: 200, unit: "gr" },
-      { idMaterial: materials[8].idMaterial, idTaskTemplate: taskTemplates[6].idTaskTemplate, quantity: 50, unit: "gr" },
+      // Clean bathroom -> template[5]
+      { idMaterial: materials[12].idMaterial, idTaskTemplate: taskTemplates[5].idTaskTemplate, quantity: 100, unit: "ml" }, // WC cleaner
 
-      // Comprar pan
-      { idMaterial: materials[9].idMaterial, idTaskTemplate: taskTemplates[5].idTaskTemplate, quantity: 1, unit: "ud" },
+      // Caesar salad -> template[7]
+      { idMaterial: materials[7].idMaterial,  idTaskTemplate: taskTemplates[7].idTaskTemplate, quantity: 1,   unit: "pcs" }, // Lettuce
+      { idMaterial: materials[1].idMaterial,  idTaskTemplate: taskTemplates[7].idTaskTemplate, quantity: 200, unit: "g" },   // Chicken
+      { idMaterial: materials[8].idMaterial,  idTaskTemplate: taskTemplates[7].idTaskTemplate, quantity: 50,  unit: "g" },   // Croutons
+      { idMaterial: materials[18].idMaterial, idTaskTemplate: taskTemplates[7].idTaskTemplate, quantity: 20,  unit: "g" },   // Parmesan
 
-      // Paella 2
-      { idMaterial: materials[0].idMaterial, idTaskTemplate: taskTemplates[13].idTaskTemplate, quantity: 200, unit: "gr" }, // Arroz - Paella
-      { idMaterial: materials[1].idMaterial, idTaskTemplate: taskTemplates[13].idTaskTemplate, quantity: 300, unit: "gr" }, // Pollo - Paella
-      { idMaterial: materials[10].idMaterial, idTaskTemplate: taskTemplates[13].idTaskTemplate, quantity: 50, unit: "ml" },  // Aceite - Paella
-      // Tortilla 2
-      { idMaterial: materials[3].idMaterial, idTaskTemplate: taskTemplates[14].idTaskTemplate, quantity: 300, unit: "gr" }, // Patatas - Tortilla
-      { idMaterial: materials[4].idMaterial, idTaskTemplate: taskTemplates[14].idTaskTemplate, quantity: 4, unit: "ud" },   // Huevos - Tortilla
-      { idMaterial: materials[11].idMaterial, idTaskTemplate: taskTemplates[14].idTaskTemplate, quantity: 100, unit: "gr" }, // Cebolla - Tortilla
-      { idMaterial: materials[10].idMaterial, idTaskTemplate: taskTemplates[14].idTaskTemplate, quantity: 500, unit: "ml" },  // Aceite - Tortilla
-      // Limpiar baño 2 
-      { idMaterial: materials[12].idMaterial, idTaskTemplate: taskTemplates[8].idTaskTemplate, quantity: 100, unit: "ml" }, // LimpiaWC - Limpiar baño
+      // Buy bread -> template[6]
+      { idMaterial: materials[9].idMaterial, idTaskTemplate: taskTemplates[6].idTaskTemplate, quantity: 1, unit: "pcs" }, // Bread
 
-      // arroz a la cubana
-      { idMaterial: materials[4].idMaterial, idTaskTemplate: taskTemplates[15].idTaskTemplate, quantity: 2, unit: "ud" },   // Huevos - Arroz a la cubana
-      { idMaterial: materials[0].idMaterial, idTaskTemplate: taskTemplates[15].idTaskTemplate, quantity: 200, unit: "gr" }, // Arroz - Arroz a la cubana
-      { idMaterial: materials[13].idMaterial, idTaskTemplate: taskTemplates[15].idTaskTemplate, quantity: 200, unit: "ml" },  // Aceite - Arroz a la cubana
+      // Paella (simple) -> template[15]
+      { idMaterial: materials[0].idMaterial,  idTaskTemplate: taskTemplates[15].idTaskTemplate, quantity: 200, unit: "g" }, // Rice
+      { idMaterial: materials[1].idMaterial,  idTaskTemplate: taskTemplates[15].idTaskTemplate, quantity: 300, unit: "g" }, // Chicken
+      { idMaterial: materials[10].idMaterial, idTaskTemplate: taskTemplates[15].idTaskTemplate, quantity: 40,  unit: "ml" },// Olive oil
+      { idMaterial: materials[14].idMaterial, idTaskTemplate: taskTemplates[15].idTaskTemplate, quantity: 5,   unit: "g" }, // Salt
 
+      // Spanish omelette (with onion) -> template[16]
+      { idMaterial: materials[3].idMaterial,  idTaskTemplate: taskTemplates[16].idTaskTemplate, quantity: 300, unit: "g" }, // Potatoes
+      { idMaterial: materials[4].idMaterial,  idTaskTemplate: taskTemplates[16].idTaskTemplate, quantity: 4,   unit: "pcs" },// Eggs
+      { idMaterial: materials[11].idMaterial, idTaskTemplate: taskTemplates[16].idTaskTemplate, quantity: 100, unit: "g" }, // Onion
+      { idMaterial: materials[10].idMaterial, idTaskTemplate: taskTemplates[16].idTaskTemplate, quantity: 50,  unit: "ml" },// Olive oil
+
+      // Deep-clean bathroom -> template[10]
+      { idMaterial: materials[12].idMaterial, idTaskTemplate: taskTemplates[10].idTaskTemplate, quantity: 100, unit: "ml" }, // WC cleaner
+      { idMaterial: materials[6].idMaterial,  idTaskTemplate: taskTemplates[10].idTaskTemplate, quantity: 2,   unit: "pcs" }, // Toilet paper
+
+      // Roast chicken dinner -> template[9]
+      { idMaterial: materials[19].idMaterial, idTaskTemplate: taskTemplates[9].idTaskTemplate, quantity: 1, unit: "pcs" },   // Whole chicken
+      { idMaterial: materials[16].idMaterial, idTaskTemplate: taskTemplates[9].idTaskTemplate, quantity: 3, unit: "pcs" },   // Garlic
+      { idMaterial: materials[17].idMaterial, idTaskTemplate: taskTemplates[9].idTaskTemplate, quantity: 5, unit: "g" },     // Paprika
+      { idMaterial: materials[10].idMaterial, idTaskTemplate: taskTemplates[9].idTaskTemplate, quantity: 30, unit: "ml" },   // Olive oil
+      { idMaterial: materials[14].idMaterial, idTaskTemplate: taskTemplates[9].idTaskTemplate, quantity: 5, unit: "g" },     // Salt
+      { idMaterial: materials[15].idMaterial, idTaskTemplate: taskTemplates[9].idTaskTemplate, quantity: 2, unit: "g" },     // Black pepper
     ]);
-    // 📆 Tareas programadas
+    // Scheduled tasks
     const now = new Date();
     const tasks = await TaskDated.bulkCreate([
-      { idGroup: groups[0].idGroup, idTaskTemplate: taskTemplates[0].idTaskTemplate, startDate: now, endDate: new Date(now.getTime() + 2 * 60 * 60 * 1000), status: "todo", frequency: "daily", rotative: true },
-      { idGroup: groups[0].idGroup, idTaskTemplate: taskTemplates[2].idTaskTemplate, startDate: now, endDate: new Date(now.getTime() + 3 * 60 * 60 * 1000), status: "todo", frequency: "weekly", rotative: false },
-      { idGroup: groups[1].idGroup, idTaskTemplate: taskTemplates[4].idTaskTemplate, startDate: now, endDate: new Date(now.getTime() + 1.5 * 60 * 60 * 1000), status: "done", frequency: "monthly", rotative: true },
-      { idGroup: groups[1].idGroup, idTaskTemplate: taskTemplates[6].idTaskTemplate, startDate: now, endDate: new Date(now.getTime() + 1 * 60 * 60 * 1000), status: "todo", frequency: "weekly", rotative: false },
-      { idGroup: groups[0].idGroup, idTaskTemplate: taskTemplates[7].idTaskTemplate, startDate: now, endDate: new Date(now.getTime() + 45 * 60 * 1000), status: "done", frequency: "daily", rotative: true },
-      { idGroup: groups[1].idGroup, idTaskTemplate: taskTemplates[5].idTaskTemplate, startDate: now, endDate: new Date(now.getTime() + 30 * 60 * 1000), status: "todo", frequency: "daily", rotative: false },
-      // Rotativas semanales y diarias
-      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[8].idTaskTemplate, startDate: new Date("2025-08-18T00:00:01"), endDate: new Date("2025-08-24T23:59:59"), status: "done", frequency: "weekly", rotative: true },
-      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[9].idTaskTemplate, startDate: new Date("2025-08-25T00:00:01"), endDate: new Date("2025-08-31T23:59:59"), status: "todo", frequency: "weekly", rotative: true },
-      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[10].idTaskTemplate, startDate: new Date("2025-09-01T00:00:01"), endDate: new Date("2025-09-07T23:59:59"), status: "done", frequency: "weekly", rotative: true },
-      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[11].idTaskTemplate, startDate: new Date("2025-08-25T00:00:01"), endDate: new Date("2025-08-31T23:59:59"), status: "todo", frequency: "weekly", rotative: true },
-      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[12].idTaskTemplate, startDate: new Date("2025-09-01T00:00:01"), endDate: new Date("2025-09-01T23:59:59"), status: "todo", frequency: "daily", rotative: true },
-      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[15].idTaskTemplate, startDate: new Date("2025-09-04T00:00:01"), endDate: new Date("2025-09-04T23:59:59"), status: "todo", frequency: "none", rotative: false },
+      { idGroup: groups[0].idGroup, idTaskTemplate: taskTemplates[0].idTaskTemplate,  startDate: now, endDate: new Date(now.getTime() + 2 * 60 * 60 * 1000), status: "todo", frequency: "daily",   rotative: true  }, // Clean kitchen
+      { idGroup: groups[0].idGroup, idTaskTemplate: taskTemplates[2].idTaskTemplate,  startDate: now, endDate: new Date(now.getTime() + 3 * 60 * 60 * 1000), status: "todo", frequency: "weekly", rotative: false }, // Paella (chicken)
+      { idGroup: groups[1].idGroup, idTaskTemplate: taskTemplates[5].idTaskTemplate,  startDate: now, endDate: new Date(now.getTime() + 1.5 * 60 * 60 * 1000), status: "done", frequency: "monthly", rotative: true  }, // Clean bathroom
+      { idGroup: groups[1].idGroup, idTaskTemplate: taskTemplates[7].idTaskTemplate,  startDate: now, endDate: new Date(now.getTime() + 1 * 60 * 60 * 1000),   status: "todo", frequency: "weekly", rotative: false }, // Caesar salad
+      { idGroup: groups[0].idGroup, idTaskTemplate: taskTemplates[4].idTaskTemplate,  startDate: now, endDate: new Date(now.getTime() + 45 * 60 * 1000),       status: "done", frequency: "daily",   rotative: true  }, // Vacuum living room
+      { idGroup: groups[1].idGroup, idTaskTemplate: taskTemplates[6].idTaskTemplate,  startDate: now, endDate: new Date(now.getTime() + 30 * 60 * 1000),       status: "todo", frequency: "daily",   rotative: false }, // Buy bread
+
+      // Weekly/daily rotating (Group 2)
+      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[10].idTaskTemplate, startDate: new Date("2025-08-18T00:00:01"), endDate: new Date("2025-08-24T23:59:59"), status: "done", frequency: "weekly", rotative: true  }, // Deep-clean bathroom
+      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[11].idTaskTemplate, startDate: new Date("2025-08-25T00:00:01"), endDate: new Date("2025-08-31T23:59:59"), status: "todo", frequency: "weekly", rotative: true  }, // Wipe kitchen surfaces
+      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[12].idTaskTemplate, startDate: new Date("2025-09-01T00:00:01"), endDate: new Date("2025-09-07T23:59:59"), status: "done", frequency: "weekly", rotative: true  }, // Wash dishes
+      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[13].idTaskTemplate, startDate: new Date("2025-08-25T00:00:01"), endDate: new Date("2025-08-31T23:59:59"), status: "todo", frequency: "weekly", rotative: true  }, // Vacuum bedrooms
+      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[14].idTaskTemplate, startDate: new Date("2025-09-01T00:00:01"), endDate: new Date("2025-09-01T23:59:59"), status: "todo", frequency: "daily",   rotative: true  }, // Take out garbage
+      { idGroup: groups[2].idGroup, idTaskTemplate: taskTemplates[17].idTaskTemplate, startDate: new Date("2025-09-04T00:00:01"), endDate: new Date("2025-09-04T23:59:59"), status: "todo", frequency: "none",    rotative: false }, // Cuban-style rice
     ]);
 
-    // 🛒 Lista de compra
+    // Buy list
     await BuyList.bulkCreate([
-      // Paella
-      { idTaskDated: tasks[1].idTaskDated, idMaterial: materials[0].idMaterial, quantity: 300, unit: "gr" },
-      { idTaskDated: tasks[1].idTaskDated, idMaterial: materials[1].idMaterial, quantity: 500, unit: "gr" },
-      { idTaskDated: tasks[1].idTaskDated, idMaterial: materials[2].idMaterial, quantity: 2, unit: "ud" },
+      // Paella (chicken) weekly -> tasks[1]
+      { idTaskDated: tasks[1].idTaskDated, idMaterial: materials[0].idMaterial, quantity: 300, unit: "g" },   // Rice
+      { idTaskDated: tasks[1].idTaskDated, idMaterial: materials[1].idMaterial, quantity: 500, unit: "g" },   // Chicken
+      { idTaskDated: tasks[1].idTaskDated, idMaterial: materials[2].idMaterial, quantity: 2,   unit: "pcs" }, // Tomato
 
-      // Limpieza cocina
-      { idTaskDated: tasks[0].idTaskDated, idMaterial: materials[5].idMaterial, quantity: 100, unit: "ml" },
+      // Clean kitchen -> tasks[0]
+      { idTaskDated: tasks[0].idTaskDated, idMaterial: materials[5].idMaterial, quantity: 100, unit: "ml" },  // Dish soap
 
-      // Ensalada
-      { idTaskDated: tasks[3].idTaskDated, idMaterial: materials[7].idMaterial, quantity: 1, unit: "ud" },
-      { idTaskDated: tasks[3].idTaskDated, idMaterial: materials[1].idMaterial, quantity: 200, unit: "gr" },
-      { idTaskDated: tasks[3].idTaskDated, idMaterial: materials[8].idMaterial, quantity: 50, unit: "gr" },
+      // Caesar salad weekly -> tasks[3]
+      { idTaskDated: tasks[3].idTaskDated, idMaterial: materials[7].idMaterial,  quantity: 1,   unit: "pcs" }, // Lettuce
+      { idTaskDated: tasks[3].idTaskDated, idMaterial: materials[1].idMaterial,  quantity: 200, unit: "g" },   // Chicken
+      { idTaskDated: tasks[3].idTaskDated, idMaterial: materials[8].idMaterial,  quantity: 50,  unit: "g" },   // Croutons
+      { idTaskDated: tasks[3].idTaskDated, idMaterial: materials[18].idMaterial, quantity: 20,  unit: "g" },   // Parmesan
 
-      // Comprar pan
-      { idTaskDated: tasks[5].idTaskDated, idMaterial: materials[9].idMaterial, quantity: 1, unit: "ud" },
+      // Buy bread -> tasks[5]
+      { idTaskDated: tasks[5].idTaskDated, idMaterial: materials[9].idMaterial, quantity: 1, unit: "pcs" },    // Bread
 
-      // Comprar limpiaWC
-      { idTaskDated: tasks[6].idTaskDated, idMaterial: materials[12].idMaterial, quantity: 100, unit: "ml" },
+      // Deep-clean bathroom -> tasks[6]
+      { idTaskDated: tasks[6].idTaskDated, idMaterial: materials[12].idMaterial, quantity: 100, unit: "ml" },  // WC cleaner
+      { idTaskDated: tasks[6].idTaskDated, idMaterial: materials[6].idMaterial,  quantity: 2,   unit: "pcs" }, // Toilet paper
 
-      // Comprar limpiaWC
-      { idTaskDated: tasks[11].idTaskDated, idMaterial: materials[4].idMaterial, quantity: 2, unit: "ud" },
-      { idTaskDated: tasks[11].idTaskDated, idMaterial: materials[0].idMaterial, quantity: 200, unit: "gr" },
-      { idTaskDated: tasks[11].idTaskDated, idMaterial: materials[13].idMaterial, quantity: 200, unit: "ml" },
-
+      // Cuban-style rice -> tasks[11]
+      { idTaskDated: tasks[11].idTaskDated, idMaterial: materials[4].idMaterial,  quantity: 2,   unit: "pcs" }, // Eggs
+      { idTaskDated: tasks[11].idTaskDated, idMaterial: materials[0].idMaterial,  quantity: 200, unit: "g" },   // Rice
+      { idTaskDated: tasks[11].idTaskDated, idMaterial: materials[13].idMaterial, quantity: 200, unit: "ml" },  // Tomato sauce
     ]);
 
-    // 👤 Relación usuarios ↔ tareas
+    // Users - tasks
     await UserTask.bulkCreate([
       { idUser: users[0].idUser, idTaskDated: tasks[0].idTaskDated },
       { idUser: users[1].idUser, idTaskDated: tasks[1].idTaskDated },
@@ -333,17 +339,15 @@ async function seedIfEmpty() {
       { idUser: users[7].idUser, idTaskDated: tasks[11].idTaskDated },
     ]);
 
-    console.log("🌱 Datos de ejemplo insertados.");
-
+    console.log("🌱 Sample data inserted.");
 
     const port = process.env.APP_PORT || 3000;
 
     console.log(`Starting server on port ${port}`);
 
-    
   }
 
-// iniciar cronjobs
+// Initiate cronjobs
 //jobMidnight.start();
 }
 
@@ -353,14 +357,14 @@ async function seedIfEmpty() {
     try {
       // console.log(process.env.DB_PASS, process.env.DB_USER);
       await sequelize.authenticate();
-      console.log("✅ Conexión con MySQL OK");
+      console.log("✅ Connection with MySQL OK");
 
-      // Crea/actualiza tablas según modelos (sin migraciones)
+      // Create/update tables based on models (without migrations)
       await sequelize.sync({ alter: false });
       await seedIfEmpty();
 
       server.listen(port, () =>
-        console.log(`🚀 API escuchando en http://localhost:${port}`)
+        console.log(`🚀 API listening on http://localhost:${port}`)
       );
 
       const close = () => {
@@ -371,7 +375,7 @@ async function seedIfEmpty() {
       process.on("SIGINT", close);
       process.on("SIGTERM", close);
     } catch (e) {
-      console.error("❌ Error al iniciar:", e);
+      console.error("Initialization error:", e);
       process.exit(1);
     }
   })();

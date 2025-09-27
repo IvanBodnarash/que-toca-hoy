@@ -5,7 +5,7 @@ import {
   logout as apiLogout,
   me,
 } from "../services/authService";
-import { setToken } from "../api/apiFetch";
+import { setOnUnauthorized, setToken } from "../api/apiFetch";
 
 export const AuthContext = createContext(null);
 const LOCALSTORAGE_USER_KEY = "user";
@@ -21,6 +21,46 @@ export function AuthProvider({ children }) {
       setUser(JSON.parse(storedUser));
     }
     setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    let locking = false; // protection against repeated calls
+
+    const handler = async () => {
+      if (locking) return;
+      locking = true;
+      try {
+        // робимо локальний logout, навіть якщо бековий /auth/logout впаде
+        try {
+          await logout();
+        } catch (_) {
+          // ігноруємо
+        }
+      } finally {
+        // миттєвий редірект без “блимання”
+        window.location.replace("/welcome");
+      }
+    };
+
+    setOnUnauthorized(handler);
+    return () => setOnUnauthorized(null);
+  }, []);
+
+  useEffect(() => {
+    // якщо в LS є користувач — перевіряємо токен бекендом
+    (async () => {
+      const storedUser = localStorage.getItem(LOCALSTORAGE_USER_KEY);
+      if (!storedUser) return setLoading(false);
+
+      try {
+        const ok = await checkAuth(); // викликає /auth/me
+        if (!ok) {
+          await logout(); // чистимо все
+        }
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const register = async ({
@@ -79,7 +119,17 @@ export function AuthProvider({ children }) {
 
   // Logout
   const logout = async () => {
-    await apiLogout();
+    // await apiLogout();
+    // setUser(null);
+    // setToken(null);
+    // localStorage.removeItem(LOCALSTORAGE_USER_KEY);
+    // localStorage.removeItem("token");
+
+    try {
+      await apiLogout();
+    } catch (_) {
+      // ignore network/cookie issues
+    }
     setUser(null);
     setToken(null);
     localStorage.removeItem(LOCALSTORAGE_USER_KEY);

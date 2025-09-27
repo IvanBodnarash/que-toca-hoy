@@ -5,7 +5,7 @@ import { FaGithub } from "react-icons/fa";
 
 export function DevCard({ member }) {
   return (
-    <div className="border-2 border-yellow-50 w-fit min-h-84 rounded-xl p-4 shadow-xl hover:scale-102 transition-all cursor-pointer">
+    <div className="border-2 border-yellow-50 w-5/6 md:w-fit min-h-84 rounded-xl p-4 shadow-xl hover:scale-102 transition-all cursor-pointer">
       <div className="flex flex-col h-full justify-between gap-2">
         <div>
           <img

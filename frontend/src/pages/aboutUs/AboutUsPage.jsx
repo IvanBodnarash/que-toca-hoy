@@ -68,10 +68,10 @@ const aboutUs = [
 
 export default function AboutUsPage() {
   return (
-    <div className="py-8 px-8 md:px-32 bg-cyan-900 h-full md:space-y-16">
+    <div className="py-8 px-8 md:px-32 bg-cyan-900 h-full md:space-y-22">
       <div className="py-4 md:py-12 hover:scale-105 m-auto transition-all w-fit">
         <NavLink
-          to="/"
+          to="/app"
           aria-label="Que Toca Hoy - Home"
           className="leading-none text-center text-yellow-100 hover:text-yellow-200 transition-all"
         >
@@ -80,7 +80,7 @@ export default function AboutUsPage() {
         </NavLink>
       </div>
 
-      <div className="flex flex-row flex-wrap gap-4 py-12 justify-between">
+      <div className="flex flex-row flex-wrap gap-4 py-8 md:py-12 justify-between">
         {aboutUs.map((el) => (
           <div
             key={el.title}
@@ -108,7 +108,7 @@ export default function AboutUsPage() {
       <div className="flex flex-col justify-center items-center gap-4 mt-8">
         <h1 className="text-2xl text-yellow-50">Contribute to our project!</h1>
         <NavLink
-          className="font-mono text-yellow-100 hover:text-yellow-50 hover:scale-105 transition-all"
+          className="font-mono text-center text-yellow-100 hover:text-yellow-50 hover:scale-105 transition-all"
           to="https://github.com/IvanBodnarash/que-toca-hoy"
           target="_blank"
         >

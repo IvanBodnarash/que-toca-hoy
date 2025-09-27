@@ -1,9 +1,9 @@
-import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router";
 import { useGroup } from "../../context/GroupContext";
 import MobileNavItem from "../navigation/MobileNavItem";
 import { dataUrlToFile } from "../../utils/imageProcessor";
 import GroupImageUploader from "./GroupImageUploader.jsx";
-import { useEffect, useState } from "react";
 import {
   uploadGroupImage,
   updateGroupName,
@@ -103,7 +103,7 @@ export default function GroupHeader() {
   };
 
   return (
-    <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-2 md:gap-4 z-10 justify-between px-5">
+    <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-2 md:gap-4 z-10 justify-between px-5 md:px-32">
       <GroupImageUploader
         avatar={group?.image}
         onChangeAvatar={handleFileChange}
@@ -167,9 +167,15 @@ export default function GroupHeader() {
           <FiRefreshCw className="size-8 hover:scale-105 hover:rotate-90 active:scale-100 transition-all" />
         </button>
 
-        <MobileNavItem path="/">
-          <BiHome className="size-10 hover:scale-105 active:scale-100 transition-all" />
-        </MobileNavItem>
+        <button
+          onClick={handleStartCronJob}
+          title="Start scheduled tasks"
+          className="inline-flex size-14 items-center justify-center hover:scale-105 active:scale-100 rounded-2xl hover:border-white/40 hover:bg-white/5 hover:border-2 cursor-pointer"
+        >
+          <NavLink to="/app">
+            <BiHome className="size-10 hover:scale-105 active:scale-100 transition-all" />
+          </NavLink>
+        </button>
       </div>
 
       {error && (

@@ -9,7 +9,7 @@ export default function AuthLayout() {
 
   if (user || token) {
     const next = new URLSearchParams(location.search).get("next");
-    return <Navigate to={next || "/"} replace />;
+    return <Navigate to={next || "/app"} replace />;
   }
 
   return (

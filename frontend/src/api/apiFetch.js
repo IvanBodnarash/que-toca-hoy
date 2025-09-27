@@ -16,6 +16,16 @@ export function getToken() {
   return token;
 }
 
+let onUnauthorized = null;
+export function setOnUnauthorized(handler) {
+  onUnauthorized = typeof handler === "function" ? handler : null;
+}
+function triggerUnauthorized(reason) {
+  try {
+    onUnauthorized && onUnauthorized(reason);
+  } catch (_) {}
+}
+
 // Refresh Lock
 let isRefreshing = false;
 let refreshPromise = null;
@@ -50,6 +60,7 @@ async function refreshToken() {
     .catch((e) => {
       setToken(null);
       notifyWaiters(e, null);
+      triggerUnauthorized("refresh_failed");
       throw e;
     })
     .finally(() => {
@@ -87,6 +98,7 @@ function buildHeaders(init, tok) {
 
 async function doFetch(path, init = {}, allowRetry = true) {
   const t = getToken();
+  const hadAuth = !!t;
   const headers = buildHeaders(init, t);
   const req = {
     ...init,
@@ -109,7 +121,7 @@ async function doFetch(path, init = {}, allowRetry = true) {
 
   if (res.status !== 401 && res.status !== 403) return res;
 
-  if (!allowRetry) return res;
+  if (!allowRetry || !hadAuth) return res;
 
   try {
     if (!isRefreshing) await refreshToken();
@@ -131,7 +143,13 @@ async function doFetch(path, init = {}, allowRetry = true) {
         ? JSON.stringify(init.body)
         : init.body,
   };
-  return fetch(BASE + path, retryReq);
+
+  const retryRes = await fetch(BASE + path, retryReq);
+
+  if ((retryRes.status === 401 || retryRes.status === 403) && hadAuth) {
+    triggerUnauthorized("retry_unauthorized");
+  }
+  return retryRes;
 }
 
 async function readError(res) {

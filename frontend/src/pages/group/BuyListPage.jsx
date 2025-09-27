@@ -259,7 +259,7 @@ export default function BuyListPage() {
                   return (
                     <li
                       key={item.idBuyList}
-                      className={`flex items-center gap-2 md:gap-3 rounded-lg border border-slate-300 p-1 md:p-2 transition ${
+                      className={`flex items-center gap-1 md:gap-3 rounded-lg border border-slate-300 p-1 md:p-2 transition ${
                         isCompleted
                           ? "bg-green-50 border-green-300"
                           : "bg-white"
@@ -270,7 +270,7 @@ export default function BuyListPage() {
                         disabled={checkboxDisabled}
                         checked={checkboxDisabled ? false : !!item.checked}
                         onChange={() => handleCheck(item.idBuyList)}
-                        className={`h-5 w-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500 cursor-pointer ${
+                        className={`size-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500 cursor-pointer ${
                           checkboxDisabled
                             ? "opacity-50 cursor-not-allowed"
                             : ""

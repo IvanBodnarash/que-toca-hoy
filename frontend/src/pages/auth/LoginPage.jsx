@@ -27,7 +27,7 @@ export default function LoginPage() {
 
       localStorage.setItem("user", JSON.stringify(user)); // Saving accessToken to localStorage
       setLoggedUser(user);
-      navigate("/", { replace: true });
+      navigate("/app", { replace: true });
     } catch (error) {
       const msg =
         error?.message === "UNAUTHORIZED"
@@ -99,9 +99,9 @@ export default function LoginPage() {
                 tabIndex={-1}
               >
                 {showPw ? (
-                  <BiHide className="size-5 md:size-6" />
-                ) : (
                   <BiShow className="size-5 md:size-6" />
+                ) : (
+                  <BiHide className="size-5 md:size-6" />
                 )}
               </button>
             </div>
