@@ -155,7 +155,7 @@ export default function Home() {
                   className="sm:min-w-120"
                 >
                   <div className="flex flex-row gap-3 bg-slate-300 hover:bg-slate-200 transition-all p-3 rounded-md border border-slate-400 items-center">
-                    <div className="w-12 h-12 rounded-md overflow-hidden bg-white/50">
+                    <div className="w-16 h-16 rounded-full border-2 border-slate-500 overflow-hidden bg-white/50">
                       {group.image ? (
                         <img
                           src={safeImageSrc(group.image)}
@@ -178,35 +178,9 @@ export default function Home() {
                       </h1>
 
                       <GroupMembersStrip idGroup={group.idGroup} max={5} />
-
-                      {/* {pinMap[group.idGroup] && (
-                        <p
-                          className="text-sm text-slate-700 mt-1 p-1 bg-white rounded shadow absolute right-0 top-1/2 transform -translate-y-1/2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            copyText(pinMap[group.idGroup]);
-                          }}
-                        >
-                          PIN: {pinMap[group.idGroup]}
-                        </p>
-                      )} */}
                     </div>
 
                     <div className="flex items-center gap-2">
-                      {/* <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          togglePin(group.idGroup);
-                        }}
-                        className="text-cyan-900 hover:text-cyan-700 cursor-pointer p-2 rounded border border-slate-400 bg-slate-100"
-                      >
-                        {pinMap[group.idGroup] ? (
-                          <AiOutlineEyeInvisible size={20} />
-                        ) : (
-                          <AiOutlineEye size={20} />
-                        )}
-                      </button> */}
                       {/* Leave Group */}
                       <button
                         type="button"
@@ -274,7 +248,7 @@ export default function Home() {
         {/* About Us Link */}
         <div className="py-2 md:hidden text-center">
           <NavLink
-            to="aboutUs"
+            to="/aboutUs"
             aria-label="Que Toca Hoy — Home"
             className="leading-none text-cyan-900 hover:text-cyan-700 hover:scale-75 transition-all"
           >

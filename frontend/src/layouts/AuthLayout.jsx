@@ -1,4 +1,4 @@
-import { Outlet, useLocation, Navigate } from "react-router";
+import { Outlet, useLocation, Navigate, NavLink } from "react-router";
 import { useAuth } from "../context/AuthContext";
 
 export default function AuthLayout() {
@@ -13,8 +13,11 @@ export default function AuthLayout() {
   }
 
   return (
-    <div className="max-h-full min-h-screen bg-linear-to-tr from-cyan-100 to-slate-400 flex justify-center items-center">
-      <Outlet />
+    <div className="max-h-full py-4 min-h-screen bg-linear-to-tr from-cyan-100 to-slate-400 flex justify-center items-center">
+      <div className="w-full flex flex-col justify-center items-center">
+        <Outlet />
+        <p className="mt-4 text-slate-700">Back to <NavLink to="/" className="underline text-cyan-800">home page</NavLink></p>
+      </div>
     </div>
   );
 }

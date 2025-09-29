@@ -102,7 +102,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col py-8 w-4/5 md:w-3/6 gap-4">
+    <div className="flex flex-col w-4/5 md:w-3/6 gap-4">
       <div className="flex flex-col gap-1">
         <h1 className="font-bold text-3xl text-cyan-950">Create account</h1>
         <h1 className="text-4xl md:text-5xl text-cyan-900 font-bold">
@@ -249,7 +249,7 @@ export default function Register() {
 
         <p className="pt-2 text-slate-800">
           You already have an account?{" "}
-          <NavLink to="/app" className="text-cyan-700 underline">
+          <NavLink to="/auth" className="text-cyan-700 underline">
             Sign In
           </NavLink>
         </p>

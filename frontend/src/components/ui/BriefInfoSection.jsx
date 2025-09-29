@@ -116,7 +116,7 @@ export default function BriefInfoSection({ userData }) {
               <p className="text-cyan-900/80 font-bold">Todo</p>
             </div>
             {todoTasks.length > 0 ? (
-              <ul className="border border-cyan-800/40 bg-cyan-800/20 p-2 space-y-1 rounded-md max-h-34 md:max-h-40 overflow-y-scroll">
+              <ul className="border border-cyan-800/40 bg-cyan-800/20 p-2 space-y-1 rounded-md max-h-34 md:max-h-40 overflow-y-auto">
                 {todoTasks.map((item, index) => (
                   <BriefTasksList key={index} data={item} type="todo" />
                 ))}
@@ -134,7 +134,7 @@ export default function BriefInfoSection({ userData }) {
               <p className="text-green-900/80 font-bold">Done</p>
             </div>
             {doneTasks.length > 0 ? (
-              <ul className="border border-green-800/40 bg-green-800/20 p-2 space-y-1 rounded-md max-h-34 md:max-h-40 overflow-y-scroll">
+              <ul className="border border-green-800/40 bg-green-800/20 p-2 space-y-1 rounded-md max-h-34 md:max-h-40 overflow-y-auto">
                 {doneTasks.map((item, index) => (
                   <BriefTasksList key={index} data={item} type="done" />
                 ))}

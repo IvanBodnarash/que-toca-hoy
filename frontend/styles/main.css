@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @font-face {
     font-family: "Mileast";
     src: url("/fonts/Mileast.otf") format("otf");
@@ -8,4 +9,19 @@
 
 .main-logo {
     font-family: "Mileast", "sans-serif";
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-up {
+    animation: fade-up 500ms ease both;
 }
