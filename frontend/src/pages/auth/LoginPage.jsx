@@ -99,9 +99,9 @@ export default function LoginPage() {
                 tabIndex={-1}
               >
                 {showPw ? (
-                  <BiShow className="size-5 md:size-6" />
-                ) : (
                   <BiHide className="size-5 md:size-6" />
+                ) : (
+                  <BiShow className="size-5 md:size-6" />
                 )}
               </button>
             </div>

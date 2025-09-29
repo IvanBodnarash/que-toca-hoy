@@ -200,7 +200,7 @@ export default function Register() {
                   className="absolute inset-y-0 right-2 flex items-center text-gray-500"
                   aria-label={showPw ? "Hide password" : "Show password"}
                 >
-                  {showPw ? <BiHide /> : <BiShow />}
+                  {showPw ? <BiShow /> : <BiHide />}
                 </button>
               </div>
               {pwHint && <div className="text-red-600 text-sm">{pwHint}</div>}
@@ -227,7 +227,7 @@ export default function Register() {
                   className="absolute inset-y-0 right-2 flex items-center text-gray-500"
                   aria-label={showConfirmPw ? "Hide password" : "Show password"}
                 >
-                  {showConfirmPw ? <BiHide /> : <BiShow />}
+                  {showConfirmPw ? <BiShow /> : <BiHide />}
                 </button>
               </div>
             </div>

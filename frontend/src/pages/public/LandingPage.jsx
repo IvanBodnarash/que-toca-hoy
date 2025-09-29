@@ -84,7 +84,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="bg-cyan-900 border-t border-slate-200 flex flex-col justify-center mt-16 md:mt-0">
+      <section className="bg-cyan-900 border-t border-slate-200 flex flex-col justify-center">
         <div className="mx-auto max-w-6xl px-4 py-12 mt-18 flex flex-col w-full gap-8">
           {featuresList.map((feature, index) => {
             const Icon = feature.icon;
@@ -93,16 +93,16 @@ export default function LandingPage() {
             return (
               <div
                 key={feature.title}
-                className={`group relative rounded-2xl border w-4/5 bg-white border-slate-300 p-4 pl-14 hover:-translate-y-0.5 shadow-lg transition cursor-pointer ${
+                className={`group relative rounded-2xl border md:w-4/5 bg-white border-slate-300 p-4 pl-14 hover:-translate-y-0.5 shadow-lg transition cursor-pointer ${
                   isRight ? "md:ml-auto md:text-right md:pr-22" : "md:pl-22"
                 } hover:-translate-y-0.5`}
               >
                 <div
                   className={`absolute -top-5  ${
-                    isRight ? "right-0 md:-right-5" : "-left-5"
-                  } h-22 w-22 rounded-xl bg-white border border-slate-200 shadow-md overflow-hidden flex items-center justify-center`}
+                    isRight ? "-right-2 md:-right-5" : "-left-2 md:-left-5"
+                  } size-14 md:size-22 rounded-xl bg-white border border-slate-200 shadow-md overflow-hidden flex items-center justify-center`}
                 >
-                  <Icon className="text-cyan-700" size={48} />
+                  <Icon className="text-cyan-700 size-8 md:size-14" />
                 </div>
 
                 {/* Card Content */}
