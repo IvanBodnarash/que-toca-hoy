@@ -56,16 +56,16 @@ export default function LandingPage() {
   return (
     <div className="bg-cyan-950/10">
       {/* Hero */}
-      <section className="mx-auto max-w-6xl h-screen px-4 py-16 grid md:grid-cols-2 md:gap-10 items-center mt-12 md:mt-0">
+      <section className="mx-auto max-w-6xl md:h-screen px-4 py-16 grid md:grid-cols-2 md:gap-10 items-center mt-12 md:mt-0">
         <div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-cyan-900 leading-tight">
             Plan tasks <br />
-            Share recipes <br />
+            Add recipes <br />
             Buy smarter
           </h1>
           <p className="mt-4 text-slate-700 md:text-lg">
             QueTocaHoy helps households coordinate chores, plan meals, and
-            generate a shared buy list — automatically.
+            generate a shared buy list - automatically.
           </p>
           <div className="mt-6 flex gap-3">
             <NavLink

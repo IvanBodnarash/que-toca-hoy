@@ -44,7 +44,7 @@ export default function FeaturesCarousel() {
   const ActiveIcon = slides[active].icon;
 
   return (
-    <div className="relative h-56 sm:h-64 xl:h-80 2xl:h-96">
+    <div className="relative h-56 sm:h-64 xl:h-80 2xl:h-96 mt-18 md:mt-0">
       <Carousel
         slide
         loop
