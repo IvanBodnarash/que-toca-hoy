@@ -7,7 +7,7 @@ const TaskDated = sequelize.define(
   "TaskDated",
   {
     idTaskDated: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
@@ -17,12 +17,12 @@ const TaskDated = sequelize.define(
       allowNull: false
     },*/
     idGroup: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "groups", key: "idGroup" },
       allowNull: false,
     },
     idTaskTemplate: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "tasktemplates", key: "idTaskTemplate" },
       allowNull: false,
     },
@@ -38,7 +38,7 @@ const TaskDated = sequelize.define(
       defaultValue: "none",
       allowNull: false,
     }, // change the defaultValue: 'all' to 'none'
-    rotative: { type: DataTypes.BOOLEAN, defaultValue: 0, allowNull: false }, // true = it rotates among those on the floor, false = only for this user
+    rotative: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false }, // true = it rotates among those on the floor, false = only for this user
   },
   {
     tableName: "tasksdated",

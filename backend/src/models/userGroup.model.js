@@ -4,14 +4,14 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../../config/database.js';
 
 const UserGroup = sequelize.define('UserGroup', {
-  idUserGroup: { type: DataTypes.INTEGER.UNSIGNED, primaryKey: true, autoIncrement: true },
+  idUserGroup: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   idUser: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     references: { model: 'users', key: 'idUser' },
     allowNull: false
   },
   idGroup: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     references: { model: 'groups', key: 'idGroup' },
     allowNull: false
   }

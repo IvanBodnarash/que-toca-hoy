@@ -5,12 +5,12 @@ const UserRefresh = sequelize.define(
   "UserRefresh",
   {
     idUserRefresh: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     idUser: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "users", key: "idUser" },
       allowNull: false,
     },

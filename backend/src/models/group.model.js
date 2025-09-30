@@ -7,7 +7,7 @@ const Group = sequelize.define(
   "Group",
   {
     idGroup: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
@@ -20,7 +20,7 @@ const Group = sequelize.define(
       allowNull: true,
     },
     //image: { type: DataTypes.STRING(255), allowNull: true },
-    image: { type: DataTypes.TEXT("long"), allowNull: true }, // base 64
+    image: { type: DataTypes.TEXT, allowNull: true }, // base 64
   },
   {
     tableName: "groups",

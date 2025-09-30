@@ -24,8 +24,11 @@
   },
   "contributors": [],
   "scripts": {
-    "dev": "",
-    "test": ""
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "migrate": "sequelize-cli db:migrate",
+    "seed": "sequelize-cli db:seed:all",
+    "reset:db": "sequelize-cli db:seed:undo:all && sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate && sequelize-cli db:seed:all"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
