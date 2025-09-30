@@ -1,4 +1,5 @@
 import { BuyList, TaskDated, Material } from "../models/index.model.js";
+import { normalizeQtyUnit } from "../utils/units.js";
 import { createBaseController } from "./base.controller.js";
 
 const baseController = createBaseController(BuyList);
@@ -53,16 +54,19 @@ export const buyListController = {
       const { materials, idTaskDated } = req.body;
 
       if (!Array.isArray(materials) || !idTaskDated) {
-        return res.status(400).json({ message: "Datos inválidos" });
+        return res.status(400).json({ message: "Invalid data" });
       }
 
       // Build array of objects to insert
-      const entries = materials.map((material) => ({
-        idTaskDated,
-        idMaterial: material.idMaterial,
-        quantity: material.quantity,
-        unit: material.unit,
-      }));
+      const entries = materials.map((material) => {
+        const norm = normalizeQtyUnit(material.quantity, material.unit);
+        return {
+          idTaskDated,
+          idMaterial: material.idMaterial,
+          quantity: norm.quantity,
+          unit: norm.unit,
+        };
+      });
 
       // Insert all into the database
       // await BuyList.bulkCreate(entries);
@@ -73,8 +77,8 @@ export const buyListController = {
       // Live
       emitForTask(req, idTaskDated, "bulk-created", { items: created });
     } catch (error) {
-      console.error("Error al crear la lista:", error);
-      res.status(500).json({ message: "Error del servidor" });
+      console.error("Error creating list", error);
+      res.status(500).json({ message: "Server error" });
     }
   },
 
@@ -87,7 +91,7 @@ export const buyListController = {
       if (!taskExists) {
         return res
           .status(404)
-          .json({ message: `TaskDated con id ${idTaskDated} no existe` });
+          .json({ message: `TaskDated with id ${idTaskDated} not found` });
       }
 
       // Check that the material exists
@@ -95,25 +99,26 @@ export const buyListController = {
       if (!materialExists) {
         return res
           .status(404)
-          .json({ message: `Material con id ${idMaterial} no existe` });
+          .json({ message: `Material with id ${idMaterial} not found` });
       }
 
+      const norm = normalizeQtyUnit(quantity, unit);
       const record = await BuyList.create({
         idTaskDated,
         idMaterial,
-        quantity,
-        unit,
+        quantity: norm.quantity,
+        unit: norm.unit,
       });
       res.status(201).json(record);
 
       // Live
       emitForTask(req, idTaskDated, "created", { item: record });
     } catch (error) {
-      if (error.original && error.original.code === "ER_NO_REFERENCED_ROW_2") {
+      if (error?.original?.code === "23503") {
         return res.status(400).json({
           message:
             "Foreign key violation: check idTaskDated and idMaterial exist",
-          error: error.original.sqlMessage,
+          error: error?.original?.detail,
         });
       }
       res.status(500).json({
@@ -130,7 +135,16 @@ export const buyListController = {
       const row = await BuyList.findByPk(id);
       if (!row) return res.status(404).json({ message: "Not Found" });
 
-      await row.update(req.body);
+      const patch = { ...req.body };
+      if ("quantity" in patch || "unit" in patch) {
+        const norm = normalizeQtyUnit(
+          patch.quantity ?? row.quantity,
+          patch.unit ?? row.unit
+        );
+        patch.quantity = norm.quantity;
+        patch.unit = norm.unit;
+      }
+      await row.update(patch);
       res.json(row);
 
       // Emit Live
