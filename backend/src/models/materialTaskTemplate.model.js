@@ -7,22 +7,22 @@ const MaterialTaskTemplate = sequelize.define(
   "MaterialTaskTemplate",
   {
     idMaterialTaskTemplate: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     idMaterial: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "materials", key: "idMaterial" },
       allowNull: false,
     },
     idTaskTemplate: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "tasktemplates", key: "idTaskTemplate" },
       allowNull: false,
     },
     quantity: {
-      type: DataTypes.FLOAT.UNSIGNED,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     unit: {

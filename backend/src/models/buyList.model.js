@@ -7,22 +7,22 @@ const BuyList = sequelize.define(
   "BuyList",
   {
     idBuyList: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     idTaskDated: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "tasksdated", key: "idTaskDated" },
       allowNull: false,
     },
     idMaterial: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "materials", key: "idMaterial" },
       allowNull: false,
     },
     quantity: {
-      type: DataTypes.FLOAT.UNSIGNED,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     unit: {

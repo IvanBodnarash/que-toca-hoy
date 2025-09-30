@@ -7,17 +7,17 @@ const UserTask = sequelize.define(
   "UserTask",
   {
     idUserTask: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     idUser: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "users", key: "idUser" },
       allowNull: false,
     },
     idTaskDated: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       references: { model: "tasksdated", key: "idTaskDated" },
       allowNull: false,
     },
