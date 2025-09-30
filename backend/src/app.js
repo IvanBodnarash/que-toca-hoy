@@ -90,6 +90,10 @@ app.use("/usergroup", userGroupRoutes); // user group routes
 app.use("/usertask", userTaskRoutes); // user task routes
 app.use("/cron", cronRouter);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ ok: true });
+});
+
 app.use(errorHandler);
 
 // Socket.IO
