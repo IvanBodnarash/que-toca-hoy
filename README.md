@@ -185,3 +185,55 @@ npm run dev
 - In Neon -> Connect -> copy Pooled connection string -> paste in .env as DATABASE_URL.
 
 ### Backend deploying (Render)
+
+1. Preparing `src/app.js`:
+
+- Production proxy & CORS allowlist:
+
+  ```js
+  if (process.env.NODE_ENV === "production") app.set("trust proxy", 1);
+
+  const allow = (process.env.CLIENT_ORIGIN || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  function isAllowedOrigin(origin) {
+    if (!origin) return true;
+    return allow.includes(origin);
+  }
+
+  app.use(
+    cors({
+      origin(origin, cb) {
+        if (isAllowedOrigin(origin)) return cb(null, true);
+        return cb(null, false);
+      },
+      credentials: true,
+      methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    })
+  );
+  ```
+
+- Health check endpoint:
+
+  ```js
+  app.get("/health", (req, res) => {
+    res.status(200).json({ ok: true });
+  });
+  ```
+
+2. Setting ENVs in Render
+
+  ```bash
+  PORT=3000
+  NODE_ENV=production
+  DATABASE_URL=postgres://... # URL from Neon
+  CLIENT_ORIGIN=https://localhost:5173 # Local frontend by this point
+  JWT_SECRET=<long-random-hex>
+  JWT_EXPIRATION=5m
+  REFRESH_TOKEN_WORD=<another-long-random>
+  REFRESH_TOKEN_LENGTH=100
+  REFRESH_TOKEN_EXPIRATION=7d
+  ```
