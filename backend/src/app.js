@@ -35,16 +35,30 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 
+if (process.env.NODE_ENV === "production") {
+  const required = ["JWT_SECRET", "DATABASE_URL", "CLIENT_ORIGIN"];
+  const miss = required.filter((k) => !process.env[k]);
+  if (miss.length) {
+    console.error("Missing required env:", miss.join(", "));
+    process.exit(1);
+  }
+}
+
 const allow = (process.env.CLIENT_ORIGIN || "")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  return allow.includes(origin);
+}
+
 app.use(
   cors({
     origin(origin, cb) {
-      if (!origin || allow.includes(origin)) return cb(null, true);
-      cb(new Error("Not allowed by CORS"));
+      if (isAllowedOrigin(origin)) return cb(null, true);
+      return cb(null, false);
     },
     credentials: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
@@ -75,7 +89,10 @@ app.use(errorHandler);
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
-    origin: process.env.CLIENT_ORIGIN,
+    origin(origin, cb) {
+      if (isAllowedOrigin(origin)) return cb(null, true);
+      return cb(null, false);
+    },
     credentials: true,
   },
 });
@@ -111,7 +128,7 @@ io.on("connection", (socket) => {
 
 app.set("io", io);
 
-const port = process.env.APP_PORT || 3000;
+const port = process.env.PORT || process.env.APP_PORT || 3000;
 
 (async () => {
   try {
@@ -120,15 +137,21 @@ const port = process.env.APP_PORT || 3000;
 
     // Schema & demo data are managed by migrations/seeders (sequelize-cli)
 
-    server.listen(port, () =>
+    const srv = server.listen(port, () =>
       console.log(`🚀 API listening on http://localhost:${port}`)
     );
 
-    const close = () => {
-      console.log("Shutting down...");
-      server.close(() => process.exit(0));
-      setTimeout(() => process.exit(0), 3000);
+    const close = async () => {
+      try {
+        console.log("Shutting down...");
+        await new Promise((res) => io.close(res));
+        await new Promise((res) => srv.close(res));
+        await sequelize.close().catch(() => {});
+      } finally {
+        process.exit(0);
+      }
     };
+
     process.on("SIGINT", close);
     process.on("SIGTERM", close);
   } catch (e) {

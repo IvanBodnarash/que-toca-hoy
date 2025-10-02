@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const BASE = "http://localhost:3000";
+const BASE = "https://que-toca-hoy.onrender.com";
 
 let getAccessToken = () => localStorage.getItem("token");
 
