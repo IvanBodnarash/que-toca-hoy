@@ -1,6 +1,6 @@
 import { reconnectSocket } from "../realtime/socket";
 
-const BASE = "http://localhost:3000";
+const BASE = "https://que-toca-hoy.onrender.com";
 
 let token = null;
 

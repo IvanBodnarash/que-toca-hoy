@@ -113,20 +113,6 @@ export default function UserSettings() {
   };
 
   const handleLogout = async () => {
-    // try {
-    //   await fetch("http://localhost:3000/auth/logout", {
-    //     method: "POST",
-    //     credentials: "include",
-    //   });
-    // } catch (_) {}
-
-    // localStorage.removeItem("user");
-
-    // try {
-    //   logout?.();
-    // } catch (_) {}
-
-    // navigate("/auth", { replace: true });
     try {
       await logout();
     } finally {

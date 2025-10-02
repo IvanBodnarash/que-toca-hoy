@@ -1,7 +1,5 @@
 import { apiGet, apiPut } from "../api/apiFetch";
 
-const API = "http://localhost:3000";
-
 // Get user's buy list
 export async function getMyBuyListReport(filter = "today") {
   const rawUser = localStorage.getItem("user");
