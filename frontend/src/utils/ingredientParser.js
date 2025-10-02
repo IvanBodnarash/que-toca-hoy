@@ -30,6 +30,7 @@ const UNIT_SYNONYMS = {
   ],
   tbsp: [
     "tbsp",
+    "tbs",
     "ст.л",
     "ст. л",
     "tablespoon",

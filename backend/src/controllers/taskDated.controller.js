@@ -260,11 +260,11 @@ export const taskDatedController = {
       return res.json({ message: "User assigned to task successfully" });
     } catch (error) {
       // FK-specific capture
-      if (error.original && error.original.code === "ER_NO_REFERENCED_ROW_2") {
+      if (error?.original?.code === "23503") {
         return res.status(400).json({
           message:
             "Foreign key violation: make sure that idTaskDated and userId exist",
-          error: error.original.sqlMessage,
+          error: error?.original?.detail,
         });
       }
 
@@ -407,7 +407,7 @@ export const taskDatedController = {
       res.status(500).json({ message: "Error fetching task statuses" });
     }
   },
-  
+
   // POST /taskdated/:id/next  { times?: number }
   createNextNow: async (req, res) => {
     try {
