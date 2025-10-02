@@ -241,16 +241,38 @@ npm run dev
   });
   ```
 
-2. Setting ENVs in Render
+2. Render Setup
 
-  ```bash
-  PORT=3000
-  NODE_ENV=production
-  DATABASE_URL=postgres://... # URL from Neon
-  CLIENT_ORIGIN=https://localhost:5173 # Local frontend by this point
-  JWT_SECRET=<long-random-hex>
-  JWT_EXPIRATION=5m
-  REFRESH_TOKEN_WORD=<another-long-random>
-  REFRESH_TOKEN_LENGTH=100
-  REFRESH_TOKEN_EXPIRATION=7d
-  ```
+  - Create Web Service
+
+    - Runtime: Node
+
+    - Region: pick the closest to your Neon region (e.g., Frankfurt (EU) if Neon is EU Central).
+
+    - Connect your GitHub repo.
+
+  - Build & Start
+
+    - Build Command:
+      `npm ci`
+
+    - Start Command:
+      `npm start`
+
+  - Setting ENVs in Render
+
+    ```bash
+    PORT=3000
+    NODE_ENV=production
+    DATABASE_URL=postgres://... # URL from Neon
+    CLIENT_ORIGIN=https://localhost:5173 # Local frontend by this point
+    JWT_SECRET=<long-random-hex>
+    JWT_EXPIRATION=5m
+    REFRESH_TOKEN_WORD=<another-long-random>
+    REFRESH_TOKEN_LENGTH=100
+    REFRESH_TOKEN_EXPIRATION=7d
+    ```
+
+  - Health Check
+
+    https://que-toca-hoy.onrender.com/health
