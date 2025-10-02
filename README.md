@@ -3,6 +3,23 @@ npm i pg pg-hstore            # drivers for Postgres
 npm i -D sequelize-cli        # CLI for migrations/seeds
 ```
 
+## Start locally
+- frontend:
+
+```bash
+src frontend
+npm i # First time
+npm run dev
+```
+
+- backend:
+
+```bash
+src backend
+npm i # First time
+npm start
+```
+
 ## Stages
 
 - Adding new brief info feature to the Home page with todo and done tasks for current user
