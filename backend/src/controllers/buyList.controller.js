@@ -1,5 +1,5 @@
 import { BuyList, TaskDated, Material } from "../models/index.model.js";
-import { normalizeQtyUnit } from "../utils/units.js";
+import { canonicalizeQtyUnit } from "../utils/units.js";
 import { createBaseController } from "./base.controller.js";
 
 const baseController = createBaseController(BuyList);
@@ -57,9 +57,9 @@ export const buyListController = {
         return res.status(400).json({ message: "Invalid data" });
       }
 
-      // Build array of objects to insert
+      // Bulk create
       const entries = materials.map((material) => {
-        const norm = normalizeQtyUnit(material.quantity, material.unit);
+        const norm = canonicalizeQtyUnit(material.quantity, material.unit);
         return {
           idTaskDated,
           idMaterial: material.idMaterial,
@@ -102,7 +102,8 @@ export const buyListController = {
           .json({ message: `Material with id ${idMaterial} not found` });
       }
 
-      const norm = normalizeQtyUnit(quantity, unit);
+      // Single create
+      const norm = canonicalizeQtyUnit(quantity, unit);
       const record = await BuyList.create({
         idTaskDated,
         idMaterial,
@@ -137,7 +138,7 @@ export const buyListController = {
 
       const patch = { ...req.body };
       if ("quantity" in patch || "unit" in patch) {
-        const norm = normalizeQtyUnit(
+        const norm = canonicalizeQtyUnit(
           patch.quantity ?? row.quantity,
           patch.unit ?? row.unit
         );

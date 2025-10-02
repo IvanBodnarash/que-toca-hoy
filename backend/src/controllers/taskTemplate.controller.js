@@ -4,7 +4,7 @@ import {
   TaskDated,
   MaterialTaskTemplate,
 } from "../models/index.model.js";
-import { normalizeQtyUnit } from "../utils/units.js";
+import { canonicalizeQtyUnit } from "../utils/units.js";
 import { createBaseController } from "./base.controller.js";
 
 const baseController = createBaseController(TaskTemplate);
@@ -123,7 +123,7 @@ export const taskTemplateController = {
             materialId = newMaterial.idMaterial;
           }
 
-          const norm = normalizeQtyUnit(mat.quantity, mat.unit);
+          const norm = canonicalizeQtyUnit(mat.quantity, mat.unit);
 
           await MaterialTaskTemplate.create({
             idTaskTemplate,
@@ -218,7 +218,7 @@ export const taskTemplateController = {
           material = await Material.create({ name: mat.name, assumed: false });
         }
 
-        const norm = normalizeQtyUnit(mat.quantity, mat.unit);
+        const norm = canonicalizeQtyUnit(mat.quantity, mat.unit);
 
         await MaterialTaskTemplate.create({
           idTaskTemplate: recipe.idTaskTemplate,

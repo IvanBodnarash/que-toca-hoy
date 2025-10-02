@@ -3,7 +3,7 @@ import {
   Material,
   TaskTemplate,
 } from "../models/index.model.js";
-import { normalizeQtyUnit } from "../utils/units.js";
+import { canonicalizeQtyUnit } from "../utils/units.js";
 import { createBaseController } from "./base.controller.js";
 
 const baseController = createBaseController(MaterialTaskTemplate);
@@ -11,43 +11,39 @@ const baseController = createBaseController(MaterialTaskTemplate);
 export const materialTaskTemplateController = {
   ...baseController,
 
-  // --- override base.create ---
-  create: async (req, res, next) => {
+  // override create
+  create: async (req, res) => {
     try {
-      const { idMaterial, idTaskTemplate, quantity, unit } = req.body;
-      const norm = normalizeQtyUnit(quantity, unit);
-      const row = await MaterialTaskTemplate.create({
-        idMaterial,
-        idTaskTemplate,
-        quantity: norm.quantity,
-        unit: norm.unit, // 'ud' | 'ml' | 'gr'
-      });
-      res.status(201).json(row);
+      const { quantity, unit, ...rest } = req.body;
+      const norm = canonicalizeQtyUnit(quantity, unit);
+      const row = await MaterialTaskTemplate.create({ ...rest, ...norm });
+      return res.status(201).json(row);
     } catch (e) {
-      next(e);
+      return res
+        .status(500)
+        .json({ message: "Failed to create", error: e.message });
     }
   },
 
-  // --- override base.update ---
-  update: async (req, res, next) => {
+  // override update
+  update: async (req, res) => {
     try {
       const { id } = req.params;
       const row = await MaterialTaskTemplate.findByPk(id);
-      if (!row) return res.status(404).json({ message: "Not Found" });
+      if (!row) return res.status(404).json({ message: "Not found" });
 
-      const patch = { ...req.body };
-      if ("quantity" in patch || "unit" in patch) {
-        const n = normalizeQtyUnit(
-          patch.quantity ?? row.quantity,
-          patch.unit ?? row.unit
-        );
-        patch.quantity = n.quantity;
-        patch.unit = n.unit;
-      }
-      await row.update(patch);
-      res.json(row);
+      const { quantity, unit, ...rest } = req.body;
+      const norm = canonicalizeQtyUnit(
+        quantity ?? row.quantity,
+        unit ?? row.unit
+      );
+      await row.update({ ...rest, ...norm });
+
+      return res.json(row);
     } catch (e) {
-      next(e);
+      return res
+        .status(500)
+        .json({ message: "Failed to update", error: e.message });
     }
   },
 
