@@ -1,6 +1,5 @@
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiGroupLine } from "react-icons/ri";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { ImExit } from "react-icons/im";
 
 import { NavLink, useNavigate } from "react-router-dom";
@@ -13,7 +12,7 @@ import defaultAvatar from "../assets/initialAvatar.jpg";
 import { safeImageSrc } from "../utils/imageProcessor";
 import JoinGroupModal from "../components/groups/JoinGroupModal";
 
-import { fetchGroupPin, deleteGroup } from "../services/groupsService";
+import { deleteGroup, getMyGroups } from "../services/groupsService";
 
 import { useGroup } from "../context/GroupContext";
 import ConfirmDialog from "../components/alerts/ConfirmDialog";
@@ -21,13 +20,12 @@ import GroupMembersStrip from "../components/groups/GetMembersStrip";
 
 import { useEffect } from "react";
 import BriefInfoSection from "../components/ui/BriefInfoSection";
+import { useCachedQuery } from "../hooks/useCachedQuery";
+import SceletonLoader from "../components/ui/SceletonLoader";
 
 export default function Home() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { groups, loading, error, refetchGroups } = useGroup();
-
-  const [pinMap, setPinMap] = useState({}); // { [idGroup]: pin }
 
   const [newGroupModalOpened, setNewGroupModalOpened] = useState(false);
   const [joinGroupModalOpened, setJoinGroupModalOpened] = useState(false);
@@ -35,43 +33,20 @@ export default function Home() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [groupToDelete, setGroupToDelete] = useState(null);
 
-  const [refreshKey, setRefreshKey] = useState(0);
-
   // If the user is not there yet (for a moment after loading) - show a stub
   const displayName = user?.username || "User";
 
-  useEffect(() => {
-    const handleFocus = async () => {
-      await refetchGroups();
-      setRefreshKey((prev) => prev + 1);
-    };
-
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, []);
-
-  const togglePin = async (groupId) => {
-    if (pinMap[groupId]) {
-      setPinMap((prev) => {
-        const newMap = { ...prev };
-        delete newMap[groupId];
-        return newMap;
-      });
-    } else {
-      try {
-        const pin = await fetchGroupPin(groupId);
-        setPinMap((prev) => ({ ...prev, [groupId]: pin }));
-      } catch (e) {
-        console.error("Error fetching PIN", e);
-      }
-    }
-  };
-
-  const copyText = (text) => {
-    navigator.clipboard.writeText(text);
-  };
+  const {
+    data: groups = [],
+    loading,
+    error,
+    refetch: refetchGroups,
+  } = useCachedQuery(["groups", user?.idUser], () => getMyGroups(), {
+    ttl: 60_000,
+    enabled: !!user?.idUser,
+    refetchOnWindowFocus: true,
+    keepPreviousData: true,
+  });
 
   return (
     <div className="">
@@ -138,15 +113,26 @@ export default function Home() {
           </div>
         </div>
 
-        {loading && <div className="text-slate-600">Loading groups...</div>}
+        {loading && !error && (
+          <div className="flex flex-col md:flex-row md:flex-wrap gap-4">
+            <SceletonLoader />
+            <SceletonLoader />
+          </div>
+        )}
         {error && (
           <div className="text-red-600">Failed to load groups. Try again.</div>
         )}
 
         {!loading && !error && (
           <div className="flex flex-col md:flex-row md:flex-wrap gap-4">
-            {groups.length === 0 ? (
-              <div className="text-slate-600">You have no groups yet</div>
+            {!groups || groups.length === 0 ? (
+              loading ? (
+                <div className="text-slate-600 animate-pulse">
+                  Loading groups…
+                </div>
+              ) : (
+                <div className="text-slate-600">You have no groups yet</div>
+              )
             ) : (
               groups.map((group) => (
                 <NavLink

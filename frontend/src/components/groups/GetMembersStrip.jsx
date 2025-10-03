@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import defaultAvatar from "../../assets/initialAvatar.jpg";
 import { safeImageSrc } from "../../utils/imageProcessor";
-import { useGroupMembersStore } from "../../state/useGroupMembersStore";
+import { useGroupMembersStore } from "../../hooks/useGroupMembersStore";
 import { useGroupRealtime } from "../../realtime/useGroupRealtime";
 
 export default function GroupMembersStrip({ idGroup, max = 5 }) {

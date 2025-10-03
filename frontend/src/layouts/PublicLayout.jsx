@@ -41,12 +41,12 @@ export default function PublicLayout() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t bg-cyan-900/20 border-slate-200 text-center text-cyan-900 font-bold text-sm py-8">
+      <footer className="bg-cyan-900/80 border-slate-200 text-center text-slate-300 font-bold text-sm py-8">
         © {new Date().getFullYear()}{" "}
         <NavLink
           to="https://github.com/IvanBodnarash/que-toca-hoy"
           target="_blank"
-          className="underline hover:text-cyan-800"
+          className="underline hover:text-slate-400"
         >
           QueTocaHoy
         </NavLink>
