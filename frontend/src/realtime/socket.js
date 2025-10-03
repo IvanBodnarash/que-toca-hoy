@@ -7,10 +7,9 @@ let getAccessToken = () => localStorage.getItem("token");
 export const socket = io(BASE, {
   autoConnect: false,
   withCredentials: true,
-  transports: ["websocket", "polling"],
+  transports: ["websocket"],
   timeout: 10000,
   reconnection: true,
-  reconnectionAttempts: Infinity,
   reconnectionDelay: 800,
   reconnectionDelayMax: 5000,
   auth: () => ({ token: getAccessToken() }),

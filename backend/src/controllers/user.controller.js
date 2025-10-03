@@ -269,33 +269,6 @@ export const userController = {
       );
       res.set("Pragma", "no-cache");
       res.set("Expires", "0");
-
-      try {
-        const io = req.app.get("io");
-        const uid = Number(id);
-
-        const groupIds = Array.from(
-          new Set(tasks.map((t) => Number(t.idGroup)).filter(Boolean))
-        );
-
-        io.to(`user:${uid}`).emit("usertasks:changed", {
-          idUser: uid,
-          reason: "report",
-          filter,
-          groups: groupIds,
-        });
-
-        for (const gid of groupIds) {
-          io.to(`calendar:${gid}`).emit("usertasks:changed", {
-            idGroup: gid,
-            idUser: uid,
-            reason: "report",
-          });
-        }
-      } catch (e) {
-        //
-      }
-
       res.json(tasks);
     } catch (error) {
       res.status(500).json({ message: error.message });

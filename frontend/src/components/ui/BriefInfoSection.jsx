@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getMyTasksReport } from "../../services/tasksService";
 import { useGroupRealtime } from "../../realtime/useGroupRealtime";
 import BriefTasksList from "./BriefTasksListItem";
@@ -6,6 +6,7 @@ import BriefTasksList from "./BriefTasksListItem";
 import { RiTodoFill } from "react-icons/ri";
 import { MdOutlineDownloadDone } from "react-icons/md";
 import { useCachedQuery } from "../../hooks/useCachedQuery";
+import { useUserRealtime } from "../../realtime/useUserRealtime";
 
 export default function BriefInfoSection({ userData }) {
   const [filter, setFilter] = useState("today");
@@ -20,7 +21,8 @@ export default function BriefInfoSection({ userData }) {
     ["tasksReport", userData.idUser, filter],
     () => getMyTasksReport(userData.idUser, filter),
     {
-      ttl: 5 * 60_000, // 5m
+      ttl: 60_000,
+      refetchOnWindowFocus: false,
       select: (list) => ({
         todo: list.filter((r) => r.status === "todo"),
         done: list.filter((r) => r.status === "done"),
@@ -36,8 +38,12 @@ export default function BriefInfoSection({ userData }) {
   const todoTasks = rows.todo ?? [];
   const doneTasks = rows.done ?? [];
 
-  useGroupRealtime(userData.idUser, {
+  const refetchTs = useRef(0);
+  useUserRealtime(userData.idUser, {
     onUserTasksChanged: () => {
+      const now = Date.now();
+      if (now - refetchTs.current < 600) return;
+      refetchTs.current = now;
       refetch();
     },
   });
