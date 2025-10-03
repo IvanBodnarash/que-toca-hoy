@@ -27,11 +27,6 @@ export default function BriefInfoSection({ userData }) {
         todo: list.filter((r) => r.status === "todo"),
         done: list.filter((r) => r.status === "done"),
       }),
-      compare: (prev, next) =>
-        prev &&
-        next &&
-        JSON.stringify(prev.todo) === JSON.stringify(next.todo) &&
-        JSON.stringify(prev.done) === JSON.stringify(next.done),
     }
   );
 

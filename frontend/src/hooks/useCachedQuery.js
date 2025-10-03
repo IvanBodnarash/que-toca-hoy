@@ -43,6 +43,19 @@ export function useCachedQuery(
 ) {
   const cacheKey = useMemo(() => keyToString(key), [key]);
 
+  const fetcherRef = useRef(fetcher);
+  const selectRef = useRef(select);
+  const compareRef = useRef(compare);
+  useEffect(() => {
+    fetcherRef.current = fetcher;
+  }, [fetcher]);
+  useEffect(() => {
+    selectRef.current = select;
+  }, [select]);
+  useEffect(() => {
+    compareRef.current = compare;
+  }, [compare]);
+
   // First init from cache
   const initFromCache = () => {
     const entry = CACHE.get(cacheKey);
@@ -64,11 +77,13 @@ export function useCachedQuery(
 
   const applyData = useCallback(
     (next) => {
-      const processed = select ? select(next) : next;
-      setData((prev) => (compare(prev, processed) ? prev : processed));
+      const processed = selectRef.current ? selectRef.current(next) : next;
+      setData((prev) =>
+        compareRef.current(prev, processed) ? prev : processed
+      );
       CACHE.set(cacheKey, { data: processed, ts: Date.now() });
     },
-    [cacheKey, select, compare]
+    [cacheKey]
   );
 
   const fetchFresh = useCallback(async () => {
@@ -84,12 +99,11 @@ export function useCachedQuery(
 
       let p = INFLIGHT.get(cacheKey);
       if (!p) {
-        p = fetcher({ signal: ac.signal });
+        p = fetcherRef.current({ signal: ac.signal });
         INFLIGHT.set(cacheKey, p);
       }
       const res = await p;
       if (ac.signal.aborted) return;
-
       applyData(res);
     } catch (e) {
       if (e?.name !== "AbortError") setError("Failed to load data");
@@ -97,7 +111,7 @@ export function useCachedQuery(
       if (INFLIGHT.get(cacheKey)) INFLIGHT.delete(cacheKey);
       if (!ac.signal.aborted) setLoadingRaw(false);
     }
-  }, [cacheKey, enabled, hasValidCache, keepPreviousData, fetcher, applyData]);
+  }, [cacheKey, enabled, hasValidCache, keepPreviousData, applyData]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -123,7 +137,7 @@ export function useCachedQuery(
     const onFocus = () => fetchFresh();
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
-  }, [fetchFresh, enabled, refetchOnWindowFocus]);
+  }, [enabled, refetchOnWindowFocus, fetchFresh]);
 
   // Public manual refetch
   const refetch = useCallback(() => fetchFresh(), [fetchFresh]);

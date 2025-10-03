@@ -5,7 +5,7 @@ import { ImExit } from "react-icons/im";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import NewGroupModal from "../components/groups/NewGroupModal";
 
 import defaultAvatar from "../assets/initialAvatar.jpg";
@@ -36,12 +36,13 @@ export default function Home() {
   // If the user is not there yet (for a moment after loading) - show a stub
   const displayName = user?.username || "User";
 
+  const fetchGroups = useCallback(() => getMyGroups(), []);
   const {
     data: groups = [],
     loading,
     error,
     refetch: refetchGroups,
-  } = useCachedQuery(["groups", user?.idUser], () => getMyGroups(), {
+  } = useCachedQuery(["groups", user?.idUser], fetchGroups, {
     ttl: 60_000,
     enabled: !!user?.idUser,
     refetchOnWindowFocus: true,
