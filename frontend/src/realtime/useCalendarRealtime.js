@@ -29,7 +29,7 @@ export function useCalendarRealtime(idGroup, reload) {
       off("calendar:eventCreated", wrapped);
       off("calendar:eventUpdated", wrapped);
       off("calendar:eventDeleted", wrapped);
-      on("calendar:eventPatched", wrapped);
+      off("calendar:eventPatched", wrapped);
       leaveCalendar(idGroup);
       if (tRef.current) {
         clearTimeout(tRef.current);

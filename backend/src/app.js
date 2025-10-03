@@ -110,6 +110,12 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
+  if (socket.user?.idUser) {
+    const uid = Number(socket.user.idUser);
+    socket.join(`user:${uid}`);
+    console.log("joined user room", `user:${uid}`, socket.id);
+  }
+
   socket.on("group:subscribe", (idGroup) => socket.join(`group:${idGroup}`));
   socket.on("group:unsubscribe", (idGroup) => socket.leave(`group:${idGroup}`));
 

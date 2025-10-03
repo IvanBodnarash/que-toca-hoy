@@ -61,6 +61,7 @@ export function RealtimeProvider({ children }) {
       },
       on(event, handler) {
         socket.on(event, handler);
+        return () => socket.off(event, handler);
       },
       off(event, handler) {
         socket.off(event, handler);
