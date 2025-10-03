@@ -7,14 +7,19 @@ let getAccessToken = () => localStorage.getItem("token");
 export const socket = io(BASE, {
   autoConnect: false,
   withCredentials: true,
-  transports: ["websocket"],
+  transports: ["websocket", "polling"],
+  timeout: 10000,
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 800,
+  reconnectionDelayMax: 5000,
   auth: () => ({ token: getAccessToken() }),
 });
 
 export function reconnectSocket() {
   try {
     if (socket.connected) socket.disconnect();
-    socket.auth = { token: getAccessToken() };
+    // socket.auth = { token: getAccessToken() };
     socket.connect();
   } catch (error) {
     console.warn("reconnectSocket failed:", error);
@@ -22,5 +27,5 @@ export function reconnectSocket() {
 }
 
 export function setAccessTokenGetter(fn) {
-  getAccessToken = fn;
+  if (typeof fn === "function") getAccessToken = fn;
 }
