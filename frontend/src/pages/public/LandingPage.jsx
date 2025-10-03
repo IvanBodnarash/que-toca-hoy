@@ -93,7 +93,7 @@ export default function LandingPage() {
             return (
               <div
                 key={feature.title}
-                className={`group relative rounded-2xl border md:w-4/5 bg-white border-slate-300 p-4 pl-14 hover:-translate-y-0.5 shadow-lg transition cursor-pointer ${
+                className={`group relative rounded-2xl border mx-4 md:mx-0 md:w-4/5 bg-white border-slate-300 p-4 pl-14 hover:-translate-y-0.5 shadow-lg transition cursor-pointer ${
                   isRight ? "md:ml-auto md:text-right md:pr-22" : "md:pl-22"
                 } hover:-translate-y-0.5`}
               >

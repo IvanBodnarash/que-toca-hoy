@@ -2,9 +2,14 @@ import { NavLink } from "react-router-dom";
 
 import { DevCard } from "../../components/cards/DevCard";
 
+import ivanPhoto from "../../assets/photo/ivan.jpeg";
+import antonnyPhoto from "../../assets/photo/antonny.png";
+import gerardPhoto from "../../assets/photo/gerard.jpeg";
+import elenaPhoto from "../../assets/photo/elena.jpeg";
+
 const teamMembers = [
   {
-    image: "https://avatars.githubusercontent.com/u/106333660?v=4",
+    image: ivanPhoto,
     name: "Ivan Bodnarash",
     position: "Frontend Developer",
     links: [
@@ -13,7 +18,7 @@ const teamMembers = [
     ],
   },
   {
-    image: "https://avatars.githubusercontent.com/u/64755680?v=4",
+    image: antonnyPhoto,
     name: "Antonny Alayo Villanueva",
     position: "Backend Developer",
     links: [
@@ -22,8 +27,7 @@ const teamMembers = [
     ],
   },
   {
-    image:
-      "https://media.licdn.com/dms/image/v2/D4D03AQGIHfne2MWvsQ/profile-displayphoto-scale_400_400/B4DZkJpMoQHYAk-/0/1756803419367?e=1759968000&v=beta&t=OhVICuEWNlWTsjPeJ9UeWPDJR0AEvaRNBHpu3ZSHpFw",
+    image: gerardPhoto,
     name: "Gerard López Paredes",
     position: "Backend Developer",
     links: [
@@ -32,8 +36,7 @@ const teamMembers = [
     ],
   },
   {
-    image:
-      "https://media.licdn.com/dms/image/v2/D4D03AQGOwnS6rua6qA/profile-displayphoto-shrink_800_800/B4DZRAXEUdHMAc-/0/1736246576867?e=1759363200&v=beta&t=r2mW4uD3_Hjsn2vYmuk6Qba3Nys9F__SQhVhcZ4xNgA",
+    image: elenaPhoto,
     name: "Elena Molina Lopez",
     position: "Full Stack Developer",
     links: [

@@ -1,4 +1,4 @@
-import { useAppStore } from "./AppStore";
+import { useAppStore } from "../state/AppStore";
 import { getGroupUsers } from "../services/groupsService";
 import { useCallback } from "react";
 
