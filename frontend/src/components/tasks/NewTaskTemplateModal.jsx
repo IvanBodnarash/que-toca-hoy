@@ -28,8 +28,6 @@ export default function AddTemplateModal({
     setError("");
     try {
       let data = await getGroupMaterials(groupId);
-      console.log("Fetched materials data:", data.materials);
-
       if (!cancelled) {
         const mats = Array.isArray(data.materials) ? data.materials : [];
 
@@ -40,7 +38,6 @@ export default function AddTemplateModal({
 
         setMaterials(uniqueMaterials);
       }
-      console.log("Loaded materials:", data);
     } catch (e) {
       if (!cancelled) setError(e.message || "Failed to load templates");
     } finally {
@@ -73,7 +70,6 @@ export default function AddTemplateModal({
     setDropdownOpen(false);
   };
   const handleAddMaterial = () => {
-    console.log(search);
     if (
       search.trim() &&
       !materials.some((m) => m.name.toLowerCase() === search.toLowerCase())

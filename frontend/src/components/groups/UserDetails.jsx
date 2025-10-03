@@ -14,8 +14,6 @@ export default function UserDetails({ user }) {
 
   const proxima = pendientes[0];
 
-  console.log(user.color);
-
   return (
     <div className="bg-white shadow-lg rounded-2xl flex flex-col flex-wrap md:flex-row items-center p-6 gap-6">
       <div className="flex flex-row items-center gap-4">

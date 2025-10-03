@@ -23,16 +23,12 @@ export async function updateTaskDatedStatus(idTaskDated, status) {
 export async function createTaskDated(payload) {
   const { materials, ...cleanPayload } = payload;
 
-  console.log(cleanPayload);
-
   const taskDatedCreated = await apiPost(`/taskdated`, {
     status: "todo",
     frequency: "none",
     rotative: false,
     ...cleanPayload,
   });
-
-  console.log(materials);
 
   if (materials && materials.length > 0) {
     await apiPost(`/buylist/${payload.idTaskTemplate}/list`, {

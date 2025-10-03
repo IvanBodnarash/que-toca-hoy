@@ -162,94 +162,101 @@ export default function GroupPage() {
       : filteredGroupUsers.find((u) => u.idUser === user.idUser);
   }, [filteredGroupUsers, selectedUser, user.idUser]);
 
-  if (loading) return <p className="text-center mt-8">Loading group data...</p>;
-  if (error) return <p className="text-center mt-8 text-red-500">{error}</p>;
-
   return (
-    <div className="bg-cyan-950/10 py-22 xl:px-48">
-      <Toaster position="bottom-center" />
-      <div className="flex flex-col w-11/12 md:w-4/5 gap-4 mx-auto">
-        {/* Group PIN */}
-        <div className="flex items-center justify-between bg-white p-1.5 rounded-xl shadow">
-          <div className="flex items-center gap-2 md:gap-4">
-            {" "}
-            <button
-              type="button"
-              onClick={() => setVisible(!visible)}
-              className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
-            >
-              {visible ? (
-                <AiOutlineEyeInvisible className="size-5 md:size-6" />
-              ) : (
-                <AiOutlineEye className="size-5 md:size-6" />
+    <div className="bg-cyan-950/10 h-screen py-22 xl:px-48">
+      {loading && (
+        <p className="text-center mt-8 animate-pulse">Loading group data...</p>
+      )}
+      {error && <p className="text-center mt-8 text-red-500">{error}</p>}
+      {!loading && !error && (
+        <>
+          <Toaster position="bottom-center" />
+          <div className="flex flex-col w-11/12 md:w-4/5 gap-4 mx-auto">
+            {/* Group PIN */}
+            <div className="flex items-center justify-between bg-white p-1.5 rounded-xl shadow">
+              <div className="flex items-center gap-2 md:gap-4">
+                {" "}
+                <button
+                  type="button"
+                  onClick={() => setVisible(!visible)}
+                  className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
+                >
+                  {visible ? (
+                    <AiOutlineEyeInvisible className="size-5 md:size-6" />
+                  ) : (
+                    <AiOutlineEye className="size-5 md:size-6" />
+                  )}
+                </button>
+                <h1 className="text-cyan-900 text-sm md:text-md">
+                  Show group details
+                </h1>
+              </div>
+              {visible && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-slate-700 font-medium">
+                    {groupPin ? `Group pin:  ${groupPin}` : "Group pin:  N/A"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (groupPin) {
+                        navigator.clipboard.writeText(groupPin);
+                        toast.success("PIN copied to clipboard");
+                      }
+                    }}
+                    className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
+                  >
+                    <AiOutlineCopy className="size-5 md:size-6" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const newPin = await rotateGroupPin(groupId);
+                        setGroupPin(newPin);
+                        toast.success("PIN refreshed");
+                      } catch (err) {
+                        toast.error(`❌ ${err.message}`);
+                      }
+                    }}
+                    className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition cursor-pointer"
+                  >
+                    <AiOutlineReload className="size-5 md:size-6" />
+                  </button>
+                </div>
               )}
-            </button>
-            <h1 className="text-cyan-900 text-sm md:text-md">Show group details</h1>
-          </div>
-          {visible && (
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-700 font-medium">
-                {groupPin ? `Group pin:  ${groupPin}` : "Group pin:  N/A"}
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  if (groupPin) {
-                    navigator.clipboard.writeText(groupPin);
-                    toast.success("PIN copied to clipboard");
-                  }
-                }}
-                className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition-all cursor-pointer"
-              >
-                <AiOutlineCopy className="size-5 md:size-6" />
-              </button>
-              <button
-                type="button"
-                onClick={async () => {
-                  try {
-                    const newPin = await rotateGroupPin(groupId);
-                    setGroupPin(newPin);
-                    toast.success("PIN refreshed");
-                  } catch (err) {
-                    toast.error(`❌ ${err.message}`);
-                  }
-                }}
-                className="p-1 md:p-1.5 bg-cyan-800 text-white rounded hover:bg-cyan-700 transition cursor-pointer"
-              >
-                <AiOutlineReload className="size-5 md:size-6" />
-              </button>
             </div>
-          )}
-        </div>
 
-        {/* Period selector */}
-        <div className="flex justify-center gap-2 bg-slate-300 rounded-xl p-1">
-          {["day", "week", "month"].map((p) => (
-            <FilterButton
-              key={p}
-              onClick={() => setPeriod(p)}
-              active={period === p}
-            >
-              {p === "day" ? "Day" : p === "week" ? "Week" : "Month"}
-            </FilterButton>
-          ))}
-        </div>
+            {/* Period selector */}
+            <div className="flex justify-center gap-2 bg-slate-300 rounded-xl p-1">
+              {["day", "week", "month"].map((p) => (
+                <FilterButton
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  active={period === p}
+                >
+                  {p === "day" ? "Day" : p === "week" ? "Week" : "Month"}
+                </FilterButton>
+              ))}
+            </div>
 
-        {/* User details */}
-        <UserDetails user={userToShowFiltered} />
+            {/* User details */}
+            <UserDetails user={userToShowFiltered} />
 
-        {/* Users grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {filteredGroupUsers.map((u) => (
-            <UserCard
-              key={u.idUser}
-              user={u}
-              isSelected={u.idUser === userToShowFiltered?.idUser}
-              onClick={() => setSelectedUser(u)}
-            />
-          ))}
-        </div>
-      </div>
+            {/* Users grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {filteredGroupUsers.map((u) => (
+                <UserCard
+                  key={u.idUser}
+                  user={u}
+                  isSelected={u.idUser === userToShowFiltered?.idUser}
+                  onClick={() => setSelectedUser(u)}
+                />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -195,7 +195,6 @@ export default function DayTasksModal({
   // Plan Tasks Now
   const openPlanAhead = (event) => {
     setPlanForEvent(event);
-    console.log(event);
     setPlanTimes(
       event.frequency === "weekly" ? 4 : event.frequency === "monthly" ? 3 : 7
     );

@@ -62,7 +62,6 @@ export default function GroupHeader() {
     e.preventDefault();
     try {
       await startCronJob();
-      window.location.reload();
     } catch (err) {
       alert(err?.message || "Failed to start cron job");
     }
@@ -167,15 +166,13 @@ export default function GroupHeader() {
           <FiRefreshCw className="size-8 hover:scale-105 hover:rotate-90 active:scale-100 transition-all" />
         </button>
 
-        <button
-          onClick={handleStartCronJob}
-          title="Start scheduled tasks"
+        <NavLink
+          to="/"
+          title="Home"
           className="inline-flex size-14 items-center justify-center hover:scale-105 active:scale-100 rounded-2xl hover:border-white/40 hover:bg-white/5 hover:border-2 cursor-pointer"
         >
-          <NavLink to="/app">
-            <BiHome className="size-10 hover:scale-105 active:scale-100 transition-all" />
-          </NavLink>
-        </button>
+          <BiHome className="size-10 hover:scale-105 active:scale-100 transition-all" />
+        </NavLink>
       </div>
 
       {error && (

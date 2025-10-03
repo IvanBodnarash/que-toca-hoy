@@ -11,6 +11,7 @@ import {
   LuWifiOff,
   LuShare2,
 } from "react-icons/lu";
+import { FaLink } from "react-icons/fa6";
 
 const featuresList = [
   {
@@ -36,6 +37,7 @@ const featuresList = [
   },
   {
     title: "Recipe Compass integration",
+    link: "https://the-recipe-compass.web.app",
     description:
       "Import recipes in seconds, keep steps and ingredients together, and add them to the plan with one click.",
     tags: ["Import", "Ingredients"],
@@ -93,23 +95,36 @@ export default function LandingPage() {
             return (
               <div
                 key={feature.title}
-                className={`group relative rounded-2xl border mx-4 md:mx-0 md:w-4/5 bg-white border-slate-300 p-4 pl-14 hover:-translate-y-0.5 shadow-lg transition cursor-pointer ${
+                className={`group relative rounded-4xl border mx-4 md:mx-0 md:w-4/5 bg-white border-slate-300 p-4 md:p-5 pl-14 hover:-translate-y-0.5 shadow-lg transition cursor-pointer ${
                   isRight ? "md:ml-auto md:text-right md:pr-22" : "md:pl-22"
                 } hover:-translate-y-0.5`}
               >
                 <div
                   className={`absolute -top-5  ${
                     isRight ? "-right-2 md:-right-5" : "-left-2 md:-left-5"
-                  } size-14 md:size-22 rounded-xl bg-white border border-slate-200 shadow-md overflow-hidden flex items-center justify-center`}
+                  } size-14 md:size-18 rounded-2xl bg-white border border-slate-200 shadow-md overflow-hidden flex items-center justify-center`}
                 >
-                  <Icon className="text-cyan-700 size-8 md:size-14" />
+                  <Icon className="text-cyan-700 size-8 md:size-10" />
                 </div>
 
                 {/* Card Content */}
-                <div className="font-semibold text-cyan-900">
-                  {feature.title}
+                <div className="font-semibold text-cyan-900 md:text-xl">
+                  {feature.link ? (
+                    <NavLink
+                      to={feature.link}
+                      target="_blank"
+                      className="hover:underline transition-all flex flex-row-reverse md:flex-row justify-end gap-2"
+                    >
+                      <p>{feature.title}</p>
+                      <FaLink size={28} />
+                    </NavLink>
+                  ) : (
+                    `${feature.title}`
+                  )}
                 </div>
-                <div className="text-slate-600 mt-1">{feature.description}</div>
+                <div className="text-slate-600 mt-1 text-sm md:text-md">
+                  {feature.description}
+                </div>
 
                 {/* <div className="rounded-xl border border-slate-200 p-6 pl-12"> */}
                 {feature.tags.length ? (

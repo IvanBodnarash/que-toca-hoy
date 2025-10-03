@@ -271,7 +271,7 @@ export default function UserSettings() {
                     className="absolute inset-y-0 right-2 flex items-center text-gray-500"
                     aria-label={showPw ? "Hide password" : "Show password"}
                   >
-                    {showPw ? <BiHide /> : <BiShow />}
+                    {showPw ? <BiShow /> : <BiHide />}
                   </button>
                 </div>
                 {errors.currentPassword && (
@@ -310,7 +310,7 @@ export default function UserSettings() {
                     className="absolute inset-y-0 right-2 flex items-center text-gray-500"
                     aria-label={showNewPw ? "Hide password" : "Show password"}
                   >
-                    {showNewPw ? <BiHide /> : <BiShow />}
+                    {showNewPw ? <BiShow /> : <BiHide />}
                   </button>
                 </div>
                 {errors.newPassword && (
@@ -351,7 +351,7 @@ export default function UserSettings() {
                       showConfirmPw ? "Hide password" : "Show password"
                     }
                   >
-                    {showConfirmPw ? <BiHide /> : <BiShow />}
+                    {showConfirmPw ? <BiShow /> : <BiHide />}
                   </button>
                 </div>
                 {errors.confirmPassword && (

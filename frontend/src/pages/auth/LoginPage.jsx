@@ -99,9 +99,9 @@ export default function LoginPage() {
                 tabIndex={-1}
               >
                 {showPw ? (
-                  <BiHide className="size-5 md:size-6" />
-                ) : (
                   <BiShow className="size-5 md:size-6" />
+                ) : (
+                  <BiHide className="size-5 md:size-6" />
                 )}
               </button>
             </div>
@@ -112,7 +112,9 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 transition-all p-2 text-white rounded-md outline-0 cursor-pointer disabled:opacity-70"
+            className={`bg-cyan-900 hover:bg-cyan-800 active:bg-cyan-700 transition-all p-2 text-white rounded-md outline-0 cursor-pointer disabled:opacity-70 ${
+              loading ? "animate-pulse" : ""
+            }`}
             disabled={loading}
             aria-busy={loading}
           >
