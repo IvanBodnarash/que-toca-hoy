@@ -139,7 +139,7 @@ export default function AddFromCompassModal({ groupId, onClose, onImported }) {
                   <label
                     key={r.id}
                     className={`flex gap-3 border rounded-xl p-3 cursor-pointer transition shadow-sm hover:shadow ${
-                      checked ? "ring-2 ring-cyan-600" : "border-slate-200"
+                      checked ? "border-cyan-900/50 ring-cyan-600 bg-cyan-900/20" : "border-slate-200"
                     }`}
                   >
                     <div className="flex-1 min-w-0">

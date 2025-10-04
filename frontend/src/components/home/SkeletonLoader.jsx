@@ -1,6 +1,6 @@
-export default function SceletonLoader() {
+export default function SkeletonLoader() {
   return (
-    <div className="w-full md:w-2/5 rounded-md border bg-cyan-900/30 border-slate-400 p-3">
+    <div className="w-full md:w-2/5 rounded-md border opacity-50 bg-cyan-900/30 border-slate-400 p-3">
       <div className="flex animate-pulse space-x-2">
         <div className="size-10 rounded-full bg-cyan-900/50"></div>
         <div className="flex-1 space-y-3 py-1">

@@ -102,7 +102,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col w-4/5 md:w-3/6 gap-4">
+    <div className="flex flex-col w-6/7 md:w-3/6 gap-4">
       <div className="flex flex-col gap-1">
         <h1 className="font-bold text-3xl text-cyan-950">Create account</h1>
         <h1 className="text-4xl md:text-5xl text-cyan-900 font-bold">

@@ -14,14 +14,12 @@ import JoinGroupModal from "../components/groups/JoinGroupModal";
 
 import { deleteGroup, getMyGroups } from "../services/groupsService";
 
-import { useGroup } from "../context/GroupContext";
 import ConfirmDialog from "../components/alerts/ConfirmDialog";
 import GroupMembersStrip from "../components/groups/GetMembersStrip";
 
-import { useEffect } from "react";
-import BriefInfoSection from "../components/ui/BriefInfoSection";
+import BriefInfoSection from "../components/home/BriefInfoSection";
 import { useCachedQuery } from "../hooks/useCachedQuery";
-import SceletonLoader from "../components/ui/SceletonLoader";
+import SkeletonLoader from "../components/home/SkeletonLoader";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -116,8 +114,8 @@ export default function Home() {
 
         {loading && !error && (
           <div className="flex flex-col md:flex-row md:flex-wrap gap-4">
-            <SceletonLoader />
-            <SceletonLoader />
+            <SkeletonLoader />
+            <SkeletonLoader />
           </div>
         )}
         {error && (

@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { getMyTasksReport } from "../../services/tasksService";
-import { useGroupRealtime } from "../../realtime/useGroupRealtime";
 import BriefTasksList from "./BriefTasksListItem";
 
 import { RiTodoFill } from "react-icons/ri";

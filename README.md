@@ -276,3 +276,5 @@ npm run dev
   - Health Check
 
     https://que-toca-hoy.onrender.com/health
+    
+    Should be `{"ok":true}`
