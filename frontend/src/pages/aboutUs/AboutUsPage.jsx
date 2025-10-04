@@ -169,7 +169,7 @@ export default function AboutUsPage() {
         <NavLink
           to="/app"
           aria-label="Que Toca Hoy - Home"
-          className="leading-none bg-cyan-800 p-1 md:p-2 md:px-4 rounded-lg border shadow-2xl border-white/20 text-sm md:text-lg text-yellow-50 hover:bg-cyan-900 backdrop-blur-lg transition-all"
+          className="leading-none bg-cyan-800 p-1.5 px-3 md:p-2 md:px-4 rounded-lg border shadow-2xl border-white/20 text-sm md:text-lg text-yellow-50 hover:bg-cyan-900 backdrop-blur-lg transition-all"
         >
           Go to App
         </NavLink>
