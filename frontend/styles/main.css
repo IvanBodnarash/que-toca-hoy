@@ -2,13 +2,13 @@
 
 @font-face {
     font-family: "Mileast";
-    src: url("/fonts/Mileast.otf") format("otf");
+    src: url("/fonts/Mileast.otf") format("opentype");
     font-weight: 400;
     font-style: normal;
 }
 
 .main-logo {
-    font-family: "Mileast", "sans-serif";
+    font-family: "Mileast", sans-serif;
 }
 
 @keyframes fade-up {
