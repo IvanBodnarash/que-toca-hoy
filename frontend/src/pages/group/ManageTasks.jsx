@@ -63,8 +63,8 @@ export default function ManageTasks() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-row text-cyan-900 items-center gap-3">
-          <SiGoogletasks className="size-6" />
-          <h1 className="text-2xl font-bold">Task Templates</h1>
+          <SiGoogletasks className="size-6 md:size-8" />
+          <h1 className="text-xl md:text-2xl font-bold">Task Templates</h1>
         </div>
         <button
           onClick={() => setShowModal(true)}

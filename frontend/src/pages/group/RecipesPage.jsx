@@ -69,10 +69,10 @@ export default function RecipesPage() {
   return (
     <div className="px-6 py-22 space-y-6 max-w-3xl mx-auto">
       {/* Header + New Recipe Button */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between">
         <div className="flex flex-row text-cyan-900 items-center gap-3">
-          <GiHotMeal className="w-8 h-8" />
-          <h1 className="text-2xl font-bold">Recipes</h1>
+          <GiHotMeal className="size-6 md:size-8" />
+          <h1 className="text-xl md:text-2xl font-bold">Recipes</h1>
         </div>
         <div className="flex gap-2">
           <button
@@ -85,7 +85,7 @@ export default function RecipesPage() {
             onClick={() => setAddingFromCompass(true)}
             className="text-sm flex items-center gap-2 border border-cyan-900 hover:bg-cyan-50 active:bg-cyan-100 text-cyan-900 px-2 py-1 md:px-4 md:py-1.5 rounded-lg shadow transition-all cursor-pointer"
           >
-            Recipe Compass
+            Import
           </button>
         </div>
       </div>
@@ -98,7 +98,6 @@ export default function RecipesPage() {
           className="w-full border border-slate-300 rounded-lg pl-10 pr-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-600"
           value={filterName}
           onChange={(e) => setFilterName(e.target.value)}
-          autoFocus
         />
       </div>
       {/* States */}

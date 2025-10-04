@@ -158,13 +158,13 @@ export default function GroupHeader() {
       </div>
 
       <div className="flex flex-end items-center justify-center gap-1 md:gap-2 text-white transition-all">
-        <button
+        {/* <button
           onClick={handleStartCronJob}
           title="Start scheduled tasks"
           className="inline-flex size-14 items-center justify-center hover:scale-105 active:scale-100 rounded-2xl hover:border-white/40 hover:bg-white/5 hover:border-2 cursor-pointer"
         >
           <FiRefreshCw className="size-8 hover:scale-105 hover:rotate-90 active:scale-100 transition-all" />
-        </button>
+        </button> */}
 
         <NavLink
           to="/"

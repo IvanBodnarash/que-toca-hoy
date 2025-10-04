@@ -105,8 +105,8 @@ export default function BuyListPage() {
       {/* Buy List */}
       <div className="flex-1">
         <div className="text-xl md:text-2xl font-bold mb-4 text-cyan-900 flex items-center gap-2">
-          <TiShoppingCart className="size-8" />
-          <h1>Buy List {isTaskView && recipeName ? ` - ${recipeName}` : ""}</h1>
+          <TiShoppingCart className="size-6 md:size-8" />
+          <h1 className="text-xl md:text-2xl font-bold">Buy List {isTaskView && recipeName ? ` - ${recipeName}` : ""}</h1>
         </div>
 
         {/* Filters */}
@@ -116,7 +116,7 @@ export default function BuyListPage() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`flex-1 px-4 py-0.5 md:py-2 rounded-lg font-medium transition cursor-pointer ${
+                className={`flex-1 px-4 py-0.5 md:py-1 rounded-lg font-medium transition cursor-pointer ${
                   filter === f
                     ? "bg-cyan-800 text-white shadow"
                     : "text-cyan-800 hover:bg-slate-400/50"
