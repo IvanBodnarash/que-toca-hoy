@@ -102,7 +102,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="px-2 py-22 md:px-32">
+    <div className="px-2 py-22 md:px-32 overflow-auto">
       {error && <div className="text-red-600 p-2">{error}</div>}
       <div className="h-[75vh]">
         <Calendar

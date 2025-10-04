@@ -107,7 +107,6 @@ export default function AddFromCompassModal({ groupId, onClose, onImported }) {
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by title"
             className="w-full border rounded px-2 py-1 outline-none focus:ring-2 border-slate-800 focus:ring-cyan-600"
-            autoFocus
           />
 
           {search && (

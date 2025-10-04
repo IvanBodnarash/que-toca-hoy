@@ -4,6 +4,7 @@ import { useGroup } from "../../context/GroupContext";
 import MobileNavItem from "../navigation/MobileNavItem";
 import { dataUrlToFile } from "../../utils/imageProcessor";
 import GroupImageUploader from "./GroupImageUploader.jsx";
+import defaultGroupAvatar from "../../assets/defaultGroupImg.png";
 import {
   uploadGroupImage,
   updateGroupName,
@@ -104,7 +105,7 @@ export default function GroupHeader() {
   return (
     <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-2 md:gap-4 z-10 justify-between px-5 md:px-32">
       <GroupImageUploader
-        avatar={group?.image}
+        avatar={group?.image || defaultGroupAvatar}
         onChangeAvatar={handleFileChange}
         size="size-14"
       />
