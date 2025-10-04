@@ -21,11 +21,11 @@ export default function ({ user }) {
           <img
             src={user.imageUrl}
             alt={user.name}
-            className="size-22 md:size-36 object-cover border-4 rounded-full"
+            className="size-24 md:size-36 object-cover border-4 rounded-full"
             style={{ borderColor: user.color }}
           />
         ) : (
-          <div className="size-22 md:size-36 flex items-center justify-center rounded-full border border-slate-400">
+          <div className="size-24 md:size-36 flex items-center justify-center rounded-full border border-slate-400">
             <img
               src={defaultAvatar}
               alt="default avatar"

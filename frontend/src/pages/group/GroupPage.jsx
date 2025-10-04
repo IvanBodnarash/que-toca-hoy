@@ -163,7 +163,7 @@ export default function GroupPage() {
   }, [filteredGroupUsers, selectedUser, user.idUser]);
 
   return (
-    <div className="bg-cyan-950/10 h-screen py-22 xl:px-48">
+    <div className="bg-cyan-950/10 h-screen py-22 xl:px-48 overflow-auto">
       {loading && (
         <p className="text-center mt-8 animate-pulse">Loading group data...</p>
       )}
