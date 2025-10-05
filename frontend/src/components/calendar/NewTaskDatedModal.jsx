@@ -9,6 +9,8 @@ import {
   endOfDayLocal,
   startOfDayLocal,
   toLocalInputString,
+  toUtcIsoAllDayRange,
+  toUtcIsoPreserveLocalFields,
 } from "../../utils/toLocalInputString";
 import MaterialsModal from "./MaterialsModal";
 
@@ -139,6 +141,13 @@ export default function NewTaskDatedModal({
 
     const s = new Date(startDate);
     const en = new Date(endDate);
+
+    const isAllDay =
+      s.getHours() === 0 &&
+      s.getMinutes() === 0 &&
+      en.getHours() === 23 &&
+      en.getMinutes() >= 59;
+
     if (isNaN(s.getTime()) || isNaN(en.getTime())) {
       setError("Invalid date format");
       return;
@@ -155,11 +164,21 @@ export default function NewTaskDatedModal({
     setLoading(true);
     setError("");
     try {
+      const { startISO, endISO } = isAllDay
+        ? (() => {
+            const { startIso, endIso } = toUtcIsoAllDayRange(startDate);
+            return { startISO: startIso, endISO: endIso };
+          })()
+        : {
+            startISO: toUtcIsoPreserveLocalFields(startDate),
+            endISO: toUtcIsoPreserveLocalFields(endDate),
+          };
+
       const created = await createTaskDated({
         idGroup: Number(groupId),
         idTaskTemplate: Number(idTaskTemplate),
-        startDate: s.toISOString(),
-        endDate: en.toISOString(),
+        startDate: startISO,
+        endDate: endISO,
         frequency,
         rotative,
         rotators: rotative ? assignees : undefined,
