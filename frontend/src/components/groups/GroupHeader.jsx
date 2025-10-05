@@ -8,6 +8,7 @@ import defaultGroupAvatar from "../../assets/defaultGroupImg.png";
 import {
   uploadGroupImage,
   updateGroupName,
+  getGroupById,
 } from "../../services/groupsService.js";
 import { FiRefreshCw } from "react-icons/fi";
 import { startCronJob } from "../../services/taskDatedService.js";
@@ -24,12 +25,14 @@ export default function GroupHeader() {
 
   const group = groups.find((g) => String(g.idGroup) === String(groupId));
 
+  const [fallbackGroup, setFallbackGroup] = useState(null);
+  const effectiveGroup = group || fallbackGroup;
+
   const [isEditingName, setIsEditingName] = useState(false);
-  const [newName, setNewName] = useState(group?.name || "");
+  const [newName, setNewName] = useState(effectiveGroup?.name || "");
 
   useGroupRealtime(groupId, {
     onGroupPatched: ({ patch }) => {
-      console.debug("[WS] group:patched", patch);
       setGroups((prev) =>
         prev.map((g) =>
           String(g.idGroup) === String(groupId) ? { ...g, ...patch } : g
@@ -39,8 +42,39 @@ export default function GroupHeader() {
   });
 
   useEffect(() => {
-    setNewName(group?.name || "");
-  }, [group?.name]);
+    setNewName(effectiveGroup?.name || "");
+  }, [effectiveGroup?.name]);
+
+  useEffect(() => {
+    if (!groupId) return;
+    if (group) {
+      setFallbackGroup(group);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const g = await getGroupById(groupId);
+        if (cancelled || !g) return;
+        setFallbackGroup(g);
+        setGroups((prev) => {
+          const exists = prev.some(
+            (x) => String(x.idGroup) === String(g.idGroup)
+          );
+          return exists
+            ? prev.map((x) =>
+                String(x.idGroup) === String(g.idGroup) ? { ...x, ...g } : x
+              )
+            : [...prev, g];
+        });
+      } catch (e) {
+        console.warn("getGroupById failed:", e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [groupId, group, setGroups]);
 
   const handleFileChange = async (dataUrl) => {
     try {
@@ -87,6 +121,9 @@ export default function GroupHeader() {
             : g
         )
       );
+      setFallbackGroup((prev) =>
+        prev ? { ...prev, name: newName.trim() } : prev
+      );
       setIsEditingName(false);
     } catch (err) {
       console.error("Error name changing:", err);
@@ -105,7 +142,7 @@ export default function GroupHeader() {
   return (
     <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-2 md:gap-4 z-10 justify-between px-5 md:px-32">
       <GroupImageUploader
-        avatar={safeImageSrc(group?.image) || defaultGroupAvatar}
+        avatar={safeImageSrc(effectiveGroup?.image) || defaultGroupAvatar}
         onChangeAvatar={handleFileChange}
         size="size-14"
       />
@@ -148,7 +185,7 @@ export default function GroupHeader() {
               onClick={handleNameClick}
               title="Click to change name"
             >
-              {group?.name || (loading ? "Loading..." : "Unknown group")}
+              {effectiveGroup?.name || "Loading..."}
             </h1>
             <FaEdit
               onClick={handleNameClick}
