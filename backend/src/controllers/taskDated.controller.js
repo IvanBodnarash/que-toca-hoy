@@ -70,6 +70,31 @@ async function buildTaskSnapshot(idTaskDated) {
   };
 }
 
+function addByFrequencyUTC(baseDate, frequency, step) {
+  const d = new Date(baseDate);
+  if (frequency === "daily") {
+    d.setUTCDate(d.getUTCDate() + step);
+  } else if (frequency === "weekly") {
+    d.setUTCDate(d.getUTCDate() + step * 7);
+  } else if (frequency === "monthly") {
+    const day = d.getUTCDate();
+    d.setUTCMonth(d.getUTCMonth() + step, Math.min(day, 28));
+    const target = new Date(
+      Date.UTC(
+        d.getUTCFullYear(),
+        d.getUTCMonth(),
+        day,
+        d.getUTCHours(),
+        d.getUTCMinutes(),
+        d.getUTCSeconds(),
+        d.getUTCMilliseconds()
+      )
+    );
+    if (!isNaN(target)) return target;
+  }
+  return d;
+}
+
 export const taskDatedController = {
   ...baseController,
 
@@ -411,77 +436,192 @@ export const taskDatedController = {
   // POST /taskdated/:id/next  { times?: number }
   createNextNow: async (req, res) => {
     try {
+      // const { id } = req.params;
+      // const { times = 1 } = req.body || {};
+
+      // const task = await TaskDated.findByPk(id);
+      // if (!task)
+      //   return res.status(404).json({ message: "TaskDated not found" });
+      // if (task.frequency === "none") {
+      //   return res.status(400).json({ message: "Task is not recurrent" });
+      // }
+
+      // const actUserTask = await UserTask.findOne({
+      //   where: { idTaskDated: task.idTaskDated },
+      // });
+      // let currUserId = actUserTask?.idUser ?? null;
+
+      // let groupUsers = [];
+      // if (task.rotative) {
+      //   groupUsers = await UserGroup.findAll({
+      //     where: { idGroup: task.idGroup },
+      //     include: [{ model: User, attributes: ["idUser", "username"] }],
+      //     order: [[User, "username", "ASC"]],
+      //   });
+      // }
+
+      // let base = new Date(task.endDate);
+      // const createdIds = [];
+
+      // const stepsToCreate = Math.max(0, Number(times) || 0);
+      // if (!stepsToCreate) {
+      //   return res
+      //     .status(400)
+      //     .json({ message: "Times must be a positive number" });
+      // }
+
+      // for (let i = 0; i < stepsToCreate; i++) {
+      //   const expira = new Date(base);
+      //   switch (task.frequency) {
+      //     case "daily":
+      //       expira.setDate(expira.getDate() + 1);
+      //       break;
+      //     case "weekly":
+      //       expira.setDate(expira.getDate() + 7);
+      //       break;
+      //     case "monthly":
+      //       expira.setMonth(expira.getMonth() + 1);
+      //       break;
+      //     default:
+      //       return res.status(400).json({ message: "Unsupported frequency" });
+      //   }
+
+      //   const startNext = new Date(expira);
+      //   startNext.setHours(0, 0, 0, 0);
+      //   const endNext = new Date(expira);
+      //   endNext.setHours(23, 0, 0, 0);
+
+      //   const exists = await TaskDated.findOne({
+      //     where: {
+      //       idTaskTemplate: task.idTaskTemplate,
+      //       idGroup: task.idGroup,
+      //       startDate: { [Op.between]: [startNext, endNext] },
+      //     },
+      //   });
+      //   if (exists) {
+      //     base = endNext;
+      //     if (task.rotative && groupUsers.length) {
+      //       const idx = Math.max(
+      //         0,
+      //         groupUsers.findIndex((u) => u.idUser === currUserId)
+      //       );
+      //       currUserId =
+      //         groupUsers[(idx + 1) % groupUsers.length]?.idUser ?? currUserId;
+      //     }
+      //     continue;
+      //   }
+
+      //   const newTask = await TaskDated.create({
+      //     idGroup: task.idGroup,
+      //     idTaskTemplate: task.idTaskTemplate,
+      //     startDate: startNext,
+      //     endDate: endNext,
+      //     status: "todo",
+      //     frequency: task.frequency,
+      //     rotative: task.rotative,
+      //   });
+      //   createdIds.push(newTask.idTaskDated);
+
+      //   const snap = await buildTaskSnapshot(newTask.idTaskDated);
+      //   if (snap)
+      //     emitCal(req, snap.idGroup, "calendar:eventPatched", { task: snap });
+
+      //   let idU = currUserId;
+      //   if (task.rotative && groupUsers.length) {
+      //     const idx = Math.max(
+      //       0,
+      //       groupUsers.findIndex((u) => u.idUser === currUserId)
+      //     );
+      //     const nextUser = groupUsers[(idx + 1) % groupUsers.length];
+      //     idU = nextUser?.idUser ?? currUserId;
+      //     currUserId = idU;
+      //   }
+      //   if (idU) {
+      //     await UserTask.create({
+      //       idUser: idU,
+      //       idTaskDated: newTask.idTaskDated,
+      //     });
+      //   }
+
+      //   base = endNext;
+      // }
+
+      // return res.status(201).json({
+      //   message: "Next instances created",
+      //   createdIds,
+      //   count: createdIds.length,
+      // });
+
       const { id } = req.params;
       const { times = 1 } = req.body || {};
 
       const task = await TaskDated.findByPk(id);
       if (!task)
         return res.status(404).json({ message: "TaskDated not found" });
-      if (task.frequency === "none") {
+      if (!["daily", "weekly", "monthly"].includes(task.frequency)) {
         return res.status(400).json({ message: "Task is not recurrent" });
       }
 
-      const actUserTask = await UserTask.findOne({
-        where: { idTaskDated: task.idTaskDated },
-      });
-      let currUserId = actUserTask?.idUser ?? null;
+      const baseStart = new Date(task.startDate);
+      const baseEnd = new Date(task.endDate);
+      let durationMs = baseEnd - baseStart;
 
-      let groupUsers = [];
+      const DAY_MS = 24 * 60 * 60 * 1000;
+      if (durationMs >= 23 * 60 * 60 * 1000 && durationMs < DAY_MS) {
+        durationMs = DAY_MS; // correct to 24h
+      }
+
+      let currUserId =
+        (
+          await UserTask.findOne({
+            where: { idTaskDated: task.idTaskDated },
+          })
+        )?.idUser ?? null;
+
+      let rotationIds = [];
       if (task.rotative) {
-        groupUsers = await UserGroup.findAll({
+        const userGroups = await UserGroup.findAll({
           where: { idGroup: task.idGroup },
           include: [{ model: User, attributes: ["idUser", "username"] }],
           order: [[User, "username", "ASC"]],
         });
+        rotationIds = userGroups.map((ug) => ug.User?.idUser).filter(Boolean);
       }
 
-      let base = new Date(task.endDate);
+      const stepsToCreate = Math.max(1, Number(times) || 1);
       const createdIds = [];
 
-      const stepsToCreate = Math.max(0, Number(times) || 0);
-      if (!stepsToCreate) {
-        return res
-          .status(400)
-          .json({ message: "Times must be a positive number" });
-      }
+      for (let i = 1; i <= stepsToCreate; i++) {
+        const logicalStart = addByFrequencyUTC(baseStart, task.frequency, i);
 
-      for (let i = 0; i < stepsToCreate; i++) {
-        const expira = new Date(base);
-        switch (task.frequency) {
-          case "daily":
-            expira.setDate(expira.getDate() + 1);
-            break;
-          case "weekly":
-            expira.setDate(expira.getDate() + 7);
-            break;
-          case "monthly":
-            expira.setMonth(expira.getMonth() + 1);
-            break;
-          default:
-            return res.status(400).json({ message: "Unsupported frequency" });
-        }
-
-        const startNext = new Date(expira);
-        startNext.setHours(0, 0, 0, 0);
-        const endNext = new Date(expira);
-        endNext.setHours(23, 0, 0, 0);
+        const startNext = new Date(
+          Date.UTC(
+            logicalStart.getUTCFullYear(),
+            logicalStart.getUTCMonth(),
+            logicalStart.getUTCDate(),
+            0,
+            0,
+            0,
+            0
+          )
+        );
+        const endNext = new Date(startNext.getTime() + durationMs);
 
         const exists = await TaskDated.findOne({
           where: {
             idTaskTemplate: task.idTaskTemplate,
             idGroup: task.idGroup,
-            startDate: { [Op.between]: [startNext, endNext] },
+            startDate: { [Op.gte]: startNext, [Op.lt]: endNext },
           },
         });
         if (exists) {
-          base = endNext;
-          if (task.rotative && groupUsers.length) {
+          if (task.rotative && rotationIds.length) {
             const idx = Math.max(
               0,
-              groupUsers.findIndex((u) => u.idUser === currUserId)
+              rotationIds.findIndex((id) => id === currUserId)
             );
             currUserId =
-              groupUsers[(idx + 1) % groupUsers.length]?.idUser ?? currUserId;
+              rotationIds[(idx + 1) % rotationIds.length] ?? currUserId;
           }
           continue;
         }
@@ -501,24 +641,21 @@ export const taskDatedController = {
         if (snap)
           emitCal(req, snap.idGroup, "calendar:eventPatched", { task: snap });
 
-        let idU = currUserId;
-        if (task.rotative && groupUsers.length) {
+        let assignTo = currUserId;
+        if (task.rotative && rotationIds.length) {
           const idx = Math.max(
             0,
-            groupUsers.findIndex((u) => u.idUser === currUserId)
+            rotationIds.findIndex((id) => id === currUserId)
           );
-          const nextUser = groupUsers[(idx + 1) % groupUsers.length];
-          idU = nextUser?.idUser ?? currUserId;
-          currUserId = idU;
+          assignTo = rotationIds[(idx + 1) % rotationIds.length] ?? currUserId;
+          currUserId = assignTo;
         }
-        if (idU) {
+        if (assignTo) {
           await UserTask.create({
-            idUser: idU,
+            idUser: assignTo,
             idTaskDated: newTask.idTaskDated,
           });
         }
-
-        base = endNext;
       }
 
       return res.status(201).json({

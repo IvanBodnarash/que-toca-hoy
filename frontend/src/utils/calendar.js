@@ -61,17 +61,62 @@ export function toCalendarEvent(task) {
   };
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+const isMidnightUTC = (d) =>
+  d.getUTCHours() === 0 &&
+  d.getUTCMinutes() === 0 &&
+  d.getUTCSeconds() === 0 &&
+  d.getUTCMilliseconds() === 0;
+
 export function mapTaskDatedToEvents(task) {
   if (!task) return [];
+
+  const start = new Date(task.startDate);
+  const end = new Date(task.endDate);
+
+  const duration = end - start;
+  const isAllDayLike =
+    isMidnightUTC(start) &&
+    isMidnightUTC(end) &&
+    duration > 0 &&
+    duration % DAY_MS === 0;
+
+  const startAllDay = isAllDayLike
+    ? new Date(
+        Date.UTC(
+          start.getUTCFullYear(),
+          start.getUTCMonth(),
+          start.getUTCDate(),
+          0,
+          0,
+          0,
+          0
+        )
+      )
+    : start;
+
+  const endAllDay = isAllDayLike
+    ? new Date(
+        Date.UTC(
+          start.getUTCFullYear(),
+          start.getUTCMonth(),
+          start.getUTCDate(),
+          0,
+          0,
+          0,
+          0
+        )
+      )
+    : end;
 
   const base = {
     id: task.idTaskDated,
     taskId: task.idTaskDated,
     title: task.TaskTemplate?.name || "Untitled task",
-    start: new Date(task.startDate),
-    end: new Date(task.endDate),
+    start: startAllDay,
+    end: endAllDay,
+    allDay: !!isAllDayLike,
     status: task.status,
-
     userTaskStatus: task.Users?.[0]?.UserTask?.status || null,
     frequency: task.frequency,
     rotative: task.rotative,
@@ -97,7 +142,6 @@ export function mapTaskDatedToEvents(task) {
   return [
     {
       ...base,
-      // id: `${task.idTaskDated}:unassigned`,
       user: null,
       userTaskStatus: null,
     },
