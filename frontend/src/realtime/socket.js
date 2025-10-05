@@ -7,17 +7,13 @@ let getAccessToken = () => localStorage.getItem("token");
 export const socket = io(BASE, {
   autoConnect: false,
   withCredentials: true,
-  // timeout: 10000,
-  // reconnection: true,
-  // reconnectionDelay: 800,
-  // reconnectionDelayMax: 5000,
-  auth: () => ({ token: getAccessToken() }),
+  // auth: () => ({ token: getAccessToken() }),
 });
 
 export function reconnectSocket() {
   try {
     if (socket.connected) socket.disconnect();
-    socket.auth = { token: getAccessToken() };
+    // socket.auth = { token: getAccessToken() };
     socket.connect();
   } catch (error) {
     console.warn("reconnectSocket failed:", error);
