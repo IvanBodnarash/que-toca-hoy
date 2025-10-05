@@ -57,8 +57,8 @@ function isAllowedOrigin(origin) {
 app.use(
   cors({
     origin(origin, cb) {
-      if (isAllowedOrigin(origin)) return cb(null, true);
-      return cb(null, false);
+      if (process.env.NODE_ENV !== "production") return cb(null, true);
+      return cb(null, isAllowedOrigin(origin));
     },
     credentials: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
@@ -90,6 +90,7 @@ const server = http.createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
     origin(origin, cb) {
+      if (process.env.NODE_ENV !== "production") return cb(null, true);
       if (isAllowedOrigin(origin)) return cb(null, true);
       const err = new Error(`CORS: origin not allowed: ${origin}`);
       err.data = { code: "CORS_NOT_ALLOWED", origin };

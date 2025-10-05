@@ -7,11 +7,13 @@ export function useCalendarRealtime(idGroup, reload) {
   const tRef = useRef(null);
 
   handlerRef.current = (payload) => {
-    const same = String(payload.idGroup) === String(idGroup);
+    if (String(payload.idGroup) !== String(idGroup)) return;
+    clearTimeout(tRef.current);
+    // const same = String(payload.idGroup) === String(idGroup);
 
-    if (!same) return;
-    reload?.();
-    if (tRef.current) clearTimeout(tRef.current);
+    // if (!same) return;
+    // reload?.();
+    // if (tRef.current) clearTimeout(tRef.current);
     tRef.current = setTimeout(() => reload?.(), 120);
   };
 

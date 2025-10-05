@@ -6,6 +6,8 @@ import { useRef } from "react";
 
 const RealtimeContext = createContext(null);
 
+console.log(socket)
+
 export function RealtimeProvider({ children }) {
   const groupsRef = useRef(new Set());
   const calendarsRef = useRef(new Set());
@@ -61,7 +63,7 @@ export function RealtimeProvider({ children }) {
       },
       on(event, handler) {
         socket.on(event, handler);
-        return () => socket.off(event, handler);
+        // return () => socket.off(event, handler);
       },
       off(event, handler) {
         socket.off(event, handler);

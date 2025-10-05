@@ -102,8 +102,6 @@ export default function GroupHeader() {
     }
   };
 
-  console.log(group?.image);
-
   return (
     <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-2 md:gap-4 z-10 justify-between px-5 md:px-32">
       <GroupImageUploader
