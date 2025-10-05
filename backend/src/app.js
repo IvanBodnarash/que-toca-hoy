@@ -88,13 +88,18 @@ app.use(errorHandler);
 // Socket.IO
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
-  cors: {
-    origin(origin, cb) {
-      if (isAllowedOrigin(origin)) return cb(null, true);
-      return cb(null, false);
-    },
-    credentials: true,
-  },
+  // cors: {
+  //   origin(origin, cb) {
+  //     if (isAllowedOrigin(origin)) return cb(null, true);
+  //     const err = new Error(`CORS: origin not allowed: ${origin}`);
+  //     err.data = { code: "CORS_NOT_ALLOWED", origin };
+  //     return cb(err, false);
+  //   },
+  //   credentials: true,
+  // },
+  cors: { origin: isAllowedOrigin, credentials: true },
+  pingInterval: 15000,
+  pingTimeout: 10000,
 });
 
 io.use((socket, next) => {

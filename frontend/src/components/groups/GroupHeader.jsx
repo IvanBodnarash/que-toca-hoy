@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import { useGroup } from "../../context/GroupContext";
 import MobileNavItem from "../navigation/MobileNavItem";
-import { dataUrlToFile } from "../../utils/imageProcessor";
+import { dataUrlToFile, safeImageSrc } from "../../utils/imageProcessor";
 import GroupImageUploader from "./GroupImageUploader.jsx";
 import defaultGroupAvatar from "../../assets/defaultGroupImg.png";
 import {
@@ -102,10 +102,12 @@ export default function GroupHeader() {
     }
   };
 
+  console.log(group?.image);
+
   return (
     <div className="fixed w-full bg-cyan-800 flex flex-row items-center p-2 gap-2 md:gap-4 z-10 justify-between px-5 md:px-32">
       <GroupImageUploader
-        avatar={group?.image || defaultGroupAvatar}
+        avatar={safeImageSrc(group?.image) || defaultGroupAvatar}
         onChangeAvatar={handleFileChange}
         size="size-14"
       />

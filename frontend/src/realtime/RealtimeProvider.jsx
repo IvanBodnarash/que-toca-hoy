@@ -30,28 +30,10 @@ export function RealtimeProvider({ children }) {
 
     if (!socket.connected) socket.connect();
 
-    // universal logger for payloads (test)
-    const logAny = (event, payload) =>
-      console.log("[WS] event:", event, payload);
-    [
-      "group:patched",
-      "group:membersUpdated",
-      "group:deleted",
-      "buylist:changed",
-      "templates:changed",
-      "calendar:eventPatched",
-      "calendar:refresh",
-      "calendar:eventCreated",
-      "calendar:eventUpdated",
-      "calendar:eventDeleted",
-      "usertasks:changed",
-    ].forEach((ev) => socket.on(ev, (p) => logAny(ev, p)));
-
     return () => {
       socket.off("connect", onConnect);
       socket.off("reconnect", onConnect);
       socket.off("connect_error", onConnectError);
-      socket.off("logger_disconnect", logAny);
       if (socket.connected) socket.disconnect();
     };
   }, []);

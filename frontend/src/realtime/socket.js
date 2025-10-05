@@ -6,8 +6,7 @@ let getAccessToken = () => localStorage.getItem("token");
 
 export const socket = io(BASE, {
   autoConnect: false,
-  withCredentials: true,
-  transports: ["websocket"],
+  // withCredentials: true,
   timeout: 10000,
   reconnection: true,
   reconnectionDelay: 800,
