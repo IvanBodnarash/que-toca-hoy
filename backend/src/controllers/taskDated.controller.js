@@ -555,6 +555,8 @@ export const taskDatedController = {
       const { id } = req.params;
       const { times = 1 } = req.body || {};
 
+      const DAY_MS = 24 * 60 * 60 * 1000;
+
       const task = await TaskDated.findByPk(id);
       if (!task)
         return res.status(404).json({ message: "TaskDated not found" });
@@ -566,10 +568,11 @@ export const taskDatedController = {
       const baseEnd = new Date(task.endDate);
       let durationMs = baseEnd - baseStart;
 
-      const DAY_MS = 24 * 60 * 60 * 1000;
       if (durationMs >= 23 * 60 * 60 * 1000 && durationMs < DAY_MS) {
         durationMs = DAY_MS; // correct to 24h
       }
+
+      const durationDays = Math.max(1, Math.round(durationMs / DAY_MS));
 
       let currUserId =
         (
@@ -592,20 +595,14 @@ export const taskDatedController = {
       const createdIds = [];
 
       for (let i = 1; i <= stepsToCreate; i++) {
-        const logicalStart = addByFrequencyUTC(baseStart, task.frequency, i);
+        const logicalStartUTC = addByFrequencyUTC(baseStart, task.frequency, i);
 
-        const startNext = new Date(
-          Date.UTC(
-            logicalStart.getUTCFullYear(),
-            logicalStart.getUTCMonth(),
-            logicalStart.getUTCDate(),
-            0,
-            0,
-            0,
-            0
-          )
-        );
-        const endNext = new Date(startNext.getTime() + durationMs);
+        const y = logicalStartUTC.getUTCFullYear();
+        const m = logicalStartUTC.getUTCMonth();
+        const d = logicalStartUTC.getUTCDate();
+
+        const startNext = new Date(y, m, d, 0, 0, 0, 0);
+        const endNext = new Date(y, m, d + durationDays, 0, 0, 0, 0);
 
         const exists = await TaskDated.findOne({
           where: {
