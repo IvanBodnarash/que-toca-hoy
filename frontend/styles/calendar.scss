@@ -3,6 +3,22 @@ $font-size: 14px;
 $event-font-size: 14px;
 $day-header-font-weight: 600;
 
+.rbc-calendar,
+.rbc-month-view,
+.rbc-month-row,
+.rbc-date-cell,
+.rbc-day-bg {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rbc-calendar,
+.rbc-month-view,
+.rbc-row-bg,
+.rbc-day-bg {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* General borders color in monthly view */
 .rbc-month-view,
 .rbc-month-header .rbc-header,

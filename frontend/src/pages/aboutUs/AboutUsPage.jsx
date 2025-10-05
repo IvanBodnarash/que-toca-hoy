@@ -118,8 +118,8 @@ const aboutUs = [
           We used the technologies we learned during our bootcamp
         </h1>
         <p className="opacity-90 md:leading-8 leading-5">
-          <strong>MySQL, Sequelize, Node.js, Express, React, Vite,</strong> and
-          <strong>TailwindCSS.</strong> <br /> For deployment, we went with
+          <strong>MySQL, Sequelize, Node.js, Express, React, Vite,</strong> and{" "}
+          <strong>TailwindCSS.</strong> <br /> For deployment, we went with{" "}
           <strong>Render, Neon (PostgreSQL),</strong> and{" "}
           <strong>Vercel</strong>. <br /> The app also includes{" "}
           <strong>JWT authentication, cookies,</strong> and global state
@@ -188,7 +188,7 @@ export default function AboutUsPage() {
                 : "mr-auto md:items-start md:text-left md:text-left"
             }`;
 
-            const bodyClasses = `text-xs md:text-xl md:leading-8 bg-cyan-900 z-10 border border-white/20 shadow-xl rounded-3xl p-4 md:p-8 text-yellow-50/80 ${
+            const bodyClasses = `text-[13px] md:text-xl md:leading-8 bg-cyan-900 z-10 border border-white/20 shadow-xl rounded-3xl p-4 md:p-8 text-yellow-50/80 ${
               alignRigt ? "md:text-right" : "md:text-left"
             }`;
 

@@ -61,7 +61,7 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
           {stepsArray.length > 0 && (
             <button
               onClick={() => setShowSteps(!showSteps)}
-              className="bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full text-xs flex items-center gap-1 font-medium hover:bg-cyan-200 transition cursor-pointer"
+              className="bg-cyan-100 text-cyan-800 px-2 md:px-3 py-1 rounded-full text-xs flex items-center gap-1 font-medium hover:bg-cyan-200 transition cursor-pointer"
             >
               {showSteps ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
               {stepsArray.length} {stepsArray.length === 1 ? "step" : "steps"}
@@ -71,7 +71,7 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
           {template.materials?.length > 0 && (
             <button
               onClick={() => setShowMaterials(!showMaterials)}
-              className="bg-cyan-100 text-cyan-800 px-3 py-1 rounded-full text-xs flex items-center gap-1 font-medium hover:bg-cyan-200 cursor-pointer transition"
+              className="bg-cyan-100 text-cyan-800 px-2 truncate md:px-3 py-1 rounded-full text-xs flex items-center gap-1 font-medium hover:bg-cyan-200 cursor-pointer transition"
             >
               {showMaterials ? (
                 <ChevronUp size={14} />
@@ -83,28 +83,30 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
             </button>
           )}
 
-          <button
-            onClick={() => onEdit?.(template)}
-            className="ml-2 bg-cyan-800 text-white px-3 py-1 rounded-md text-xs flex items-center gap-1 font-medium hover:bg-cyan-900 cursor-pointer transition"
-          >
-            <Edit size={14} />
-            Edit
-          </button>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => onEdit?.(template)}
+              className="ml-2 bg-cyan-800 text-white px-3 py-1 rounded-md text-xs flex items-center gap-1 font-medium hover:bg-cyan-900 cursor-pointer transition"
+            >
+              <Edit size={14} />
+              Edit
+            </button>
 
-          <button
-            onClick={requestDelete}
-            disabled={busy}
-            className="bg-red-700 text-white p-1.5 rounded-md text-xs flex items-center gap-1 font-medium hover:bg-red-900 cursor-pointer transition"
-            title="Delete recipe"
-          >
-            <Trash2 size={14} />
-          </button>
+            <button
+              onClick={requestDelete}
+              disabled={busy}
+              className="bg-red-700 text-white p-1.5 rounded-md text-xs flex items-center gap-1 font-medium hover:bg-red-900 cursor-pointer transition"
+              title="Delete recipe"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Steps */}
       <div
-        className={`overflow-hidden transition-[max-height] duration-400 ease-in-out ${
+        className={`overflow-hidden transition-[max-height] mt-2 duration-400 ease-in-out ${
           showSteps ? "max-h-96" : "max-h-0"
         }`}
       >
@@ -121,7 +123,7 @@ export default function TemplateItem({ template, onEdit, onDeleted }) {
 
       {/* Separator */}
       {showSteps && showMaterials && (
-        <hr className="my-3 border-cyan-500 transition-all" />
+        <hr className="my-3 border-cyan-800 border-dashed transition-all" />
       )}
 
       {/* Materials */}

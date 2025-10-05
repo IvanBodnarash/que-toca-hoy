@@ -61,11 +61,11 @@ export default function IndividualItems({
               disabled={checkboxDisabled}
               checked={checkboxDisabled ? false : !!item.checked}
               onChange={() => handleCheck(item.idBuyList)}
-              className={`size-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500 cursor-pointer ${
+              className={`size-4 md:size-5 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500 cursor-pointer ${
                 checkboxDisabled ? "opacity-50 cursor-not-allowed" : ""
               }`}
             />
-            <span className="flex-1 flex items-center gap-2 text-slate-800">
+            <span className="flex-1 flex text-sm md:text-md items-center gap-2 text-slate-800">
               <span
                 className={isCompleted ? "line-through text-slate-400" : ""}
               >
@@ -78,7 +78,7 @@ export default function IndividualItems({
                 </span>
               )}
               {item.checked && item.quantity > 0 && (
-                <span className="text-cyan-800 text-xs font-medium bg-cyan-100 px-2 py-0.5 rounded-full">
+                <span className="text-cyan-800 text-xs text-center font-medium bg-cyan-100 px-1.5 md:px-2 py-0.5 rounded-full">
                   Pending saving
                 </span>
               )}

@@ -101,13 +101,63 @@ export default function CalendarPage() {
     };
   };
 
+  function DateHeader({ label, date }) {
+    const handleTap = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setSelectedDate(new Date(date));
+      setDayOpen(true);
+    };
+
+    return (
+      <button
+        type="button"
+        className="rbc-button-link"
+        onClick={handleTap}
+        onTouchEnd={handleTap}
+      >
+        {label}
+      </button>
+    );
+  }
+
+  const keyForDate = (date) => {
+    const d = new Date(date);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const dayPropGetter = (date) => ({
+    className: `tapcell tapcell-${keyForDate(date)}`,
+  });
+
+  const handleCellTapCapture = (e) => {
+    const el = e.target.closest(".tapcell");
+    if (!el) return;
+    const cls = Array.from(el.classList).find((c) => c.startsWith("tapcell-"));
+    if (!cls) return;
+    const isoDay = cls.slice("tapcell-".length); // YYYY-MM-DD
+    const tapped = new Date(`${isoDay}T00:00:00`);
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedDate(tapped);
+    setDayOpen(true);
+  };
+
   return (
     <div className="px-2 py-22 md:px-32 overflow-auto">
       {error && <div className="text-red-600 p-2">{error}</div>}
-      <div className="h-[75vh]">
+      <div
+        onClick={handleCellTapCapture}
+        onTouchEnd={handleCellTapCapture}
+        style={{ touchAction: "manipulation" }}
+      >
         <Calendar
           localizer={localizer}
           events={events}
+          style={{ height: 490 }}
           startAccessor="start"
           endAccessor="end"
           view={view}
@@ -116,15 +166,18 @@ export default function CalendarPage() {
           onNavigate={(newDate) => setDate(newDate)}
           views={[Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA]}
           popup
-          selectable="ignoreEvents"
-          longPressThreshold={1}
+          // selectable="ignoreEvents"
+          selectable={false}
+          // longPressThreshold={8}
           drilldownView={null}
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
+          dayPropGetter={dayPropGetter}
           eventPropGetter={eventPropGetter}
           components={{
             event: EventContent,
             agenda: { event: EventContent },
+            month: { dateHeader: DateHeader },
           }}
           messages={{
             today: "Today",

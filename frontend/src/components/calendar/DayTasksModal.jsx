@@ -15,6 +15,8 @@ import ReassignDialog from "../alerts/Reassign";
 import { useAuth } from "../../context/AuthContext";
 import PlanTasksAhead from "./PlanTasksAhead";
 
+import { RiDeleteBin2Line } from "react-icons/ri";
+
 export default function DayTasksModal({
   open,
   date,
@@ -365,13 +367,13 @@ export default function DayTasksModal({
                         )}
 
                         <button
-                          className="text-xs px-3 py-2 rounded border bg-red-700 text-white hover:bg-red-800 transition-all cursor-pointer"
+                          className="text-md p-2 rounded border bg-red-700 text-white hover:bg-red-800 transition-all cursor-pointer"
                           style={{ borderColor: textColor }}
                           onClick={() => openDeleteConfirm(event)}
                           disabled={busyId === event.id}
                           title="Delete task"
                         >
-                          Delete
+                          <RiDeleteBin2Line />
                         </button>
                       </div>
                     </div>
