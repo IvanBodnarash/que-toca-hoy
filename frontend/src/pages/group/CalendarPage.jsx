@@ -157,7 +157,7 @@ export default function CalendarPage() {
         <Calendar
           localizer={localizer}
           events={events}
-          style={{ height: 490 }}
+          style={{ height: 500 }}
           startAccessor="start"
           endAccessor="end"
           view={view}
