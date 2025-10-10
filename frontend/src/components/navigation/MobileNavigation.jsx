@@ -7,7 +7,7 @@ import MobileNavItem from "./MobileNavItem";
 
 export default function MobileNavigation() {
   return (
-    <div className="fixed bottom-0 w-full z-50 py-3 bg-cyan-800 border-t border-white/10">
+    <div className="fixed bottom-0 w-full z-40 py-3 bg-cyan-800 border-t border-white/10">
       <div className="flex flex-row items-center justify-center gap-2 text-white transition-all">
         <MobileNavItem path="manageGroup">
           <GrGroup className="size-9" />

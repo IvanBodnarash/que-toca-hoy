@@ -166,8 +166,8 @@ export default function CalendarPage() {
           onNavigate={(newDate) => setDate(newDate)}
           views={[Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA]}
           popup
-          // selectable="ignoreEvents"
-          selectable={false}
+          selectable="ignoreEvents"
+          // selectable={false}
           // longPressThreshold={8}
           drilldownView={null}
           onSelectSlot={handleSelectSlot}
