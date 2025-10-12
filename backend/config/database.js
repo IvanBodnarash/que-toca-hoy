@@ -9,7 +9,7 @@ const usePg = !!process.env.DATABASE_URL;
 export const sequelize = usePg
   ? new Sequelize(process.env.DATABASE_URL, {
       dialect: "postgres",
-      // Neon вимагає TLS
+      // Neon needs TLS
       dialectOptions: { ssl: { require: true } },
       logging: process.env.NODE_ENV !== "production" ? console.log : false,
       pool: { max: 10, min: 0, idle: 10000, acquire: 30000 },
