@@ -4,6 +4,8 @@
   <img src="./frontend/public/welcome-page.png" alt="Project Screenshot" width="600"/>
 </p>
 
+### [Watch video showcase here](https://www.youtube.com/watch?v=TKHIeJ4b308)
+
 ## Table of Contents
 
 1. [Description](#description)
@@ -66,6 +68,7 @@ The app also integrates recipes imported from [Recipe Compass](https://the-recip
 
 ```bash
 quetocahoy/
+│
 ├── backend/                        # Node.js + Express + Sequelize
 │   ├── config/
 │   │   ├── database.js             # Runtime Sequelize connection (Postgres / MySQL fallback)
@@ -88,6 +91,7 @@ quetocahoy/
 │   ├── .env.example                # Example environment variables file
 │   ├── .sequelizerc                # Path mapping for Sequelize CLI (src/migrations, src/seeders)
 │   └── package.json                # Backend dependencies & scripts (start, dev, migrate, seed)
+│
 └── frontend/                       # React + Vite + TailwindCSS
     ├── public/                     # Static assets
     ├── src/
